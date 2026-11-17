@@ -26,14 +26,29 @@ jobs:
           ./scripts/build-app.sh
       - name: Record the demo
         run: |
-          mkdir -p demo-out
+          mkdir -p demo-out demo-site
           system_profiler SPDisplaysDataType | grep -i resolution || true
+          # Our own neutral page, large enough to read at 1024x768, served locally.
+          cat > demo-site/recipes.html <<'HTML'
+          <!doctype html><html><head><meta charset="utf-8"><title>Weekend recipes</title></head>
+          <body style="font-family:-apple-system,Helvetica,sans-serif;margin:56px;background:#f7f6f2;color:#1e2124">
+          <h1 style="font-size:44px;margin:0 0 16px">Weekend recipes</h1>
+          <p style="font-size:24px">Pancakes &middot; Tomato soup &middot; Green salad</p>
+          <p style="font-size:20px;color:#4f555b">A sample page for the PlainClick demo.</p>
+          </body></html>
+          HTML
+          python3 -m http.server 8765 --directory demo-site > /dev/null 2>&1 &
+          sleep 2
+          # Pre-load Safari so the Safari scene doesn't wait for a cold launch.
+          open -a Safari "http://localhost:8765/recipes.html"
+          sleep 10
           # -v video, -C show cursor, -k show clicks, -x no sounds, -V max seconds
-          screencapture -v -C -k -x -V 100 "$PWD/demo-out/plainclick-demo-macos26.mov" &
+          screencapture -v -C -k -x -V 90 "$PWD/demo-out/plainclick-demo-macos26.mov" &
           REC_PID=$!
           python3 -c 'import time; print(time.time())' > demo-out/recording-started-epoch.txt
           sleep 3
-          "build/PlainClick Prototype.app/Contents/MacOS/PlainClickPrototype" --demo "$PWD/demo-out" > demo-out/stdout.txt 2>&1 &
+          DEMO_URL="http://localhost:8765/recipes.html" \
+            "build/PlainClick Prototype.app/Contents/MacOS/PlainClickPrototype" --demo "$PWD/demo-out" > demo-out/stdout.txt 2>&1 &
           APP_PID=$!
           for i in $(seq 1 100); do kill -0 $APP_PID 2>/dev/null || break; sleep 1; done
           kill $APP_PID 2>/dev/null || true

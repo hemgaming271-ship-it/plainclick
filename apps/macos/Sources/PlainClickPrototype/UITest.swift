@@ -204,9 +204,11 @@ final class UITestRunner {
 
         // Safari: only the tested actions appear.
         scene("safari")
-        open(["-a", "Safari", "https://example.com"]) // neutral public page; a local file showed blank with a temp path
+        // Our own page, served locally by the CI job (DEMO_URL) and pre-loaded before recording, so it appears instantly.
+        let demoURL = ProcessInfo.processInfo.environment["DEMO_URL"] ?? "https://example.com"
+        open(["-a", "Safari", demoURL])
         waitUntil(15) { frontBundle() == "com.apple.Safari" }
-        wait(3)
+        wait(2)
         glideAndClickPanel("Reload")
         wait(2)
         glideAndClickPanel("New Tab")
