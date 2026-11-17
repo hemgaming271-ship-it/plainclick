@@ -1,7 +1,7 @@
-// PlainClick Phase 0 â€” automated feasibility harness.
+// PlainClick Phase 0 - automated feasibility harness.
 //
 // Drives REAL TextEdit, Finder and Safari through the same PlainClickCore path the app uses
-// (resolve by shortcut signature â†’ check AXEnabled â†’ AXPress, guarded by "target must be frontmost"),
+// (resolve by shortcut signature -> check AXEnabled -> AXPress, guarded by "target must be frontmost"),
 // and verifies each effect by observable state (file contents on disk, folder counts, window titles, AX elements).
 //
 // Test-only helpers (typing into TextEdit, pressing Escape, closing tabs) use CGEvent posted to a specific PID or
@@ -75,7 +75,7 @@ func appVersion(_ bundleID: String) -> String {
 
 func frontPID() -> pid_t? { AX.focusedApplicationPID() ?? NSWorkspace.shared.frontmostApplication?.processIdentifier }
 
-/// Uses LaunchServices (`open`) to launch/activate â€” reliable from a background process on macOS 14+.
+/// Uses LaunchServices (`open`) to launch/activate - reliable from a background process on macOS 14+.
 @discardableResult
 func bringToFront(_ bundleID: String, open args: [String]) -> pid_t? {
     run("/usr/bin/open", args)
@@ -148,7 +148,7 @@ func dumpMenus(_ name: String, pid: pid_t) {
         notes.append("\(name): menu bar not readable")
         return
     }
-    var lines = ["# \(name) â€” path\tcmdChar\tmodifiers\tidentifier\tenabled\ttitle"]
+    var lines = ["# \(name) - path\tcmdChar\tmodifiers\tidentifier\tenabled\ttitle"]
     func walk(_ el: AXUIElement, _ path: String, _ depth: Int) {
         guard depth < 6 else { return }
         for (i, c) in AX.children(el).enumerated() {
@@ -208,6 +208,8 @@ let sa = ActionCatalog.adapter(for: "com.apple.Safari")!
 let trusted = AXIsProcessTrusted()
 let osVersion = ProcessInfo.processInfo.operatingSystemVersionString
 print("macOS: \(osVersion)\nAccessibility trusted: \(trusted)")
+// Global AX timeout so a call into a busy app (e.g. one tracking an open menu) can't stall the run.
+AXUIElementSetMessagingTimeout(AXUIElementCreateSystemWide(), 2.0)
 let versions = [
     "TextEdit": appVersion(te.bundleID),
     "Finder": appVersion(fi.bundleID),
@@ -241,7 +243,7 @@ func writeReport() {
     }
     let fails = rows.filter { !$0.pass }
     md += ["", "## Failures (\(fails.count))", ""]
-    md += fails.prefix(80).map { "- \($0.test) Â· \($0.app) Â· \($0.action) #\($0.run): \($0.outcome) â€” \($0.detail)" }
+    md += fails.prefix(80).map { "- \($0.test) | \($0.app) | \($0.action) #\($0.run): \($0.outcome) - \($0.detail)" }
     if !notes.isEmpty { md += ["", "## Notes", ""] + notes.map { "- \($0)" } }
     let text = md.joined(separator: "\n") + "\n"
     try? text.write(to: outDir.appendingPathComponent("report.md"), atomically: true, encoding: .utf8)
@@ -254,7 +256,7 @@ func writeReport() {
 }
 
 guard trusted else {
-    notes.append("This process is NOT trusted for Accessibility, so no app-control test could run. On a Mac, grant access in System Settings â†’ Privacy & Security â†’ Accessibility to the app that launches this tool (e.g. Terminal).")
+    notes.append("This process is NOT trusted for Accessibility, so no app-control test could run. On a Mac, grant access in System Settings -> Privacy & Security -> Accessibility to the app that launches this tool (e.g. Terminal).")
     record("T9-permission", "-", "AXIsProcessTrusted", 1, "not_trusted", false)
     writeReport()
     exit(0)
@@ -292,7 +294,7 @@ for (adapter, pid) in [(te, tePID), (fi, fiPID)] + (saPID.map { [(sa, $0)] } ?? 
 }
 if saPID == nil { notes.append("Safari did not launch/activate; Safari tests skipped.") }
 
-// MARK: - T1 TextEdit Save Ã—20: type a token, press Save, file on disk must contain it
+// MARK: - T1 TextEdit Save x20: type a token, press Save, file on disk must contain it
 
 let save = te.action("textedit.save")!
 for i in 1...20 {
@@ -305,7 +307,7 @@ for i in 1...20 {
     record("T1-repeat", "TextEdit", "Save", i, o.label, o == .pressed && ok, t, ok ? "file updated on disk" : "file NOT updated")
 }
 
-// MARK: - T1 TextEdit Find Ã—20: find field must appear; Escape closes it between runs
+// MARK: - T1 TextEdit Find x20: find field must appear; Escape closes it between runs
 
 let find = te.action("textedit.find")!
 func teHasFindFieldFor(_ pid: pid_t) -> Bool {
@@ -324,7 +326,7 @@ for i in 1...20 {
 }
 pressKey(53, to: tePID)
 
-// MARK: - T1 Finder New Folder Ã—20: a new folder must appear on disk in FolderA
+// MARK: - T1 Finder New Folder x20: a new folder must appear on disk in FolderA
 
 let newFolder = fi.action("finder.newfolder")!
 for i in 1...20 {
@@ -332,13 +334,49 @@ for i in 1...20 {
     let before = subfolderCount(folderA)
     let (o, t) = attempt(newFolder, target: fiPID)
     let ok = waitUntil(5) { subfolderCount(folderA) == before + 1 }
-    record("T1-repeat", "Finder", "New Folder", i, o.label, o == .pressed && ok, t, "folders \(before)â†’\(subfolderCount(folderA))")
+    record("T1-repeat", "Finder", "New Folder", i, o.label, o == .pressed && ok, t, "folders \(before)->\(subfolderCount(folderA))")
     pressKey(53, to: fiPID) // leave rename mode
 }
 
 // MARK: - T5 disabled state: a fresh Finder window has no history, so Back/Forward must be disabled and NOT sent
 
-// Test-only helper: Finder's own "New Finder Window" (âŒ˜N) gives a window with no navigation history.
+// MARK: - R2 helpers (is AXEnabled on a CLOSED menu up to date?)
+
+func resolveItem(_ def: ActionDefinition, _ pid: pid_t) -> AXUIElement? {
+    if case .found(let item) = CommandRunner.resolve(def, pid: pid) { return item }
+    return nil
+}
+func rawEnabled(_ def: ActionDefinition, _ pid: pid_t) -> Bool? {
+    guard let item = resolveItem(def, pid), case .value(let v) = AX.bool(item, kAXEnabledAttribute as String) else { return nil }
+    return v
+}
+/// Opens the item's top-level menu through AX (visible on screen), reads AXEnabled after AppKit revalidates, closes it.
+func enabledAfterMenuOpen(_ def: ActionDefinition, _ pid: pid_t) -> Bool? {
+    guard let item = resolveItem(def, pid) else { return nil }
+    var cur: AXUIElement? = item
+    var barItem: AXUIElement?
+    while let c = cur {
+        if role(c) == (kAXMenuBarItemRole as String) { barItem = c; break }
+        cur = AX.element(c, kAXParentAttribute as String)
+    }
+    guard let barItem else { return nil }
+    _ = AXUIElementPerformAction(barItem, kAXPressAction as CFString)
+    pump(0.5)
+    var result: Bool?
+    if let fresh = resolveItem(def, pid), case .value(let v) = AX.bool(fresh, kAXEnabledAttribute as String) { result = v }
+    if let menu = AX.children(barItem).first { _ = AXUIElementPerformAction(menu, kAXCancelAction as CFString) }
+    pressKey(53, to: pid)
+    pump(0.3)
+    return result
+}
+/// Experiment only: press regardless of AXEnabled.
+func forcePress(_ def: ActionDefinition, _ pid: pid_t) -> String {
+    guard let item = resolveItem(def, pid) else { return "not_found" }
+    return "forced:" + AX.describe(AX.press(item))
+}
+func state(_ v: Bool?) -> String { v.map { $0 ? "enabled" : "disabled" } ?? "unknown" }
+
+// Test-only helper: Finder's own "New Finder Window" (Cmd-N) gives a window with no navigation history.
 let newFinderWindow = ActionDefinition(id: "test.newwindow", label: "New Finder Window", symbol: "", matchers: [.init(cmdChar: "N")])
 bringToFront(fi.bundleID, open: [folderA.path])
 let nw = CommandRunner.perform(newFinderWindow, targetPID: fiPID, frontmostPID: frontPID())
@@ -347,7 +385,7 @@ for def in [fi.action("finder.back")!, fi.action("finder.forward")!] {
     let (o, t) = attempt(def, target: fiPID)
     record("T5-disabled", "Finder", def.label, 1, o.label, o == .disabled, t, "new window (\(nw.label)), title=\(windowTitle(fiPID))")
 }
-// Real history: navigate this window with Finder's own Go > Applications (⇧⌘A, test-only helper),
+// Real history: navigate this window with Finder's own Go > Applications (Shift-Cmd-A, test-only helper),
 // then Back must be enabled and leave Applications, and Forward must return to it.
 let goApplications = ActionDefinition(id: "test.goapps", label: "Go to Applications", symbol: "", matchers: [.init(cmdChar: "A", modifiers: [.shift])])
 let titleBeforeNav = windowTitle(fiPID)
@@ -355,14 +393,29 @@ let navOutcome = CommandRunner.perform(goApplications, targetPID: fiPID, frontmo
 waitUntil(3) { windowTitle(fiPID) != titleBeforeNav }
 notes.append("Finder history setup: Go to Applications \(navOutcome.label), title \(titleBeforeNav) -> \(windowTitle(fiPID))")
 let titleAfterNav = windowTitle(fiPID)
-let (ob, tb) = attempt(fi.action("finder.back")!, target: fiPID)
+let fBack = fi.action("finder.back")!, fFwd = fi.action("finder.forward")!
+// Truth here: Back IS available (we just navigated). Compare the raw closed-menu state, a menu-open refresh, and a forced press.
+let rawB = rawEnabled(fBack, fiPID)
+record("T7-R2-raw-state", "Finder", "Back", 1, "raw=\(state(rawB)) truth=enabled", rawB == true)
+let refB = enabledAfterMenuOpen(fBack, fiPID)
+record("T7-R2-menu-refresh", "Finder", "Back", 1, "refreshed=\(state(refB)) truth=enabled", refB == true)
+let rawB2 = rawEnabled(fBack, fiPID)
+record("T7-R2-raw-after-refresh", "Finder", "Back", 1, "raw=\(state(rawB2)) truth=enabled", rawB2 == true)
+let fb = forcePress(fBack, fiPID)
 let backChanged = waitUntil(3) { windowTitle(fiPID) != titleAfterNav }
-record("T5-enabled-after-history", "Finder", "Back", 1, ob.label, ob == .pressed && backChanged, tb, "\(titleAfterNav) â†’ \(windowTitle(fiPID))")
-let (of, tf) = attempt(fi.action("finder.forward")!, target: fiPID)
+record("T7-force-press-available", "Finder", "Back", 1, fb, backChanged, 0, "\(titleAfterNav) -> \(windowTitle(fiPID))")
+let rawF = rawEnabled(fFwd, fiPID)
+record("T7-R2-raw-state", "Finder", "Forward", 1, "raw=\(state(rawF)) truth=enabled", rawF == true)
+let ff = forcePress(fFwd, fiPID)
 let fwdChanged = waitUntil(3) { windowTitle(fiPID) == titleAfterNav }
-record("T5-enabled-after-history", "Finder", "Forward", 1, of.label, of == .pressed && fwdChanged, tf, "â†’ \(windowTitle(fiPID))")
+record("T7-force-press-available", "Finder", "Forward", 1, ff, fwdChanged, 0, "-> \(windowTitle(fiPID))")
+// Truly unavailable: now at the newest entry, Forward has nothing to do. A forced press must be harmless.
+let titleNoop = windowTitle(fiPID)
+let fnoop = forcePress(fFwd, fiPID)
+pump(1)
+record("T7-force-press-unavailable", "Finder", "Forward", 1, fnoop, windowTitle(fiPID) == titleNoop, 0, "title stays \(windowTitle(fiPID))")
 
-// MARK: - T2 wrong-app guard Ã—20: target TextEdit while Finder is in front â†’ must refuse, nothing changes anywhere
+// MARK: - T2 wrong-app guard x20: target TextEdit while Finder is in front -> must refuse, nothing changes anywhere
 
 for i in 1...20 {
     bringToFront(fi.bundleID, open: [folderA.path])
@@ -371,11 +424,11 @@ for i in 1...20 {
     let (o, t) = attempt(find, target: tePID) // stale target on purpose
     pump(0.5)
     let unchanged = subfolderCount(folderA) == folders && teHasFindField() == findBefore
-    record("T2-wrong-app-guard", "TextEditâ†’Finder", "Find", i, o.label, o == .refusedTargetChanged && unchanged, t,
+    record("T2-wrong-app-guard", "TextEdit->Finder", "Find", i, o.label, o == .refusedTargetChanged && unchanged, t,
            unchanged ? "no side effects" : "SIDE EFFECT DETECTED")
 }
 
-// MARK: - T2 app switching Ã—20: alternate apps; each command must land only in the app in front
+// MARK: - T2 app switching x20: alternate apps; each command must land only in the app in front
 
 var wrongApp = 0
 for i in 1...20 {
@@ -405,7 +458,7 @@ for i in 1...20 {
 }
 notes.append("Wrong-app events during app switching: \(wrongApp)")
 
-// MARK: - T6 stale references Ã—5: old element after TextEdit relaunch must fail safely; fresh lookup must work
+// MARK: - T6 stale references x5: old element after TextEdit relaunch must fail safely; fresh lookup must work
 
 for i in 1...5 {
     bringToFront(te.bundleID, open: ["-a", "TextEdit", docURL.path])
@@ -422,11 +475,11 @@ for i in 1...5 {
     let (o, t) = attempt(find, target: newPID)
     let fresh = waitUntil(3) { teHasFindFieldFor(newPID) }
     record("T6-stale", "TextEdit", "Find", i, "stale=\(AX.describe(staleErr)); fresh=\(o.label)",
-           staleErr != .success && o == .pressed && fresh, t, "pid \(pid)â†’\(newPID)")
+           staleErr != .success && o == .pressed && fresh, t, "pid \(pid)->\(newPID)")
     pressKey(53, to: newPID)
 }
 
-// MARK: - Safari Ã—20: Reload changes the timestamped title; Back â†’ PC-A; Forward â†’ PC-B; New Tab leaves PC- pages
+// MARK: - Safari x20: Reload changes the timestamped title; Back -> PC-A; Forward -> PC-B; New Tab leaves PC- pages
 
 if let saPID {
     let reload = sa.action("safari.reload")!, back = sa.action("safari.back")!, fwd = sa.action("safari.forward")!, newTab = sa.action("safari.newtab")!
@@ -436,19 +489,34 @@ if let saPID {
         let before = windowTitle(saPID)
         let (o, t) = attempt(reload, target: saPID)
         let changed = waitUntil(5) { let now = windowTitle(saPID); return now.hasPrefix("PC-B") && now != before }
-        record("T1-repeat", "Safari", "Reload", i, o.label, o == .pressed && changed, t, "\(before) â†’ \(windowTitle(saPID))")
+        record("T1-repeat", "Safari", "Reload", i, o.label, o == .pressed && changed, t, "\(before) -> \(windowTitle(saPID))")
     }
-    for i in 1...20 {
+    // R2 experiment. Start state: PC-B with history [A, B], so Back is truly available.
+    for i in 1...10 {
         bringToFront(sa.bundleID, open: ["-a", "Safari"])
-        let (o1, t1) = attempt(back, target: saPID)
+        let rawBack = rawEnabled(back, saPID)
+        record("T7-R2-raw-state", "Safari", "Back", i, "raw=\(state(rawBack)) truth=enabled", rawBack == true)
+        let fb = forcePress(back, saPID)
         let wentBack = waitUntil(5) { windowTitle(saPID) == "PC-A" }
-        record("T1-repeat", "Safari", "Back", i, o1.label, o1 == .pressed && wentBack, t1, "title=\(windowTitle(saPID))")
-        pump(0.5)
-        let (o2, t2) = attempt(fwd, target: saPID)
+        record("T7-force-press-available", "Safari", "Back", i, fb, wentBack, 0, "title=\(windowTitle(saPID))")
+        pump(0.3)
+        // Now at A: Forward is truly available.
+        let rawFwd = rawEnabled(fwd, saPID)
+        record("T7-R2-raw-state", "Safari", "Forward", i, "raw=\(state(rawFwd)) truth=enabled", rawFwd == true)
+        if i <= 3 {
+            let refreshed = enabledAfterMenuOpen(fwd, saPID)
+            record("T7-R2-menu-refresh", "Safari", "Forward", i, "refreshed=\(state(refreshed)) truth=enabled", refreshed == true)
+        }
+        let ff = forcePress(fwd, saPID)
         let wentFwd = waitUntil(5) { windowTitle(saPID).hasPrefix("PC-B") }
-        record("T1-repeat", "Safari", "Forward", i, o2.label, o2 == .pressed && wentFwd, t2, "title=\(windowTitle(saPID))")
-        pump(0.5)
+        record("T7-force-press-available", "Safari", "Forward", i, ff, wentFwd, 0, "title=\(windowTitle(saPID))")
+        pump(0.3)
     }
+    // Truly unavailable: at the newest entry Forward has nothing to do. A forced press must be harmless.
+    let saNoop = windowTitle(saPID)
+    let fnoopSa = forcePress(fwd, saPID)
+    pump(1.5)
+    record("T7-force-press-unavailable", "Safari", "Forward", 1, fnoopSa, windowTitle(saPID) == saNoop, 0, "title stays \(windowTitle(saPID))")
     for i in 1...20 {
         bringToFront(sa.bundleID, open: ["-a", "Safari"])
         let (o, t) = attempt(newTab, target: saPID)
