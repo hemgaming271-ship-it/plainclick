@@ -19,7 +19,10 @@ export function CompatTable() {
             <tr key={r.app + r.action} className="border-b border-line last:border-0">
               <td className="px-3 py-2">{r.app}</td>
               <td className="px-3 py-2">{r.action}</td>
-              <td className="px-3 py-2">{statusLabel[r.status]}</td>
+              <td className="px-3 py-2">
+                {statusLabel[r.status]}
+                {r.note && <span className="mt-1 block text-sm text-muted">{r.note}</span>}
+              </td>
               <td className="px-3 py-2 text-muted">{r.macOS ?? "—"}</td>
               <td className="px-3 py-2 text-muted">{r.appVersion ?? "—"}</td>
             </tr>

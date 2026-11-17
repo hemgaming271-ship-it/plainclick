@@ -20,12 +20,15 @@ public struct ActionDefinition: Identifiable, Hashable {
     public let label: String           // our own plain label (English for now)
     public let symbol: String          // SF Symbol name, optional decoration only
     public let matchers: [MenuMatcher] // tried in order; first one that resolves to exactly one item wins
+    /// false = known unreliable; kept in the catalog for the feasibility harness but never shown in the panel.
+    public let supported: Bool
 
-    public init(id: String, label: String, symbol: String, matchers: [MenuMatcher]) {
+    public init(id: String, label: String, symbol: String, matchers: [MenuMatcher], supported: Bool = true) {
         self.id = id
         self.label = label
         self.symbol = symbol
         self.matchers = matchers
+        self.supported = supported
     }
 }
 
@@ -41,21 +44,24 @@ public struct AppAdapter {
     }
 
     public func action(_ id: String) -> ActionDefinition? { actions.first { $0.id == id } }
+    /// Actions the product may show (excludes known-unreliable ones).
+    public var supportedActions: [ActionDefinition] { actions.filter(\.supported) }
 }
 
-/// CANDIDATES — compatibility is claimed only for rows verified in docs/compatibility.md.
-/// Shortcut signatures are the stock defaults; confirm them with the discovery dump on each macOS/app version.
+/// Compatibility is claimed only for rows recorded in docs/compatibility.md.
+/// Back/Forward are `supported: false`: feasibility runs on macOS 15.8.2 and 26.7.2 (2026-11-17) showed their
+/// closed-menu AXEnabled state is stale and pressing them is unreliable (see docs/feasibility-report.md, R2).
 public enum ActionCatalog {
     public static let adapters: [AppAdapter] = [
         AppAdapter(bundleID: "com.apple.Safari", displayName: "Safari", actions: [
-            .init(id: "safari.back",    label: "Back",    symbol: "chevron.backward", matchers: [.init(cmdChar: "[")]),
-            .init(id: "safari.forward", label: "Forward", symbol: "chevron.forward",  matchers: [.init(cmdChar: "]")]),
+            .init(id: "safari.back",    label: "Back",    symbol: "chevron.backward", matchers: [.init(cmdChar: "[")], supported: false),
+            .init(id: "safari.forward", label: "Forward", symbol: "chevron.forward",  matchers: [.init(cmdChar: "]")], supported: false),
             .init(id: "safari.reload",  label: "Reload",  symbol: "arrow.clockwise",  matchers: [.init(cmdChar: "R")]),
             .init(id: "safari.newtab",  label: "New Tab", symbol: "plus.square",      matchers: [.init(cmdChar: "T")]),
         ]),
         AppAdapter(bundleID: "com.apple.finder", displayName: "Finder", actions: [
-            .init(id: "finder.back",      label: "Back",       symbol: "chevron.backward", matchers: [.init(cmdChar: "[")]),
-            .init(id: "finder.forward",   label: "Forward",    symbol: "chevron.forward",  matchers: [.init(cmdChar: "]")]),
+            .init(id: "finder.back",      label: "Back",       symbol: "chevron.backward", matchers: [.init(cmdChar: "[")], supported: false),
+            .init(id: "finder.forward",   label: "Forward",    symbol: "chevron.forward",  matchers: [.init(cmdChar: "]")], supported: false),
             .init(id: "finder.newfolder", label: "New Folder", symbol: "folder.badge.plus",
                   matchers: [.init(cmdChar: "N", modifiers: [.shift])]),
         ]),

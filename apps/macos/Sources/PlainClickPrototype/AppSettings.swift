@@ -43,8 +43,8 @@ final class AppSettings: ObservableObject {
 
     /// The actions to show, in the user's order. Only IDs that still exist in the catalog are returned.
     func visibleActions(for adapter: AppAdapter) -> [ActionDefinition] {
-        guard let order = pinned[adapter.bundleID] else { return adapter.actions }
-        let byID = Dictionary(uniqueKeysWithValues: adapter.actions.map { ($0.id, $0) })
+        guard let order = pinned[adapter.bundleID] else { return adapter.supportedActions }
+        let byID = Dictionary(uniqueKeysWithValues: adapter.supportedActions.map { ($0.id, $0) })
         return order.compactMap { byID[$0] }
     }
 

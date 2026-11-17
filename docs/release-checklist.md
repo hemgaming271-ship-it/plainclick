@@ -5,9 +5,10 @@ Tick only what has actually been done, and record who did it and when. Nothing b
 ## A. Feasibility gate (friend's Mac)
 - [x] `./scripts/build-app.sh` builds; `swift test` passes — on GitHub Actions macOS runner, 2026-11-17 (CI only, not a real-Mac run)
 - [ ] App launched on a real Mac; menu bar icon, panel and permission prompt appear
-- [ ] Feasibility tests T0–T12 run and recorded in `feasibility-report.md`
-- [ ] At least 3 actions across 2 apps verified; `compatibility.md` and `src/lib/compatibility.ts` updated with the macOS build and app versions
-- [ ] Go / narrow / no-go written down
+- [x] Automated feasibility (T0, T1, T2, T5, T6, R2 experiment) on macOS 15.8.2 and 26.7.2 — 2026-11-17, Actions run #3
+- [x] 5 actions across 3 apps passed; `compatibility.md` and `src/lib/compatibility.ts` updated with macOS build and app versions
+- [x] Decision written down: **narrow go** (Back/Forward dropped)
+- [ ] Manual tests on a physical Mac: T3 window switching, T4 panel focus, T8 remapped shortcut, T9 permission flow, T10 fullscreen, VoiceOver
 
 ## B. Native checks
 - [ ] Permission accepted, refused, and revoked while running

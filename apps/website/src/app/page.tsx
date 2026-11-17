@@ -72,8 +72,9 @@ export default function Home() {
           {!anyVerified && (
             <div className="mt-4">
               <Notice>
-                Nothing is verified yet. These are the apps and actions we&apos;re testing first. We&apos;ll list only
-                combinations that pass testing on a stated macOS version.
+                Five actions have passed our automated tests with the real Apple apps on macOS 15 and macOS 26 (Tahoe),
+                running on test machines. We haven&apos;t confirmed them by hand on a physical Mac yet. Back and Forward
+                didn&apos;t pass, so PlainClick doesn&apos;t offer them.
               </Notice>
             </div>
           )}

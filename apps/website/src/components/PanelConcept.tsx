@@ -3,7 +3,7 @@
  * or a recording once a tested build exists.
  */
 export function PanelConcept() {
-  const actions = ["Back", "Forward", "Reload", "New Tab"];
+  const actions = ["Reload", "New Tab"];
   return (
     <figure className="mx-auto w-full max-w-sm">
       <div className="rounded-lg border-2 border-line bg-surface shadow-sm" aria-hidden="true">
@@ -15,13 +15,9 @@ export function PanelConcept() {
           <p className="text-sm">
             <span className="text-muted">Target:</span> <strong>Safari</strong>
           </p>
-          {actions.map((a, i) => (
-            <div
-              key={a}
-              className={`rounded-md border px-3 py-2 text-base ${i === 0 ? "border-line text-muted" : "border-line text-ink"}`}
-            >
+          {actions.map((a) => (
+            <div key={a} className="rounded-md border border-line px-3 py-2 text-base text-ink">
               {a}
-              {i === 0 && <span className="ml-2 text-sm">(not available right now)</span>}
             </div>
           ))}
         </div>

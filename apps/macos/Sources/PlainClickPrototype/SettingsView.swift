@@ -49,7 +49,7 @@ private struct AppsTab: View {
                                     .accessibilityLabel("Unpin \(action.label)")
                             }
                         }
-                        let unpinned = adapter.actions.filter { !settings.isPinned($0, in: adapter) }
+                        let unpinned = adapter.supportedActions.filter { !settings.isPinned($0, in: adapter) }
                         if !unpinned.isEmpty {
                             HStack {
                                 Text("Available:").foregroundStyle(.secondary)

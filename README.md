@@ -14,11 +14,13 @@ toolbar, and it doesn't change macOS appearance. "PlainClick" is a provisional n
 | DB migrations | Written | Applied by the tests (PGlite); not yet run against a real Postgres server |
 | Mac app: menu bar, panel, AX command engine, settings, per-app config, licence, trial, appearance guide | **Compiles** | GitHub Actions macOS runner (arm64), 2026-11-17: `swift build` + ad-hoc signed `.app` bundle succeed. **Never launched or used on a real Mac.** |
 | Swift licensing tests (shared vector with the Node signer) | Passing | Same CI run: `swift test` passes, so CryptoKit accepts the Node-signed entitlement and rejects tampered ones |
-| Real-Mac feasibility tests | **Not run** | Planned on a friend's Mac — `docs/feasibility-report.md` |
+| Feasibility with real TextEdit/Finder/Safari | **Narrow go: 5 actions pass** | Automated on GitHub macOS VMs, macOS 15.8.2 + 26.7.2: Save, Find, New Folder, Reload, New Tab 20/20 each; 0 wrong-app events. Back/Forward dropped (stale menu state). See `docs/feasibility-report.md` |
+| Hands-on test on a physical Mac (panel UI, permission flow, VoiceOver) | **Not run** | No Mac available |
 | Paddle, email provider, hosting, Apple Developer ID | **Not set up** | Needs your accounts |
 
-The biggest open risk is still the core feature itself: whether pressing app menu commands through Accessibility is
-reliable enough. Until the Mac tests pass, keep checkout off and don't publish any compatibility claim.
+The core mechanism now has evidence: five actions work reliably with the real apps on macOS 15 and 26. Navigation actions
+(Back/Forward) don't, so they're excluded. What remains unproven is the app's own UI on a real Mac. Keep checkout off until
+a signed build has been used by a person on a physical Mac.
 
 ## Layout
 ```

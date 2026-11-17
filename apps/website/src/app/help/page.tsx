@@ -41,7 +41,12 @@ export default function Page() {
           Licensing uses a small amount of data, described in the <a href="/privacy">privacy policy</a>.
         </p>
         <h3>A button is greyed out.</h3>
-        <p>The app reports that command as unavailable right now. For example, Back is greyed out when there&apos;s no page to go back to.</p>
+        <p>The app reports that command as unavailable right now, so PlainClick doesn&apos;t send it.</p>
+        <h3>Why aren&apos;t Back and Forward included?</h3>
+        <p>
+          In our tests, macOS often reported Back and Forward as unavailable when they actually were available, and
+          pressing them didn&apos;t work reliably. We only offer actions that work reliably.
+        </p>
         <h3>How do I move my licence to a new Mac?</h3>
         <p>
           On the old Mac, open PlainClick → Manage Licence → Deactivate this Mac, then activate on the new one. If the

@@ -12,8 +12,9 @@ export default function Page() {
         {!anyVerified && (
           <div className="mb-6">
             <Notice>
-              <strong>Nothing is verified yet.</strong> PlainClick is pre-release. The rows below are the first actions
-              being tested, not a promise that they will work.
+              <strong>Pre-release.</strong> &ldquo;Passed automated tests&rdquo; means each action ran 20 times in a
+              row with the real Apple app, including while switching between apps, on test machines running the listed
+              macOS versions. It hasn&apos;t been confirmed by hand on a physical Mac yet.
             </Notice>
           </div>
         )}
@@ -22,7 +23,8 @@ export default function Page() {
       <Prose>
         <h2>What the statuses mean</h2>
         <ul>
-          <li><strong>Verified</strong>: passed repeated tests, including app and window switching, on the listed macOS and app versions.</li>
+          <li><strong>Verified on a Mac</strong>: passed the automated tests and was then confirmed by hand on a physical Mac.</li>
+          <li><strong>Passed automated tests</strong>: 20 repeated runs, plus app-switching and wrong-app safety checks, with the real Apple app on test machines running the listed macOS versions.</li>
           <li><strong>Works with limits</strong>: works, with a caveat listed next to it.</li>
           <li><strong>Being tested</strong>: a candidate. Not yet confirmed.</li>
           <li><strong>Not supported</strong>: tried and dropped because it wasn&apos;t reliable.</li>

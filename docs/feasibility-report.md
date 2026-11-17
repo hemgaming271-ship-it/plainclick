@@ -1,7 +1,51 @@
 # Phase 0 feasibility report
 
-**Status: NOT RUN.** No Mac has been used yet. Every result cell below is empty on purpose.
-Do not quote anything from this file as a result until the cells are filled in from a real run, with logs to back them.
+## Automated results — 2026-11-17 (real apps on GitHub-hosted macOS VMs)
+
+No physical Mac was available, so the core mechanism was tested automatically. `plainclick-feasibility` (apps/macos/Sources/Feasibility)
+drives the real TextEdit, Finder and Safari through the **same `PlainClickCore` code path the app uses**. It checks every
+effect against observable state: file contents on disk, folder counts, window titles and AX elements.
+
+| Field | macOS 15 job | macOS 26 job |
+|---|---|---|
+| macOS build | 15.8.2 (24H232) | 26.7.2 (25G332) — Tahoe / Liquid Glass |
+| TextEdit / Finder / Safari | 1.20 (409) / 15.5 / 27.2 | 1.20 (415) / 26.4 / 27.2 |
+| Accessibility trusted | yes (runner image grant) | yes |
+| Evidence | Actions run #3 (`7e19fe7`), job summary + `feasibility-report-macos-15` artifact | same run, `feasibility-report-macos-26` |
+
+| Test | What it proves | macOS 15 | macOS 26 |
+|---|---|---|---|
+| T0 discovery | All 9 candidates resolve to exactly one menu item by shortcut | 9/9 | 9/9 |
+| T1 ×20 TextEdit Save | Typed text is saved to disk | 20/20 | 20/20 |
+| T1 ×20 TextEdit Find | Find field appears | 20/20 | 20/20 |
+| T1 ×20 Finder New Folder | Folder appears on disk | 20/20 | 20/20 |
+| T1 ×20 Safari Reload | Page reloads | 20/20 | 20/20 |
+| T1 ×20 Safari New Tab | New tab opens | 20/20 | 20/20 |
+| T2 wrong-app guard ×20 | Command aimed at a background app is refused, with no side effects anywhere | 20/20 | 20/20 |
+| T2 app switching ×20 | Alternating apps; each command lands only in the front app | 20/20, **0 wrong-app** | 20/20, **0 wrong-app** |
+| T5 disabled | Fresh Finder window: Back/Forward correctly reported disabled and not sent | 2/2 | 2/2 |
+| T6 stale ref ×5 | Old element after relaunch fails safely; fresh lookup works | 5/5 | 5/5 |
+| T7 R2 raw state | Closed-menu AXEnabled matches reality for Back/Forward | **1/22** | **1/22** |
+| T7 menu-open refresh | Opening the menu fixes the state | Finder 1/1, Safari **0/3** | same |
+| T7 forced press | Pressing despite "disabled" | Safari Back 10/10, Safari Forward **0/10**, Finder mixed | same |
+
+Latency (resolve + enabled check + press): median 40–105 ms, max 522 ms.
+
+### Decision: **NARROW — go with 5 actions**
+- **Ship:** TextEdit Save, TextEdit Find, Finder New Folder, Safari Reload, Safari New Tab. That is 5 actions across 3 apps, above the acceptance bar of 3 actions across 2 apps.
+- **Drop:** Back/Forward in Safari and Finder (risk R2 confirmed). macOS only revalidates these menu items when the menu is opened. Pressing them is unreliable, and showing them would mean either wrong greyed-out buttons or silent no-ops. They stay in the catalog with `supported: false`, so the harness keeps measuring them.
+- The wrong-app risk (R4, command landing in the wrong app) showed **zero** occurrences in 80 guarded or switching attempts across both OSes.
+
+### Not covered by these runs (still needs a physical Mac)
+The real PlainClick app UI wasn't tested: the panel window, the hotkey, the focus behaviour while clicking the panel (T4), and VoiceOver. Also not tested:
+- the permission grant / deny / revoke flow (T9), because the runner already had permission
+- remapped shortcuts (T8) and a second UI language (T7-lang)
+- full screen, multiple monitors, and sleep/wake
+- testing by a person on real hardware
+
+---
+
+## Manual protocol (physical Mac) — not run yet
 
 ## Test environment (fill in)
 
