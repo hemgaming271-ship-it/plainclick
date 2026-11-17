@@ -154,12 +154,13 @@ final class UITestRunner {
     // MARK: Demo (raw footage for the launch video; recorded by `screencapture -v` in CI)
 
     /// A slow, human-paced walkthrough. Nothing is faked: the real app runs the real commands in the real apps.
+    /// Prints a wall-clock timestamp per scene so captions can be aligned with the recording.
+    private func scene(_ name: String) { print("SCENE \(name) \(Date().timeIntervalSince1970)") }
+
     func runDemo() {
+        scene("start")
         let te = "com.apple.TextEdit"
         try? "Weekend plan\n".write(to: doc, atomically: true, encoding: .utf8)
-        let page = doc.deletingLastPathComponent().appendingPathComponent("recipes.html")
-        try? "<!doctype html><title>Recipes</title><body style=\"font:20px -apple-system;margin:48px\"><h1>Recipes</h1><p>Pancakes, soup, salad.</p>"
-            .write(to: page, atomically: true, encoding: .utf8)
 
         open(["-a", "TextEdit", doc.path])
         waitUntil(15) { frontBundle() == te }
@@ -174,15 +175,18 @@ final class UITestRunner {
         wait(1.5)
 
         // Open PlainClick with the shortcut.
+        scene("hotkey")
         postHotKey()
         waitUntil(3) { app.panel.isVisible }
         wait(2.5)
 
         // Save through the panel. TextEdit's title loses "Edited".
+        scene("save")
         glideAndClickPanel("Save")
         wait(2.5)
 
         // Keep writing: focus is still in the document.
+        scene("keep-typing")
         if let w = AX.element(AX.app(pid: tePID), kAXFocusedWindowAttribute as String), let wf = Self.frame(w) {
             glide(to: CGPoint(x: wf.minX + 300, y: wf.minY + 200))
         }
@@ -190,6 +194,7 @@ final class UITestRunner {
         wait(1.5)
 
         // Find through the panel, then search.
+        scene("find")
         glideAndClickPanel("Find")
         wait(1.2)
         typeSystemWide("milk", delay: 0.15)
@@ -198,7 +203,8 @@ final class UITestRunner {
         wait(1)
 
         // Safari: only the tested actions appear.
-        open(["-a", "Safari", page.path])
+        scene("safari")
+        open(["-a", "Safari", "https://example.com"]) // neutral public page; a local file showed blank with a temp path
         waitUntil(15) { frontBundle() == "com.apple.Safari" }
         wait(3)
         glideAndClickPanel("Reload")
@@ -207,11 +213,13 @@ final class UITestRunner {
         wait(2.5)
 
         // An app PlainClick doesn't support: it says so honestly.
+        scene("unsupported")
         open(["-a", "Calculator"])
         waitUntil(10) { frontBundle() == "com.apple.calculator" }
         wait(3)
 
         // Back to TextEdit and close the panel with the same shortcut.
+        scene("close")
         open(["-a", "TextEdit"])
         waitUntil(10) { frontBundle() == te }
         wait(2)

@@ -29,8 +29,9 @@ jobs:
           mkdir -p demo-out
           system_profiler SPDisplaysDataType | grep -i resolution || true
           # -v video, -C show cursor, -k show clicks, -x no sounds, -V max seconds
-          screencapture -v -C -k -x -V 80 "$PWD/demo-out/plainclick-demo-macos26.mov" &
+          screencapture -v -C -k -x -V 100 "$PWD/demo-out/plainclick-demo-macos26.mov" &
           REC_PID=$!
+          python3 -c 'import time; print(time.time())' > demo-out/recording-started-epoch.txt
           sleep 3
           "build/PlainClick Prototype.app/Contents/MacOS/PlainClickPrototype" --demo "$PWD/demo-out" > demo-out/stdout.txt 2>&1 &
           APP_PID=$!
