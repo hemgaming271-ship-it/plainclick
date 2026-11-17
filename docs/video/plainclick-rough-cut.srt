@@ -1,0 +1,32 @@
+1
+00:00:05,144 --> 00:00:18,835
+Your everyday Mac actions, made clearer.
+
+2
+00:00:18,835 --> 00:00:21,827
+Press Control-Option-P. A plain panel appears. TextEdit stays as it is.
+
+3
+00:00:21,827 --> 00:00:29,436
+Click Save. TextEdit saves your document.
+
+4
+00:00:29,436 --> 00:00:36,811
+Your typing stays in your document.
+
+5
+00:00:36,811 --> 00:00:47,951
+Find, in one clear click.
+
+6
+00:00:47,951 --> 00:01:17,832
+Only actions we have tested: Safari Reload and New Tab.
+
+7
+00:01:17,832 --> 00:01:26,421
+Apps we have not tested get an honest message.
+
+8
+00:01:26,421 --> 00:01:40,000
+PlainClick - pre-release build, recorded on macOS 26.
+
