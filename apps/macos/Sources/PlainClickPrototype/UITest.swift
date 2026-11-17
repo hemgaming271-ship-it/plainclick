@@ -29,7 +29,16 @@ final class UITestRunner {
 
     // MARK: Helpers
 
-    private func wait(_ s: Double) { RunLoop.current.run(until: Date().addingTimeInterval(s)) }
+    /// Waits while still DISPATCHING app events (like NSApp.run does), so clicks on our own panel and the Carbon
+    /// hotkey are actually delivered. A bare RunLoop.run here would swallow them (first CI run's false failures).
+    private func wait(_ s: Double) {
+        let end = Date().addingTimeInterval(s)
+        repeat {
+            if let event = NSApp.nextEvent(matching: .any, until: Date().addingTimeInterval(0.02), inMode: .default, dequeue: true) {
+                NSApp.sendEvent(event)
+            }
+        } while Date() < end
+    }
 
     @discardableResult
     private func waitUntil(_ t: Double, _ c: () -> Bool) -> Bool {
