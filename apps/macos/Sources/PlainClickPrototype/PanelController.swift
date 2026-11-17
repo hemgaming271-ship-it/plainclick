@@ -2,17 +2,17 @@ import AppKit
 import Combine
 import SwiftUI
 
-/// A floating panel that never becomes key or main, so keyboard focus stays in the target app (risk R4).
-/// Mouse only for now; keyboard navigation inside the panel is a separate design problem.
+/// AppKit's tool-palette pattern: a `.nonactivatingPanel` with `becomesKeyOnlyIfNeeded`. Clicking a button doesn't
+/// activate PlainClick or take keyboard focus, so typing keeps going to the target app (risk R4).
+/// (An earlier `canBecomeKey = false` override made clicks activate the app and swallowed the button action in CI.)
 final class NonActivatingPanel: NSPanel {
-    override var canBecomeKey: Bool { false }
     override var canBecomeMain: Bool { false }
 }
 
-/// Lets the very first click on the (never-key) panel trigger the button instead of being swallowed.
-/// Found by the CI UI test on macOS 15.8.2 / 26.7.2: without this, clicks did nothing.
+/// First click triggers the button, and the hosting view never asks the panel to become key.
 final class FirstMouseHostingView<Content: View>: NSHostingView<Content> {
     override func acceptsFirstMouse(for event: NSEvent?) -> Bool { true }
+    override var needsPanelToBecomeKey: Bool { false }
 }
 
 final class PanelController {
@@ -28,7 +28,7 @@ final class PanelController {
             contentRect: NSRect(x: 0, y: 0, width: 260, height: 200),
             styleMask: [.titled, .closable, .utilityWindow, .nonactivatingPanel],
             backing: .buffered,
-            defer: true
+            defer: false // create the window-server window now, with the non-activating flag applied
         )
         panel.title = "PlainClick"
         panel.isFloatingPanel = true

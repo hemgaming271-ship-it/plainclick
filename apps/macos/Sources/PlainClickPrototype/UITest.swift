@@ -241,7 +241,10 @@ final class UITestRunner {
             let found = waitUntil(4) { textEditHasFindField(tePID) }
             record("click Find button", found, "find field appeared=\(found); status=\"\(app.engine.model.status)\"")
             let backInFront = waitUntil(2) { frontBundle() == te }
-            record("target app in front after click", backInFront, "front=\(frontBundle() ?? "?") PlainClick active=\(NSApp.isActive)")
+            record("target app in front after click", backInFront,
+                   "front=\(frontBundle() ?? "?") PlainClick active=\(NSApp.isActive) panelKey=\(app.panel.window.isKeyWindow)")
+            let log = (try? String(contentsOf: TrialLog.fileURL, encoding: .utf8))?.split(separator: "\n").suffix(3).joined(separator: " / ") ?? "no log"
+            record("diagnostic: last engine log rows", true, log)
             captureScreen("02-screen-after-find")
             pressEscape(to: tePID)
         } else {
