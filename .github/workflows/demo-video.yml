@@ -1,0 +1,58 @@
+# Records RAW, real footage of PlainClick on a GitHub-hosted macOS 26 (Tahoe) VM for the launch video.
+# The app runs its --demo walkthrough (real hotkey, real clicks, real commands in TextEdit/Safari/Calculator)
+# while macOS's own `screencapture -v` records the screen with the cursor and clicks.
+# Output: the "demo-video" artifact and the ci-demo branch.
+name: Demo footage (macOS 26)
+
+on:
+  workflow_dispatch:
+  push:
+    paths: [".github/workflows/demo-video.yml"]
+
+jobs:
+  record:
+    runs-on: macos-26
+    timeout-minutes: 20
+    permissions:
+      contents: write
+    defaults:
+      run:
+        working-directory: apps/macos
+    steps:
+      - uses: actions/checkout@v5
+      - name: Build app bundle
+        run: |
+          chmod +x scripts/build-app.sh
+          ./scripts/build-app.sh
+      - name: Record the demo
+        run: |
+          mkdir -p demo-out
+          system_profiler SPDisplaysDataType | grep -i resolution || true
+          # -v video, -C show cursor, -k show clicks, -x no sounds, -V max seconds
+          screencapture -v -C -k -x -V 80 "$PWD/demo-out/plainclick-demo-macos26.mov" &
+          REC_PID=$!
+          sleep 3
+          "build/PlainClick Prototype.app/Contents/MacOS/PlainClickPrototype" --demo "$PWD/demo-out" > demo-out/stdout.txt 2>&1 &
+          APP_PID=$!
+          for i in $(seq 1 100); do kill -0 $APP_PID 2>/dev/null || break; sleep 1; done
+          kill $APP_PID 2>/dev/null || true
+          wait $REC_PID || true
+          cat demo-out/stdout.txt
+          ls -la demo-out
+      - name: Upload footage
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: demo-video
+          path: apps/macos/demo-out
+      - name: Publish footage to branch ci-demo
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cd demo-out
+          git init -q
+          git checkout -q -b out
+          git add -A
+          git -c user.name="ci" -c user.email="ci@users.noreply.github.com" commit -qm "Demo footage (${{ github.sha }})" || exit 0
+          git push -qf "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" out:ci-demo

@@ -117,7 +117,7 @@ final class UITestRunner {
     }
 
     /// Types into whatever app has keyboard focus (system-wide), like a person would.
-    private func typeSystemWide(_ text: String) {
+    private func typeSystemWide(_ text: String, delay: Double = 0.03) {
         for scalar in text.utf16 {
             var ch = scalar
             for down in [true, false] {
@@ -126,8 +126,99 @@ final class UITestRunner {
                 e?.keyboardSetUnicodeString(stringLength: 1, unicodeString: &ch)
                 e?.post(tap: .cghidEventTap)
             }
-            wait(0.03)
+            wait(delay)
         }
+    }
+
+    /// Moves the pointer smoothly (ease-in-out), so a screen recording looks like a person using the Mac.
+    private func glide(to p: CGPoint, duration: Double = 0.8) {
+        let start = CGEvent(source: nil)?.location ?? p
+        let steps = 40
+        for i in 1...steps {
+            let t = Double(i) / Double(steps)
+            let e = t * t * (3 - 2 * t)
+            let q = CGPoint(x: start.x + (p.x - start.x) * e, y: start.y + (p.y - start.y) * e)
+            CGEvent(mouseEventSource: nil, mouseType: .mouseMoved, mouseCursorPosition: q, mouseButton: .left)?.post(tap: .cghidEventTap)
+            wait(duration / Double(steps))
+        }
+    }
+
+    private func glideAndClickPanel(_ label: String) {
+        guard let f = panelButtonFrame(label) else { print("DEMO: \(label) button not found"); return }
+        let p = CGPoint(x: f.midX, y: f.midY)
+        glide(to: p)
+        wait(0.4)
+        click(p)
+    }
+
+    // MARK: Demo (raw footage for the launch video; recorded by `screencapture -v` in CI)
+
+    /// A slow, human-paced walkthrough. Nothing is faked: the real app runs the real commands in the real apps.
+    func runDemo() {
+        let te = "com.apple.TextEdit"
+        try? "Weekend plan\n".write(to: doc, atomically: true, encoding: .utf8)
+        let page = doc.deletingLastPathComponent().appendingPathComponent("recipes.html")
+        try? "<!doctype html><title>Recipes</title><body style=\"font:20px -apple-system;margin:48px\"><h1>Recipes</h1><p>Pancakes, soup, salad.</p>"
+            .write(to: page, atomically: true, encoding: .utf8)
+
+        open(["-a", "TextEdit", doc.path])
+        waitUntil(15) { frontBundle() == te }
+        wait(2)
+        guard let tePID = pid(te) else { return finish() }
+        if let w = AX.element(AX.app(pid: tePID), kAXFocusedWindowAttribute as String), let wf = Self.frame(w) {
+            glide(to: CGPoint(x: wf.minX + 220, y: wf.minY + 120), duration: 1.0)
+            click(CGPoint(x: wf.minX + 220, y: wf.minY + 120))
+        }
+        wait(0.8)
+        typeSystemWide("- buy milk\n- water the plants", delay: 0.09)
+        wait(1.5)
+
+        // Open PlainClick with the shortcut.
+        postHotKey()
+        waitUntil(3) { app.panel.isVisible }
+        wait(2.5)
+
+        // Save through the panel. TextEdit's title loses "Edited".
+        glideAndClickPanel("Save")
+        wait(2.5)
+
+        // Keep writing: focus is still in the document.
+        if let w = AX.element(AX.app(pid: tePID), kAXFocusedWindowAttribute as String), let wf = Self.frame(w) {
+            glide(to: CGPoint(x: wf.minX + 300, y: wf.minY + 200))
+        }
+        typeSystemWide("\n- call the plumber", delay: 0.09)
+        wait(1.5)
+
+        // Find through the panel, then search.
+        glideAndClickPanel("Find")
+        wait(1.2)
+        typeSystemWide("milk", delay: 0.15)
+        wait(2.5)
+        pressEscape(to: tePID)
+        wait(1)
+
+        // Safari: only the tested actions appear.
+        open(["-a", "Safari", page.path])
+        waitUntil(15) { frontBundle() == "com.apple.Safari" }
+        wait(3)
+        glideAndClickPanel("Reload")
+        wait(2)
+        glideAndClickPanel("New Tab")
+        wait(2.5)
+
+        // An app PlainClick doesn't support: it says so honestly.
+        open(["-a", "Calculator"])
+        waitUntil(10) { frontBundle() == "com.apple.calculator" }
+        wait(3)
+
+        // Back to TextEdit and close the panel with the same shortcut.
+        open(["-a", "TextEdit"])
+        waitUntil(10) { frontBundle() == te }
+        wait(2)
+        postHotKey()
+        wait(2.5)
+        print("DEMO DONE")
+        NSApp.terminate(nil)
     }
 
     private func pressEscape(to pid: pid_t) {

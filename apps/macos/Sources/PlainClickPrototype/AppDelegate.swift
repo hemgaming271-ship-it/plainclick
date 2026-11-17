@@ -54,6 +54,17 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
                         detail: AXIsProcessTrusted() ? "trusted" : "not_trusted")
 
         // Automated UI test mode (CI / developer only): PlainClickPrototype --ui-test <output-dir>
+        // Demo mode for recording launch-video footage: PlainClickPrototype --demo <output-dir>
+        if let i = CommandLine.arguments.firstIndex(of: "--demo") {
+            let dir = CommandLine.arguments.indices.contains(i + 1) ? CommandLine.arguments[i + 1] : "demo-out"
+            Task { @MainActor [weak self] in
+                try? await Task.sleep(nanoseconds: 1_000_000_000)
+                guard let self else { return }
+                let runner = UITestRunner(app: self, out: URL(fileURLWithPath: dir, isDirectory: true))
+                self.uiTest = runner
+                runner.runDemo()
+            }
+        }
         if let i = CommandLine.arguments.firstIndex(of: "--ui-test") {
             let dir = CommandLine.arguments.indices.contains(i + 1) ? CommandLine.arguments[i + 1] : "ui-test-out"
             Task { @MainActor [weak self] in
