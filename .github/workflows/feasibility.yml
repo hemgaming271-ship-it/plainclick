@@ -6,7 +6,7 @@ name: Feasibility (real apps on macOS)
 on:
   workflow_dispatch:
   push:
-    paths: ["apps/macos/Sources/PlainClickCore/**", "apps/macos/Sources/Feasibility/**", ".github/workflows/feasibility.yml"]
+    paths: ["apps/macos/Sources/**", ".github/workflows/feasibility.yml"]
 
 jobs:
   feasibility:
@@ -38,3 +38,48 @@ jobs:
         with:
           name: feasibility-report-${{ matrix.os }}
           path: apps/macos/out
+
+  # Drives the REAL PlainClick app: real hotkey, real mouse clicks on the panel, focus checks, screenshots.
+  ui-test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-15, macos-26]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 25
+    permissions:
+      contents: write   # to publish screenshots to a ci-ui-* branch
+    defaults:
+      run:
+        working-directory: apps/macos
+    steps:
+      - uses: actions/checkout@v5
+      - name: Build app bundle
+        run: |
+          chmod +x scripts/build-app.sh
+          ./scripts/build-app.sh
+      - name: Run UI test (real app, max 4 minutes)
+        run: |
+          mkdir -p ui-out
+          "build/PlainClick Prototype.app/Contents/MacOS/PlainClickPrototype" --ui-test "$PWD/ui-out" &
+          APP_PID=$!
+          for i in $(seq 1 240); do kill -0 $APP_PID 2>/dev/null || break; sleep 1; done
+          kill $APP_PID 2>/dev/null || true
+          ls -la ui-out
+      - name: Upload UI artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ui-test-${{ matrix.os }}
+          path: apps/macos/ui-out
+      - name: Publish screenshots to branch ci-ui-${{ matrix.os }}
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cd ui-out
+          git init -q
+          git checkout -q -b out
+          git add -A
+          git -c user.name="ci" -c user.email="ci@users.noreply.github.com" commit -qm "UI test output (${{ matrix.os }}, ${{ github.sha }})" || exit 0
+          git push -qf "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" out:ci-ui-${{ matrix.os }}

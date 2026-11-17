@@ -4,13 +4,15 @@ import Carbon
 import SwiftUI
 
 final class AppDelegate: NSObject, NSApplicationDelegate {
-    private var settings: AppSettings!
-    private var licence: LicenceManager!
-    private var engine: Engine!
-    private var panel: PanelController!
+    // Internal (not private) so the --ui-test runner in UITest.swift can drive the real objects.
+    var settings: AppSettings!
+    var licence: LicenceManager!
+    var engine: Engine!
+    var panel: PanelController!
     private var statusItem: NSStatusItem!
     private var hotKey: HotKey?
-    private var settingsWindow: NSWindow?
+    var settingsWindow: NSWindow?
+    private var uiTest: UITestRunner?
     private let pauseItem = NSMenuItem(title: "Pause PlainClick", action: #selector(togglePause), keyEquivalent: "")
 
     func applicationDidFinishLaunching(_ notification: Notification) {
@@ -49,9 +51,21 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         }
         TrialLog.record(app: nil, actionID: "-", outcome: "launched", latencyMs: 0,
                         detail: AXIsProcessTrusted() ? "trusted" : "not_trusted")
+
+        // Automated UI test mode (CI / developer only): PlainClickPrototype --ui-test <output-dir>
+        if let i = CommandLine.arguments.firstIndex(of: "--ui-test") {
+            let dir = CommandLine.arguments.indices.contains(i + 1) ? CommandLine.arguments[i + 1] : "ui-test-out"
+            Task { @MainActor [weak self] in
+                try? await Task.sleep(nanoseconds: 1_000_000_000)
+                guard let self else { return }
+                let runner = UITestRunner(app: self, out: URL(fileURLWithPath: dir, isDirectory: true))
+                self.uiTest = runner
+                runner.run()
+            }
+        }
     }
 
-    private func showSettings(_ tab: SettingsView.Tab) {
+    func showSettings(_ tab: SettingsView.Tab) {
         let view = SettingsView(settings: settings, licence: licence, initialTab: tab)
         if settingsWindow == nil {
             let w = NSWindow(contentViewController: NSHostingController(rootView: view))

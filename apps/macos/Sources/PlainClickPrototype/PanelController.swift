@@ -64,6 +64,7 @@ final class PanelController {
     }
 
     var isVisible: Bool { panel.isVisible }
+    var window: NSWindow { panel }
 
     func toggle() {
         if panel.isVisible { hide() } else { show() }
