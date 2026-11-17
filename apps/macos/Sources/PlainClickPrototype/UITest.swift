@@ -93,11 +93,39 @@ final class UITestRunner {
         }
     }
 
+    private var seenMouse: [String] = []
+    private var mouseMonitor: Any?
+
     private func click(_ p: CGPoint) {
-        for type in [CGEventType.mouseMoved, .leftMouseDown, .leftMouseUp] {
-            CGEvent(mouseEventSource: nil, mouseType: type, mouseCursorPosition: p, mouseButton: .left)?.post(tap: .cghidEventTap)
-            wait(0.08)
+        if mouseMonitor == nil {
+            // Diagnostic: did our app actually receive the click, and in which window?
+            mouseMonitor = NSEvent.addLocalMonitorForEvents(matching: [.leftMouseDown, .leftMouseUp]) { [weak self] e in
+                let title = e.window?.title ?? "nil"
+                self?.seenMouse.append("\(e.type == .leftMouseDown ? "down" : "up")@\(title) clicks=\(e.clickCount) active=\(NSApp.isActive)")
+                return e
+            }
         }
+        let src = CGEventSource(stateID: .hidSystemState)
+        for type in [CGEventType.mouseMoved, .leftMouseDown, .leftMouseUp] {
+            let e = CGEvent(mouseEventSource: src, mouseType: type, mouseCursorPosition: p, mouseButton: .left)
+            if type != .mouseMoved { e?.setIntegerValueField(.mouseEventClickState, value: 1) }
+            e?.post(tap: .cghidEventTap)
+            wait(0.12)
+        }
+    }
+
+    /// Presses a panel button through Accessibility (the VoiceOver path), off the main thread.
+    private func axPressPanelButton(_ label: String) -> String {
+        let me = getpid()
+        return offMain {
+            let root = AXUIElementCreateApplication(me)
+            AXUIElementSetMessagingTimeout(root, 2)
+            guard let b = Self.bfs(root, { el in
+                AX.string(el, kAXRoleAttribute as String) == (kAXButtonRole as String) &&
+                    (AX.string(el, kAXDescriptionAttribute as String) == label || AX.string(el, kAXTitleAttribute as String) == label)
+            }) else { return "button not found" }
+            return AX.describe(AX.press(b))
+        } ?? "timeout"
     }
 
     /// Types into whatever app has keyboard focus (system-wide), like a person would.
@@ -243,13 +271,29 @@ final class UITestRunner {
             let backInFront = waitUntil(2) { frontBundle() == te }
             record("target app in front after click", backInFront,
                    "front=\(frontBundle() ?? "?") PlainClick active=\(NSApp.isActive) panelKey=\(app.panel.window.isKeyWindow)")
-            let log = (try? String(contentsOf: TrialLog.fileURL, encoding: .utf8))?.split(separator: "\n").suffix(3).joined(separator: " / ") ?? "no log"
-            record("diagnostic: last engine log rows", true, log)
+            let w = app.panel.window
+            record("diagnostic: click", true,
+                   "button frame=\(f.integral) panel frame(AppKit)=\(w.frame.integral) mouse events seen=\(seenMouse) " +
+                   "nonactivating=\(w.styleMask.contains(.nonactivatingPanel)) floating=\((w as? NSPanel)?.isFloatingPanel ?? false)")
             captureScreen("02-screen-after-find")
             pressEscape(to: tePID)
         } else {
             record("click Find button", false, "Find button not found through Accessibility")
         }
+
+        // 4b. Same button pressed through Accessibility (how VoiceOver presses it). Re-front TextEdit first.
+        open(["-a", "TextEdit"])
+        waitUntil(5) { frontBundle() == te }
+        wait(0.5)
+        let axResult = axPressPanelButton("Find")
+        let axFound = waitUntil(4) { textEditHasFindField(tePID) }
+        record("Find via Accessibility press (VoiceOver path)", axFound,
+               "AXPress=\(axResult) find field=\(axFound) status=\"\(app.engine.model.status)\" front=\(frontBundle() ?? "?")")
+        pressEscape(to: tePID)
+        open(["-a", "TextEdit"])
+        waitUntil(5) { frontBundle() == te }
+        let log = (try? String(contentsOf: TrialLog.fileURL, encoding: .utf8))?.split(separator: "\n").suffix(3).joined(separator: " / ") ?? "no log"
+        record("diagnostic: last engine log rows", true, log)
 
         // 5. Typing still goes to TextEdit after clicking the panel (T4), then the panel's Save button saves it.
         let token = "milk eggs 42"
