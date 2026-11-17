@@ -78,7 +78,7 @@ final class UITestRunner {
     private func postHotKey() {
         let flags: CGEventFlags = [.maskControl, .maskAlternate]
         for down in [true, false] {
-            let e = CGEvent(keyboardEventSource: nil, virtualKey: 49, keyDown: down)
+            let e = CGEvent(keyboardEventSource: nil, virtualKey: 35, keyDown: down) // 35 = P
             e?.flags = flags
             e?.post(tap: .cghidEventTap)
         }
@@ -207,9 +207,10 @@ final class UITestRunner {
         if app.panel.isVisible { app.panel.hide() }
 
         // 1. Real global hotkey opens the panel.
+        record("hotkey registered", app.hotKeyRegistered, "RegisterEventHotKey for Ctrl-Option-P")
         postHotKey()
         let shown = waitUntil(3) { app.panel.isVisible }
-        record("hotkey opens panel", shown, shown ? "Ctrl-Option-Space via HID event" : "panel did not appear; opening via menu path instead")
+        record("hotkey opens panel", shown, shown ? "Ctrl-Option-P via HID event" : "panel did not appear; opening via menu path instead")
         if !shown { app.panel.show() }
         wait(0.8)
 
@@ -229,8 +230,9 @@ final class UITestRunner {
         if let f = panelButtonFrame("Find") {
             click(CGPoint(x: f.midX, y: f.midY))
             let found = waitUntil(4) { textEditHasFindField(tePID) }
-            record("click Find button", found, "find field appeared=\(found); front=\(frontBundle() ?? "?")")
-            record("still not activated after click", frontBundle() == te && !NSApp.isActive, "PlainClick active=\(NSApp.isActive)")
+            record("click Find button", found, "find field appeared=\(found); status=\"\(app.engine.model.status)\"")
+            let backInFront = waitUntil(2) { frontBundle() == te }
+            record("target app in front after click", backInFront, "front=\(frontBundle() ?? "?") PlainClick active=\(NSApp.isActive)")
             captureScreen("02-screen-after-find")
             pressEscape(to: tePID)
         } else {
@@ -245,7 +247,7 @@ final class UITestRunner {
         if let f = panelButtonFrame("Save") {
             click(CGPoint(x: f.midX, y: f.midY))
             let saved = waitUntil(5) { ((try? String(contentsOf: doc, encoding: .utf8)) ?? "").contains(token) }
-            record("click Save button", saved, saved ? "file on disk updated" : "file not updated")
+            record("click Save button", saved, (saved ? "file on disk updated" : "file not updated") + "; status=\"\(app.engine.model.status)\"")
         } else {
             record("click Save button", false, "Save button not found through Accessibility")
         }

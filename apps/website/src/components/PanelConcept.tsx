@@ -9,7 +9,7 @@ export function PanelConcept() {
       <div className="rounded-lg border-2 border-line bg-surface shadow-sm" aria-hidden="true">
         <div className="flex items-center justify-between border-b border-line px-4 py-2 text-sm text-muted">
           <span>PlainClick</span>
-          <span>⌃⌥Space</span>
+          <span>⌃⌥P</span>
         </div>
         <div className="space-y-2.5 p-4">
           <p className="text-sm">

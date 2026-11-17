@@ -159,12 +159,27 @@ final class Engine {
             refresh()
             return finish("refused_no_permission", "App control is off. Nothing was sent.")
         }
-        // Guard against sending to the wrong app: the app that is frontmost *now* must be the one the panel shows.
+        // Guard against sending to the wrong app. The app shown in the panel must be the front app, OR PlainClick
+        // itself may be front for a moment because the user just clicked the panel (seen in CI on macOS 15/26).
+        // In that case `targetApp` is still the last *other* app the user activated (retarget ignores PlainClick),
+        // so we hand activation back to it, confirm it is in front, and only then send the command.
+        let me = ProcessInfo.processInfo.processIdentifier
         let front = NSWorkspace.shared.frontmostApplication
         guard let app = targetApp, !app.isTerminated, let front,
-              front.processIdentifier == app.processIdentifier else {
+              front.processIdentifier == app.processIdentifier || front.processIdentifier == me else {
             retarget(front)
             return finish("refused_target_changed", "The front app changed. Nothing was sent — check the panel and try again.")
+        }
+        if front.processIdentifier == me {
+            NSApp.yieldActivation(to: app)
+            app.activate()
+            let deadline = Date().addingTimeInterval(1.0)
+            while NSWorkspace.shared.frontmostApplication?.processIdentifier != app.processIdentifier, Date() < deadline {
+                RunLoop.current.run(until: Date().addingTimeInterval(0.05))
+            }
+            guard NSWorkspace.shared.frontmostApplication?.processIdentifier == app.processIdentifier else {
+                return finish("refused_target_not_restored", "\(app.localizedName ?? "The app") couldn't be brought back to the front. Nothing was sent.")
+            }
         }
 
         var (avail, item) = availability(of: def, pid: app.processIdentifier)

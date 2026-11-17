@@ -11,6 +11,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     var panel: PanelController!
     private var statusItem: NSStatusItem!
     private var hotKey: HotKey?
+    var hotKeyRegistered: Bool { hotKey != nil }
     var settingsWindow: NSWindow?
     private var uiTest: UITestRunner?
     private let pauseItem = NSMenuItem(title: "Pause PlainClick", action: #selector(togglePause), keyEquivalent: "")
@@ -28,7 +29,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         }
 
         let menu = NSMenu()
-        menu.addItem(NSMenuItem(title: "Open Panel  (⌃⌥Space)", action: #selector(togglePanel), keyEquivalent: ""))
+        menu.addItem(NSMenuItem(title: "Open Panel  (⌃⌥P)", action: #selector(togglePanel), keyEquivalent: ""))
         menu.addItem(NSMenuItem(title: "Settings…", action: #selector(openSettings), keyEquivalent: ","))
         menu.addItem(NSMenuItem(title: "Manage Licence…", action: #selector(openLicence), keyEquivalent: ""))
         menu.addItem(NSMenuItem(title: "Appearance Guide (free)…", action: #selector(openGuide), keyEquivalent: ""))
@@ -43,11 +44,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         for item in menu.items { item.target = self }
         statusItem.menu = menu
 
-        hotKey = HotKey(keyCode: UInt32(kVK_Space), modifiers: UInt32(controlKey | optionKey)) { [weak self] in
+        hotKey = HotKey(keyCode: UInt32(kVK_ANSI_P), modifiers: UInt32(controlKey | optionKey)) { [weak self] in
             self?.panel.toggle()
         }
         if hotKey == nil {
-            NSLog("PlainClick: could not register ⌃⌥Space (already in use?). Use the menu bar item instead.")
+            NSLog("PlainClick: could not register ⌃⌥P (already in use?). Use the menu bar item instead.")
         }
         TrialLog.record(app: nil, actionID: "-", outcome: "launched", latencyMs: 0,
                         detail: AXIsProcessTrusted() ? "trusted" : "not_trusted")

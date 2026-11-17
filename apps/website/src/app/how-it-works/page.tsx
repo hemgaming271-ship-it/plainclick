@@ -10,7 +10,7 @@ export default function Page() {
         <h2>The short version</h2>
         <ol>
           <li>Open a supported app, for example Safari.</li>
-          <li>Press your PlainClick shortcut (⌃⌥Space by default).</li>
+          <li>Press your PlainClick shortcut (⌃⌥P by default).</li>
           <li>A small panel appears, naming the app it will control and showing clearly labelled buttons.</li>
           <li>Click a button. PlainClick asks that app to run the matching command from its own menu bar.</li>
         </ol>

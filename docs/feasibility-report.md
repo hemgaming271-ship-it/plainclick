@@ -69,7 +69,7 @@ evidence. Attach it, plus a screen recording of T1–T4.
 | ID | Test | Steps | Pass criteria |
 |---|---|---|---|
 | T0 | Discovery | Dump menu commands for each target app; check each catalog matcher resolves to exactly 1 item | Every catalog action resolves; matcher table updated |
-| T1 | Main flow ×20 | Per action: open panel with ⌃⌥Space, click action, observe effect | ≥20/20 effects in the correct app; log shows `pressed` |
+| T1 | Main flow ×20 | Per action: open panel with ⌃⌥P, click action, observe effect | ≥20/20 effects in the correct app; log shows `pressed` |
 | T2 | App switching ×20 | Alternate Safari ↔ Finder (⌘Tab and clicking) with panel open; press an action after each switch | Panel target name always matches the front app; command lands only there; zero wrong-app events |
 | T3 | Window switching ×20 | Two Safari windows / two TextEdit docs; switch (⌘\` and click); press Reload / Find | Command acts on the window the user last focused; the target's key window does not change when the panel is clicked |
 | T4 | Panel focus | With TextEdit caret in a doc, click panel buttons, then keep typing | Typing still goes to TextEdit without any re-click |

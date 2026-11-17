@@ -81,7 +81,7 @@ private struct AppearanceTab: View {
                 Text("Compact").tag(false)
             }
             Toggle("Show icons next to labels", isOn: $settings.showIcons)
-            Text("Shortcut: ⌃⌥Space (customisable shortcut is planned).").foregroundStyle(.secondary)
+            Text("Shortcut: ⌃⌥P (customisable shortcut is planned).").foregroundStyle(.secondary)
             Text("These settings affect only the PlainClick panel, not other apps or macOS.").font(.caption).foregroundStyle(.secondary)
         }
     }

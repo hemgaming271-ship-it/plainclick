@@ -1,10 +1,12 @@
 # PlainClick — Phase 0 native prototype
 
-**Status: source written on Windows. Never compiled or run. Expect compile fixes on first Mac build.**
+**Status:** builds and runs on GitHub's macOS 15 and 26 machines. The core engine is tested against the real apps
+(`plainclick-feasibility`), and the real app UI is driven by `--ui-test`. It hasn't been used by a person on a physical Mac yet.
+Supported actions: TextEdit Save/Find, Finder New Folder, Safari Reload/New Tab. Back/Forward were dropped; see docs/compatibility.md.
 
 ## What it does
 
-- Menu-bar-only app (`LSUIElement`). Global shortcut **⌃⌥Space** shows or hides the panel.
+- Menu-bar-only app (`LSUIElement`). Global shortcut **⌃⌥P** shows or hides the panel.
 - The panel is a **non-activating** `NSPanel` that never becomes key, so the target app stays frontmost and keeps its key window.
 - It shows the target app's name and, for Safari, Finder, and TextEdit, a few labelled buttons ([ActionCatalog.swift](Sources/PlainClickPrototype/ActionCatalog.swift)).
 - A button finds the matching **menu-bar item** of the target app by `AXIdentifier` or key-equivalent signature (never its title), checks `AXEnabled`, then sends `AXPress` to that process only.
@@ -28,7 +30,7 @@ Requirements: macOS 14+ and Xcode 16+ (Swift 5.10+ toolchain). Check what you ha
 
 First run:
 1. Click the menu-bar icon → **Turn on app control…** → macOS shows its own prompt → System Settings → Privacy & Security → Accessibility → enable *PlainClick Prototype*.
-2. Open Safari, press ⌃⌥Space, and try Back, Reload, and New Tab.
+2. Open Safari, press ⌃⌥P, and try Reload and New Tab.
 3. Before trusting any default matcher, run **Developer: Dump Menu Commands of Front App** in each target app and update `ActionCatalog.swift`. Use identifiers where the dump shows them.
 
 To revoke: System Settings → Privacy & Security → Accessibility → turn off or remove *PlainClick Prototype*. To uninstall, quit it, delete the .app, and delete `~/Library/Logs/PlainClickPrototype`.

@@ -16,7 +16,7 @@ shortcuts. If these alone solve the problem for someone, that person should not 
 
 ## 2. What it is
 
-A menu-bar utility. Press a configurable shortcut (prototype default: **⌃⌥Space**) → a small floating panel appears
+A menu-bar utility. Press a configurable shortcut (prototype default: **⌃⌥P**) → a small floating panel appears
 showing the frontmost app's name and a short list of clearly labelled buttons. Clicking a button invokes that app's own
 menu command through the macOS Accessibility API. The panel does not take focus from the target app.
 
@@ -89,7 +89,7 @@ Estimates are planning guesses, not deadlines.
 ### Phase 1 — Native MVP (≈1–2 weeks) — source written, not compiled
 - [x] Code written: menu bar (Open panel, Settings, Manage licence, Pause, Quit), per-app enable, pin/reorder, compact/comfortable, light/dark/system, optional icons, remembered position, VoiceOver labels, trial, licence UI, free appearance guide
 - [ ] Keyboard navigation inside the panel (blocked by the no-focus design, see R4)
-- [ ] Configurable shortcut (fixed ⌃⌥Space for now)
+- [ ] Configurable shortcut (fixed ⌃⌥P for now)
 
 ### Phase 1 original list
 - [ ] Menu-bar items: Open panel, Settings, Manage licence, Pause, Quit
