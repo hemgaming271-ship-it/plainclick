@@ -61,10 +61,14 @@ jobs:
       - name: Run UI test (real app, max 4 minutes)
         run: |
           mkdir -p ui-out
-          "build/PlainClick Prototype.app/Contents/MacOS/PlainClickPrototype" --ui-test "$PWD/ui-out" &
+          "build/PlainClick Prototype.app/Contents/MacOS/PlainClickPrototype" --ui-test "$PWD/ui-out" > ui-out/stdout.txt 2>&1 &
           APP_PID=$!
           for i in $(seq 1 240); do kill -0 $APP_PID 2>/dev/null || break; sleep 1; done
           kill $APP_PID 2>/dev/null || true
+          sleep 5
+          # Keep any crash report so failures can be diagnosed without a Mac.
+          cp ~/Library/Logs/DiagnosticReports/PlainClickPrototype* ui-out/ 2>/dev/null || true
+          cat ui-out/stdout.txt
           ls -la ui-out
       - name: Upload UI artifacts
         if: always()
