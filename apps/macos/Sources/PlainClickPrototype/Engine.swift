@@ -100,8 +100,11 @@ final class Engine {
         refresh()
     }
 
+    /// Test hook: pauses the periodic availability refresh (used by --ui-test while it inspects the panel).
+    var refreshSuspended = false
+
     func refresh() {
-        guard let app = targetApp, !app.isTerminated else { return }
+        guard !refreshSuspended, let app = targetApp, !app.isTerminated else { return }
         for i in model.actions.indices {
             model.actions[i].availability = availability(of: model.actions[i].def, pid: app.processIdentifier).0
         }

@@ -168,7 +168,27 @@ final class UITestRunner {
     /// Screen rect (top-left origin) of the panel button labelled `label`, read from the panel's own in-process
     /// accessibility tree on the main thread (the same tree VoiceOver sees). No cross-process AX call into ourselves:
     /// that deadlocked against the panel's refresh timer in CI (stack sample, 2026-11-17).
+    /// Screen rect (top-left origin) of a panel button, read through Accessibility (exactly what VoiceOver sees).
+    /// The panel's refresh timer is paused meanwhile: a main-thread AX call to TextEdit during our own
+    /// background AX query deadlocked on HIServices' client lock (CI stack sample, 2026-11-17).
     private func panelButtonFrame(_ label: String) -> CGRect? {
+        app.engine.refreshSuspended = true
+        defer { app.engine.refreshSuspended = false }
+        let me = getpid()
+        let viaAX: CGRect? = offMain {
+            let root = AXUIElementCreateApplication(me)
+            AXUIElementSetMessagingTimeout(root, 2)
+            let button = Self.bfs(root) { el in
+                AX.string(el, kAXRoleAttribute as String) == (kAXButtonRole as String) &&
+                    (AX.string(el, kAXDescriptionAttribute as String) == label || AX.string(el, kAXTitleAttribute as String) == label)
+            }
+            return button.flatMap { Self.frame($0) }
+        } ?? nil
+        return viaAX ?? panelButtonFrameFromLayout(label)
+    }
+
+    /// Fallback: frames reported by the SwiftUI layout.
+    private func panelButtonFrameFromLayout(_ label: String) -> CGRect? {
         let w = app.panel.window
         guard let local = PanelButtonFrames.shared.frame(label), let content = w.contentView,
               let primary = NSScreen.screens.first else { return nil }
