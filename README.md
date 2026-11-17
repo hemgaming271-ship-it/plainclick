@@ -15,7 +15,9 @@ toolbar, and it doesn't change macOS appearance. "PlainClick" is a provisional n
 | Mac app: menu bar, panel, AX command engine, settings, per-app config, licence, trial, appearance guide | **Compiles** | GitHub Actions macOS runner (arm64), 2026-11-17: `swift build` + ad-hoc signed `.app` bundle succeed. **Never launched or used on a real Mac.** |
 | Swift licensing tests (shared vector with the Node signer) | Passing | Same CI run: `swift test` passes, so CryptoKit accepts the Node-signed entitlement and rejects tampered ones |
 | Feasibility with real TextEdit/Finder/Safari | **Narrow go: 5 actions pass** | Automated on GitHub macOS VMs, macOS 15.8.2 + 26.7.2: Save, Find, New Folder, Reload, New Tab 20/20 each; 0 wrong-app events. Back/Forward dropped (stale menu state). See `docs/feasibility-report.md` |
-| Hands-on test on a physical Mac (panel UI, permission flow, VoiceOver) | **Not run** | No Mac available |
+| Real app UI (hotkey ⌃⌥P, panel, real clicks, focus) | **Works on CI** | `--ui-test` on macOS 15.8.2 + 26.7.2: 15/17 checks; clicks run commands while TextEdit keeps focus. Screenshots in `docs/screenshots/` |
+| Hands-on test on a physical Mac (permission flow, VoiceOver, multi-monitor) | **Not run** | No Mac available |
+| CI macOS minutes | **Used up for this month** | Private repo; macOS jobs count 10×. The feasibility workflow is now manual-only |
 | Paddle, email provider, hosting, Apple Developer ID | **Not set up** | Needs your accounts |
 
 The core mechanism now has evidence: five actions work reliably with the real apps on macOS 15 and 26. Navigation actions

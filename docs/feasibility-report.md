@@ -36,8 +36,38 @@ Latency (resolve + enabled check + press): median 40–105 ms, max 522 ms.
 - **Drop:** Back/Forward in Safari and Finder (risk R2 confirmed). macOS only revalidates these menu items when the menu is opened. Pressing them is unreliable, and showing them would mean either wrong greyed-out buttons or silent no-ops. They stay in the catalog with `supported: false`, so the harness keeps measuring them.
 - The wrong-app risk (R4, command landing in the wrong app) showed **zero** occurrences in 80 guarded or switching attempts across both OSes.
 
+## Real app UI test (`--ui-test`), 2026-11-17
+
+The real PlainClick app was driven on the same GitHub macOS 15.8.2 and 26.7.2 machines. The test used real system input:
+the global hotkey sent as an HID event, real mouse clicks on the panel, and system-wide typing. Screenshots are in `docs/screenshots/macos-15|26/`.
+The last complete run (commit `0ffd691`) passed 15 of 17 checks on **both** OSes:
+
+| Check | Result |
+|---|---|
+| Hotkey ⌃⌥P registers, opens and hides the panel | PASS |
+| Opening the panel doesn't steal focus from TextEdit | PASS |
+| Panel shows the right target and only tested actions (Save, Find; Safari: Reload, New Tab) | PASS |
+| Real click on **Find** runs Find in TextEdit; TextEdit stays in front; PlainClick never activates | PASS |
+| Real click on **Save** sends Save ("Save sent to TextEdit."; 17–64 ms) | Sent ✔; file check inconclusive (see below) |
+| **Typing continues in TextEdit's document after clicking the panel (T4)** | PASS |
+| Unsupported app (Calculator) gets the honest message | PASS |
+| Trial shows 7 days on first use | PASS |
+| Settings window opens (Apps / Panel / Licence / Free guide) | Screenshot captured |
+
+The one remaining FAIL was a test-setup problem, not a product one: the first typing ran straight after the synthetic hotkey and was lost,
+so Save had nothing new to write. A fix (type before the hotkey) was pushed as `8f6bf79`, but it **couldn't run**: GitHub stopped
+the jobs because the account's macOS minutes or spending limit ran out. It needs a re-run.
+
+### Bugs this test found and fixed (none were visible on Windows)
+1. **⌃⌥Space conflicts with macOS's "Select next input source" shortcut.** The default is now **⌃⌥P**.
+2. **Clicking the panel activated PlainClick and the button didn't fire.** The panel now uses the standard AppKit palette setup:
+   `.nonactivatingPanel`, `becomesKeyOnlyIfNeeded`, a hosting view that never needs key, `acceptsFirstMouse`, and `defer: false`.
+   The engine also still hands focus back to the target if PlainClick ever ends up in front.
+3. Test-harness lessons: dispatch app events while waiting, clear modifier flags on synthetic typing, and never press your own
+   SwiftUI button through Accessibility from a background thread (that crashed SwiftUI; real VoiceOver calls arrive on the main thread).
+
 ### Not covered by these runs (still needs a physical Mac)
-The real PlainClick app UI wasn't tested: the panel window, the hotkey, the focus behaviour while clicking the panel (T4), and VoiceOver. Also not tested:
+The panel, hotkey and focus behaviour are now covered by the UI test above. Still not tested: VoiceOver used by a person. Also not tested:
 - the permission grant / deny / revoke flow (T9), because the runner already had permission
 - remapped shortcuts (T8) and a second UI language (T7-lang)
 - full screen, multiple monitors, and sleep/wake

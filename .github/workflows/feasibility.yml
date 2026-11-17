@@ -3,10 +3,10 @@
 # runner permissions. Results go to the job summary and the "feasibility-report" artifact.
 name: Feasibility (real apps on macOS)
 
+# Manual only: each run uses ~4 macOS jobs, and macOS minutes count 10x on private repositories.
+# Run it from the Actions tab ("Run workflow") after changing the app or the engine.
 on:
   workflow_dispatch:
-  push:
-    paths: ["apps/macos/Sources/**", ".github/workflows/feasibility.yml"]
 
 jobs:
   feasibility:
