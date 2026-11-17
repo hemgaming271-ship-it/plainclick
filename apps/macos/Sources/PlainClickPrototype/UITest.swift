@@ -135,6 +135,7 @@ final class UITestRunner {
             var ch = scalar
             for down in [true, false] {
                 let e = CGEvent(keyboardEventSource: nil, virtualKey: 0, keyDown: down)
+                e?.flags = [] // don't inherit the Control/Option flags from the synthetic hotkey
                 e?.keyboardSetUnicodeString(stringLength: 1, unicodeString: &ch)
                 e?.post(tap: .cghidEventTap)
             }
@@ -143,7 +144,11 @@ final class UITestRunner {
     }
 
     private func pressEscape(to pid: pid_t) {
-        for down in [true, false] { CGEvent(keyboardEventSource: nil, virtualKey: 53, keyDown: down)?.postToPid(pid) }
+        for down in [true, false] {
+            let e = CGEvent(keyboardEventSource: nil, virtualKey: 53, keyDown: down)
+            e?.flags = []
+            e?.postToPid(pid)
+        }
         wait(0.3)
     }
 
