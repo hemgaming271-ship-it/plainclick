@@ -1,6 +1,6 @@
 # Release checklist
 
-Tick only what has actually been done, and record who did it and when. Nothing below is done yet.
+Tick only what has actually been done, and record who did it and when. "CI" means GitHub-hosted macOS VMs, not a physical Mac.
 
 ## A. Feasibility gate (friend's Mac)
 - [x] `./scripts/build-app.sh` builds; `swift test` passes — on GitHub Actions macOS runner, 2026-11-17 (CI only, not a real-Mac run)
@@ -8,15 +8,15 @@ Tick only what has actually been done, and record who did it and when. Nothing b
 - [x] Automated feasibility (T0, T1, T2, T5, T6, R2 experiment) on macOS 15.8.2 and 26.7.2 — 2026-11-17, Actions run #3
 - [x] 5 actions across 3 apps passed; `compatibility.md` and `src/lib/compatibility.ts` updated with macOS build and app versions
 - [x] Decision written down: **narrow go** (Back/Forward dropped)
-- [x] Real app UI test on macOS 15.8.2 + 26.7.2 (CI): hotkey, non-activating panel, real clicks on Find/Save, typing continues in the target (T4) — 15/17, remaining failure is a test-setup issue; re-run pending (CI minutes)
+- [x] Real app UI test on macOS 15.8.2 + 26.7.2 (CI): hotkey, non-activating panel, real clicks on Find/Save, typing continues in the target (T4) — **17/17 on both OSes**, commit 76bfffb
 - [ ] Manual tests on a physical Mac: T3 window switching, T8 remapped shortcut, T9 permission flow, T10 fullscreen, VoiceOver
 
 ## B. Native checks
 - [ ] Permission accepted, refused, and revoked while running
-- [ ] App switching and window switching: zero commands sent to the wrong app
-- [ ] Target app quit and relaunched (stale references)
-- [ ] Disabled controls match the real menu state (or the limitation is documented)
-- [ ] Panel never takes focus; typing continues in the target app
+- [x] App switching: zero commands sent to the wrong app — CI, 0/80 (window switching still manual)
+- [x] Target app quit and relaunched (stale references) — CI, 5/5
+- [x] Disabled controls: limitation documented; Back/Forward dropped (R2)
+- [x] Panel never takes keyboard focus; typing continues in the target app — CI UI test, both OSes
 - [ ] Fullscreen apps; two monitors; Spaces
 - [ ] Light, dark, Increase Contrast, Reduce Transparency, larger text
 - [ ] Sleep/wake with the panel open

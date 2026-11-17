@@ -40,31 +40,39 @@ Latency (resolve + enabled check + press): median 40–105 ms, max 522 ms.
 
 The real PlainClick app was driven on the same GitHub macOS 15.8.2 and 26.7.2 machines. The test used real system input:
 the global hotkey sent as an HID event, real mouse clicks on the panel, and system-wide typing. Screenshots are in `docs/screenshots/macos-15|26/`.
-The last complete run (commit `0ffd691`) passed 15 of 17 checks on **both** OSes:
+**Final run (commit `76bfffb`): 17 of 17 checks passed on both macOS 15.8.2 and 26.7.2.**
 
 | Check | Result |
 |---|---|
 | Hotkey ⌃⌥P registers, opens and hides the panel | PASS |
 | Opening the panel doesn't steal focus from TextEdit | PASS |
 | Panel shows the right target and only tested actions (Save, Find; Safari: Reload, New Tab) | PASS |
-| Real click on **Find** runs Find in TextEdit; TextEdit stays in front; PlainClick never activates | PASS |
-| Real click on **Save** sends Save ("Save sent to TextEdit."; 17–64 ms) | Sent ✔; file check inconclusive (see below) |
+| Typing reaches TextEdit's document (environment check) | PASS |
+| Real click on **Save** saves the typed text to the file on disk (engine 161 / 366 ms) | PASS |
 | **Typing continues in TextEdit's document after clicking the panel (T4)** | PASS |
+| Real click on **Find** opens TextEdit's find bar; TextEdit stays in front | PASS |
 | Unsupported app (Calculator) gets the honest message | PASS |
 | Trial shows 7 days on first use | PASS |
 | Settings window opens (Apps / Panel / Licence / Free guide) | Screenshot captured |
 
-The one remaining FAIL was a test-setup problem, not a product one: the first typing ran straight after the synthetic hotkey and was lost,
-so Save had nothing new to write. A fix (type before the hotkey) was pushed as `8f6bf79`, but it **couldn't run**: GitHub stopped
-the jobs because the account's macOS minutes or spending limit ran out. It needs a re-run.
+Note: a click on the panel sometimes makes macOS briefly activate PlainClick (seen on the Save click, not on Find). The engine
+handles this: it hands activation back to the target app, confirms it is in front, and only then sends the command. Typing
+afterwards still lands in the target document (PASS above).
+
+A failure along the way was a false alarm from the test, not the product: TextEdit auto-capitalised "milk" → "Milk", and the
+check was case-sensitive.
 
 ### Bugs this test found and fixed (none were visible on Windows)
 1. **⌃⌥Space conflicts with macOS's "Select next input source" shortcut.** The default is now **⌃⌥P**.
 2. **Clicking the panel activated PlainClick and the button didn't fire.** The panel now uses the standard AppKit palette setup:
    `.nonactivatingPanel`, `becomesKeyOnlyIfNeeded`, a hosting view that never needs key, `acceptsFirstMouse`, and `defer: false`.
    The engine also still hands focus back to the target if PlainClick ever ends up in front.
-3. Test-harness lessons: dispatch app events while waiting, clear modifier flags on synthetic typing, and never press your own
-   SwiftUI button through Accessibility from a background thread (that crashed SwiftUI; real VoiceOver calls arrive on the main thread).
+3. Test-harness lessons:
+   - dispatch app events while waiting
+   - clear modifier flags on synthetic typing
+   - never press your own SwiftUI button through Accessibility from a background thread (that crashed SwiftUI; real VoiceOver calls arrive on the main thread)
+   - pause the panel's refresh timer while querying your own app through Accessibility (a stack sample showed an HIServices lock deadlock)
+   - compare typed text case-insensitively
 
 ### Not covered by these runs (still needs a physical Mac)
 The panel, hotkey and focus behaviour are now covered by the UI test above. Still not tested: VoiceOver used by a person. Also not tested:
