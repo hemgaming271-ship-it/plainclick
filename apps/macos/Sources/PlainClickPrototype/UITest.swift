@@ -215,10 +215,11 @@ final class UITestRunner {
         wait(2.5)
 
         // An app PlainClick doesn't support: it says so honestly.
-        scene("unsupported")
         open(["-a", "Calculator"])
         waitUntil(10) { frontBundle() == "com.apple.calculator" }
-        wait(3)
+        waitUntil(3) { !app.engine.model.supported } // panel has switched to the honest message
+        scene("unsupported")
+        wait(4.5)
 
         // Back to TextEdit and close the panel with the same shortcut.
         scene("close")

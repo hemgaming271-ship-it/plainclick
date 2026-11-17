@@ -23,7 +23,7 @@ $plan = [ordered]@{
     'keep-typing' = @('Your typing stays in your document.', 0.0, 5.5)
     'find'        = @('Find, in one clear click.', 0.0, 6.5)
     'safari'      = @('Only actions we have tested: Safari Reload and New Tab.', 0.0, 7.0)
-    'unsupported' = @('Apps we have not tested get an honest message.', 1.0, 4.5)
+    'unsupported' = @('Apps we have not tested get an honest message.', 0.0, 4.5)
     'close'       = @('Press Control-Option-P again to close it.', 0.0, 4.0)
 }
 $names = @($plan.Keys | Where-Object { $scenes.Contains($_) })

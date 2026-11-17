@@ -31,16 +31,21 @@ jobs:
           # Our own neutral page, large enough to read at 1024x768, served locally.
           cat > demo-site/recipes.html <<'HTML'
           <!doctype html><html><head><meta charset="utf-8"><title>Weekend recipes</title></head>
-          <body style="font-family:-apple-system,Helvetica,sans-serif;margin:56px;background:#f7f6f2;color:#1e2124">
-          <h1 style="font-size:44px;margin:0 0 16px">Weekend recipes</h1>
-          <p style="font-size:24px">Pancakes &middot; Tomato soup &middot; Green salad</p>
-          <p style="font-size:20px;color:#4f555b">A sample page for the PlainClick demo.</p>
+          <body style="font-family:Helvetica,Arial,sans-serif;margin:48px;background:#f7f6f2;color:#1e2124">
+          <h1 style="font-size:44px;margin:0 0 24px">Weekend recipes</h1>
+          <div style="display:flex;gap:24px">
+            <div style="flex:1;height:220px;border-radius:16px;background:linear-gradient(135deg,#f4c27a,#e8954a)"></div>
+            <div style="flex:1;height:220px;border-radius:16px;background:linear-gradient(135deg,#e86a5a,#b8402f)"></div>
+            <div style="flex:1;height:220px;border-radius:16px;background:linear-gradient(135deg,#8cc98a,#3f8f4f)"></div>
+          </div>
+          <p style="font-size:24px;margin-top:20px">Pancakes &middot; Tomato soup &middot; Green salad</p>
           </body></html>
           HTML
           python3 -m http.server 8765 --directory demo-site > /dev/null 2>&1 &
           sleep 2
           # Pre-load Safari so the Safari scene doesn't wait for a cold launch.
           open -a Safari "http://localhost:8765/recipes.html"
+          open -g -a Calculator
           sleep 10
           # -v video, -C show cursor, -k show clicks, -x no sounds, -V max seconds
           screencapture -v -C -k -x -V 90 "$PWD/demo-out/plainclick-demo-macos26.mov" &

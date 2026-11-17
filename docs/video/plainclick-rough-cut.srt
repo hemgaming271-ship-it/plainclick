@@ -3,34 +3,34 @@
 Your everyday Mac actions, made clearer.
 
 2
-00:00:11,000 --> 00:00:13,992
+00:00:11,000 --> 00:00:14,000
 Press Control-Option-P. A plain panel appears. TextEdit stays as it is.
 
 3
-00:00:13,992 --> 00:00:18,492
+00:00:14,000 --> 00:00:18,500
 Click Save. TextEdit saves your document.
 
 4
-00:00:18,492 --> 00:00:23,992
+00:00:18,500 --> 00:00:24,000
 Your typing stays in your document.
 
 5
-00:00:23,992 --> 00:00:30,492
+00:00:24,000 --> 00:00:30,500
 Find, in one clear click.
 
 6
-00:00:30,492 --> 00:00:37,492
+00:00:30,500 --> 00:00:37,500
 Only actions we have tested: Safari Reload and New Tab.
 
 7
-00:00:37,492 --> 00:00:41,992
+00:00:37,500 --> 00:00:40,040
 Apps we have not tested get an honest message.
 
 8
-00:00:41,992 --> 00:00:45,992
+00:00:40,040 --> 00:00:44,040
 Press Control-Option-P again to close it.
 
 9
-00:00:45,992 --> 00:00:50,992
+00:00:44,040 --> 00:00:49,040
 PlainClick. Clear controls. Less clutter. Join the beta.
 
