@@ -1,0 +1,9 @@
+.DS_Store
+apps/macos/.build/
+apps/macos/build/
+*.xcuserstate
+node_modules/
+.next/
+*.tsbuildinfo
+.env
+.env.local

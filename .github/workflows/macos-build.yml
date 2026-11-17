@@ -1,0 +1,32 @@
+# Compile-only check for the Phase 0 prototype on a GitHub-hosted macOS runner.
+# This proves the Swift source BUILDS. It does NOT test Accessibility behaviour, permissions or the panel —
+# CI runners cannot grant Accessibility access, so none of the feasibility tests (T0–T12) can run here.
+name: macOS build check
+
+on:
+  push:
+    paths: ["apps/macos/**", "packages/licence-contracts/**", ".github/workflows/**"]
+  pull_request:
+    paths: ["apps/macos/**"]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-15
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: apps/macos
+    steps:
+      - uses: actions/checkout@v4
+      - name: Record toolchain
+        run: |
+          sw_vers
+          xcodebuild -version
+          swift --version
+      - name: Licensing unit tests (entitlement vector shared with the Node signer)
+        run: swift test
+      - name: Build and bundle (ad-hoc signed)
+        run: |
+          chmod +x scripts/build-app.sh
+          ./scripts/build-app.sh

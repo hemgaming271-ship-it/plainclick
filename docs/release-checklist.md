@@ -1,0 +1,47 @@
+# Release checklist
+
+Tick only what has actually been done, and record who did it and when. Nothing below is done yet.
+
+## A. Feasibility gate (friend's Mac)
+- [ ] `./scripts/build-app.sh` builds; `swift test` passes
+- [ ] Feasibility tests T0–T12 run and recorded in `feasibility-report.md`
+- [ ] At least 3 actions across 2 apps verified; `compatibility.md` and `src/lib/compatibility.ts` updated with the macOS build and app versions
+- [ ] Go / narrow / no-go written down
+
+## B. Native checks
+- [ ] Permission accepted, refused, and revoked while running
+- [ ] App switching and window switching: zero commands sent to the wrong app
+- [ ] Target app quit and relaunched (stale references)
+- [ ] Disabled controls match the real menu state (or the limitation is documented)
+- [ ] Panel never takes focus; typing continues in the target app
+- [ ] Fullscreen apps; two monitors; Spaces
+- [ ] Light, dark, Increase Contrast, Reduce Transparency, larger text
+- [ ] Sleep/wake with the panel open
+- [ ] VoiceOver reads the target name and each button with its availability hint
+- [ ] Trial: fresh install shows 7 days; ends correctly
+- [ ] Licence: activate, invalid key, limit reached, deactivate, transfer to a second Mac
+- [ ] Offline launch after activation still licensed; revoked licence removed on next online check
+
+## C. Backend checks
+- [x] Automated: invalid/stale signature, duplicate and retried webhooks, refund before/after fulfilment, wrong product/price/currency/discount/quantity, concurrent activations, forged and transplanted entitlements, email failure and retry, recovery single-use and expiry, rate limiting (`npm test`, 19 passing on 2026-11-17, Windows, PGlite)
+- [ ] Same scenarios against real PostgreSQL with concurrent connections
+- [ ] Sandbox Paddle webhooks captured and compared with the adapter's field mapping
+- [ ] Real email delivered from the verified domain; not marked as spam
+
+## D. Signing and notarization (needs Apple Developer Program, US$99/yr)
+- [ ] Developer ID Application certificate in the keychain
+- [ ] Bundle ID changed from `local.plainclick.prototype` to the final reverse-DNS ID you control
+- [ ] `CODESIGN_IDENTITY="Developer ID Application: <Name> (<TEAMID>)" ./scripts/build-app.sh` (hardened runtime is already on)
+- [ ] Package as a DMG or ZIP; `xcrun notarytool submit PlainClick.zip --keychain-profile <profile> --wait`
+- [ ] `xcrun stapler staple "PlainClick.app"` (or the DMG)
+- [ ] `spctl --assess --type execute --verbose "PlainClick.app"` shows "Notarized Developer ID"
+- [ ] Download from the real URL on a **clean** Mac (new user account at minimum) and install without any Gatekeeper workaround
+- [ ] `shasum -a 256` recorded; version, checksum and release notes published on `/changelog` and `/download`
+
+## E. Website go-live
+- [ ] Real support email works; seller legal name filled in; legal pages reviewed
+- [ ] Mobile and desktop layouts; keyboard-only navigation; contrast checked
+- [ ] Compatibility page shows only verified rows
+- [ ] `NEXT_PUBLIC_RELEASE_AVAILABLE=true` with real download URL and checksum
+- [ ] Sandbox: checkout success, cancel and failure paths; fulfilment end-to-end
+- [ ] Only then: production Paddle keys + `NEXT_PUBLIC_CHECKOUT_ENABLED=true`

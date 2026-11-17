@@ -1,0 +1,7 @@
+{
+  "note": "TEST ONLY. Throwaway key. Regenerate with node packages/licence-contracts/scripts/make-test-vector.mjs",
+  "publicKeyRawB64": "0/NQU8+lxmVLe45XDu2FE2AKF3cQlOfX9JIru+ckgN8=",
+  "installationId": "6F1C2E9A-3B4D-4E5F-8A9B-0C1D2E3F4A5B",
+  "valid": "pc1.eyJ2IjoxLCJwcm9kdWN0IjoicGxhaW5jbGljayIsIm1ham9yIjoxLCJraW5kIjoicGVycGV0dWFsIiwibGlkIjoiMDEyMzQ1Njc4OWFiY2RlZjAxMjM0NTY3IiwiaWlkIjoiNkYxQzJFOUEtM0I0RC00RTVGLThBOUItMEMxRDJFM0Y0QTVCIiwiaWF0IjoxNzk1MDAwMDAwfQ.Btca8F5LAcFO-YsyXKl2I3zKgWWM__TbeYEngwgd7nVD5ypLyJY_I2jzUFxjyp9ov2x4jJeqFZ-EdnSa4_fVAw",
+  "tampered": "pc1.eyJ2IjoxLCJwcm9kdWN0IjoicGxhaW5jbGljayIsIm1ham9yIjoyLCJraW5kIjoicGVycGV0dWFsIiwibGlkIjoiMDEyMzQ1Njc4OWFiY2RlZjAxMjM0NTY3IiwiaWlkIjoiNkYxQzJFOUEtM0I0RC00RTVGLThBOUItMEMxRDJFM0Y0QTVCIiwiaWF0IjoxNzk1MDAwMDAwfQ.Btca8F5LAcFO-YsyXKl2I3zKgWWM__TbeYEngwgd7nVD5ypLyJY_I2jzUFxjyp9ov2x4jJeqFZ-EdnSa4_fVAw"
+}
