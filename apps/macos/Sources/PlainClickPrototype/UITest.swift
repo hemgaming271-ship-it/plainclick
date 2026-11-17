@@ -116,20 +116,6 @@ final class UITestRunner {
         }
     }
 
-    /// Presses a panel button through Accessibility (the VoiceOver path), off the main thread.
-    private func axPressPanelButton(_ label: String) -> String {
-        let me = getpid()
-        return offMain {
-            let root = AXUIElementCreateApplication(me)
-            AXUIElementSetMessagingTimeout(root, 2)
-            guard let b = Self.bfs(root, { el in
-                AX.string(el, kAXRoleAttribute as String) == (kAXButtonRole as String) &&
-                    (AX.string(el, kAXDescriptionAttribute as String) == label || AX.string(el, kAXTitleAttribute as String) == label)
-            }) else { return "button not found" }
-            return AX.describe(AX.press(b))
-        } ?? "timeout"
-    }
-
     /// Types into whatever app has keyboard focus (system-wide), like a person would.
     private func typeSystemWide(_ text: String) {
         for scalar in text.utf16 {
@@ -179,18 +165,25 @@ final class UITestRunner {
         return nil
     }
 
-    /// Screen rect (top-left origin) of the panel button labelled `label`, found through Accessibility like VoiceOver would.
+    /// Screen rect (top-left origin) of the panel button labelled `label`, read from the panel's own in-process
+    /// accessibility tree on the main thread (the same tree VoiceOver sees). No cross-process AX call into ourselves:
+    /// that deadlocked against the panel's refresh timer in CI (stack sample, 2026-11-17).
     private func panelButtonFrame(_ label: String) -> CGRect? {
-        let me = getpid()
-        return offMain {
-            let root = AXUIElementCreateApplication(me)
-            AXUIElementSetMessagingTimeout(root, 2)
-            let button = Self.bfs(root) { el in
-                AX.string(el, kAXRoleAttribute as String) == (kAXButtonRole as String) &&
-                    (AX.string(el, kAXDescriptionAttribute as String) == label || AX.string(el, kAXTitleAttribute as String) == label)
+        guard let root = app.panel.window.contentView else { return nil }
+        var queue: [AnyObject] = [root]
+        var best: NSRect?
+        var seen = 0
+        while !queue.isEmpty, seen < 2000 {
+            let el = queue.removeFirst()
+            seen += 1
+            if let l = el.accessibilityLabel?(), l == label, let f = el.accessibilityFrame?(), f.width > 0, f.height > 0 {
+                best = f // keep the deepest match (the button itself)
             }
-            return button.flatMap { Self.frame($0) }
-        } ?? nil
+            if let kids = el.accessibilityChildren?() { queue.append(contentsOf: kids.map { $0 as AnyObject }) }
+        }
+        guard let f = best, let primary = NSScreen.screens.first else { return nil }
+        // Cocoa screen coords (bottom-left origin) → CGEvent global coords (top-left origin of the primary display).
+        return CGRect(x: f.minX, y: primary.frame.height - f.maxY, width: f.width, height: f.height)
     }
 
     private func textEditHasFindField(_ pid: pid_t) -> Bool {
