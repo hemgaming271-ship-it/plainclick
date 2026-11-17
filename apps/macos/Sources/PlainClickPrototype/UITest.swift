@@ -18,6 +18,7 @@ final class UITestRunner {
     private let doc: URL
 
     init(app: AppDelegate, out: URL) {
+        setvbuf(stdout, nil, _IOLBF, 0) // line-buffered so output survives a crash
         self.app = app
         self.out = out
         try? FileManager.default.createDirectory(at: out, withIntermediateDirectories: true)
@@ -281,19 +282,11 @@ final class UITestRunner {
             record("click Find button", false, "Find button not found through Accessibility")
         }
 
-        // 4b. Same button pressed through Accessibility (how VoiceOver presses it). Re-front TextEdit first.
-        open(["-a", "TextEdit"])
-        waitUntil(5) { frontBundle() == te }
-        wait(0.5)
-        let axResult = axPressPanelButton("Find")
-        let axFound = waitUntil(4) { textEditHasFindField(tePID) }
-        record("Find via Accessibility press (VoiceOver path)", axFound,
-               "AXPress=\(axResult) find field=\(axFound) status=\"\(app.engine.model.status)\" front=\(frontBundle() ?? "?")")
-        pressEscape(to: tePID)
         open(["-a", "TextEdit"])
         waitUntil(5) { frontBundle() == te }
         let log = (try? String(contentsOf: TrialLog.fileURL, encoding: .utf8))?.split(separator: "\n").suffix(3).joined(separator: " / ") ?? "no log"
         record("diagnostic: last engine log rows", true, log)
+        writeInterim()
 
         // 5. Typing still goes to TextEdit after clicking the panel (T4), then the panel's Save button saves it.
         let token = "milk eggs 42"
@@ -346,11 +339,30 @@ final class UITestRunner {
         postHotKey()
         let hidden = waitUntil(3) { !app.panel.isVisible }
         record("hotkey hides panel", hidden, "visible=\(app.panel.isVisible)")
+        writeInterim()
+
+        // 11. LAST (it crashed the app in an earlier CI run): press a panel button through Accessibility,
+        // the way VoiceOver does. Everything above is already saved if this crashes.
+        app.panel.show()
+        wait(0.8)
+        let axResult = axPressPanelButton("Find")
+        let axFound = waitUntil(4) { textEditHasFindField(tePID) }
+        record("Find via Accessibility press (VoiceOver path)", axFound,
+               "AXPress=\(axResult) find field=\(axFound) status=\"\(app.engine.model.status)\" front=\(frontBundle() ?? "?")")
 
         finish()
     }
 
+    /// Saves the report so far (survives a later crash).
+    private func writeInterim() { writeReport() }
+
     private func finish() {
+        writeReport()
+        print("UI TEST DONE \(rows.filter(\.pass).count)/\(rows.count)")
+        NSApp.terminate(nil)
+    }
+
+    private func writeReport() {
         let enc = JSONEncoder()
         enc.outputFormatting = [.prettyPrinted]
         try? enc.encode(rows).write(to: out.appendingPathComponent("ui-results.json"))
@@ -363,12 +375,5 @@ final class UITestRunner {
         md += ["", "## Screenshots", ""] + shots.map { "- \($0)" }
         let text = md.joined(separator: "\n") + "\n"
         try? text.write(to: out.appendingPathComponent("ui-report.md"), atomically: true, encoding: .utf8)
-        if let summary = ProcessInfo.processInfo.environment["GITHUB_STEP_SUMMARY"], let h = FileHandle(forWritingAtPath: summary) {
-            h.seekToEndOfFile()
-            h.write(Data(text.utf8))
-            h.closeFile()
-        }
-        print("UI TEST DONE \(passed)/\(rows.count)")
-        NSApp.terminate(nil)
     }
 }

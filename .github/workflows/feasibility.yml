@@ -65,10 +65,11 @@ jobs:
           APP_PID=$!
           for i in $(seq 1 240); do kill -0 $APP_PID 2>/dev/null || break; sleep 1; done
           kill $APP_PID 2>/dev/null || true
-          sleep 5
+          sleep 15
           # Keep any crash report so failures can be diagnosed without a Mac.
-          cp ~/Library/Logs/DiagnosticReports/PlainClickPrototype* ui-out/ 2>/dev/null || true
+          find ~/Library/Logs/DiagnosticReports /Library/Logs/DiagnosticReports -iname '*PlainClick*' -exec cp {} ui-out/ \; 2>/dev/null || true
           cat ui-out/stdout.txt
+          [ -f ui-out/ui-report.md ] && cat ui-out/ui-report.md >> "$GITHUB_STEP_SUMMARY"
           ls -la ui-out
       - name: Upload UI artifacts
         if: always()
