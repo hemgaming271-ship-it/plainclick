@@ -188,7 +188,12 @@ try? FileManager.default.createDirectory(at: folderA, withIntermediateDirectorie
 try? "start\n".write(to: docURL, atomically: true, encoding: .utf8)
 try? """
 <!doctype html><title>PC-A</title><p>Page A</p>
-<script>if (!sessionStorage.getItem('v')) { sessionStorage.setItem('v', '1'); location.href = 'b.html'; }</script>
+<script>
+// Navigate only after load + delay, so Safari records a real history entry (an in-load script redirect replaces it).
+window.addEventListener('load', function () {
+  if (!sessionStorage.getItem('v')) { sessionStorage.setItem('v', '1'); setTimeout(function () { location.href = 'b.html'; }, 1500); }
+});
+</script>
 """.write(to: pageA, atomically: true, encoding: .utf8)
 try? """
 <!doctype html><title>PC-B</title><p>Page B</p><script>document.title = 'PC-B ' + Date.now();</script>
@@ -342,9 +347,13 @@ for def in [fi.action("finder.back")!, fi.action("finder.forward")!] {
     let (o, t) = attempt(def, target: fiPID)
     record("T5-disabled", "Finder", def.label, 1, o.label, o == .disabled, t, "new window (\(nw.label)), title=\(windowTitle(fiPID))")
 }
-// Real history: navigate the window, then Back must be enabled and work, Forward must then be enabled and work.
-bringToFront(fi.bundleID, open: [folderA.path])
-pump(0.5)
+// Real history: navigate this window with Finder's own Go > Applications (⇧⌘A, test-only helper),
+// then Back must be enabled and leave Applications, and Forward must return to it.
+let goApplications = ActionDefinition(id: "test.goapps", label: "Go to Applications", symbol: "", matchers: [.init(cmdChar: "A", modifiers: [.shift])])
+let titleBeforeNav = windowTitle(fiPID)
+let navOutcome = CommandRunner.perform(goApplications, targetPID: fiPID, frontmostPID: frontPID())
+waitUntil(3) { windowTitle(fiPID) != titleBeforeNav }
+notes.append("Finder history setup: Go to Applications \(navOutcome.label), title \(titleBeforeNav) -> \(windowTitle(fiPID))")
 let titleAfterNav = windowTitle(fiPID)
 let (ob, tb) = attempt(fi.action("finder.back")!, target: fiPID)
 let backChanged = waitUntil(3) { windowTitle(fiPID) != titleAfterNav }
