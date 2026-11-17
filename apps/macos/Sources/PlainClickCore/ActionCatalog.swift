@@ -1,32 +1,52 @@
 import Foundation
 
 /// How we recognise a menu command without relying on its (localised) title.
-struct MenuMatcher: Hashable {
+public struct MenuMatcher: Hashable {
     /// Preferred: the menu item's AXIdentifier, when the app provides one. Fill in from the discovery dump.
-    var identifier: String?
+    public var identifier: String?
     /// Fallback: keyboard-equivalent character as reported by AXMenuItemCmdChar (case-insensitive compare).
-    var cmdChar: String?
-    var modifiers: AX.Modifiers = .commandOnly
+    public var cmdChar: String?
+    public var modifiers: AX.Modifiers
+
+    public init(identifier: String? = nil, cmdChar: String? = nil, modifiers: AX.Modifiers = .commandOnly) {
+        self.identifier = identifier
+        self.cmdChar = cmdChar
+        self.modifiers = modifiers
+    }
 }
 
-struct ActionDefinition: Identifiable, Hashable {
-    let id: String              // stable, e.g. "safari.back"
-    let label: String           // our own plain label (English for the prototype)
-    let symbol: String          // SF Symbol name, optional decoration only
-    let matchers: [MenuMatcher] // tried in order; first one that resolves to exactly one item wins
+public struct ActionDefinition: Identifiable, Hashable {
+    public let id: String              // stable, e.g. "safari.back"
+    public let label: String           // our own plain label (English for now)
+    public let symbol: String          // SF Symbol name, optional decoration only
+    public let matchers: [MenuMatcher] // tried in order; first one that resolves to exactly one item wins
+
+    public init(id: String, label: String, symbol: String, matchers: [MenuMatcher]) {
+        self.id = id
+        self.label = label
+        self.symbol = symbol
+        self.matchers = matchers
+    }
 }
 
-struct AppAdapter {
-    let bundleID: String
-    let displayName: String
-    let actions: [ActionDefinition]
+public struct AppAdapter {
+    public let bundleID: String
+    public let displayName: String
+    public let actions: [ActionDefinition]
+
+    public init(bundleID: String, displayName: String, actions: [ActionDefinition]) {
+        self.bundleID = bundleID
+        self.displayName = displayName
+        self.actions = actions
+    }
+
+    public func action(_ id: String) -> ActionDefinition? { actions.first { $0.id == id } }
 }
 
-/// PROTOTYPE CANDIDATES — NOT VERIFIED COMPATIBILITY.
-/// Shortcut signatures are the stock US-English defaults as commonly documented; every one must be confirmed with
-/// the discovery dump ("Dump menu commands of frontmost app…") on the macOS build and app version under test.
-enum ActionCatalog {
-    static let adapters: [AppAdapter] = [
+/// CANDIDATES — compatibility is claimed only for rows verified in docs/compatibility.md.
+/// Shortcut signatures are the stock defaults; confirm them with the discovery dump on each macOS/app version.
+public enum ActionCatalog {
+    public static let adapters: [AppAdapter] = [
         AppAdapter(bundleID: "com.apple.Safari", displayName: "Safari", actions: [
             .init(id: "safari.back",    label: "Back",    symbol: "chevron.backward", matchers: [.init(cmdChar: "[")]),
             .init(id: "safari.forward", label: "Forward", symbol: "chevron.forward",  matchers: [.init(cmdChar: "]")]),
@@ -45,7 +65,7 @@ enum ActionCatalog {
         ]),
     ]
 
-    static func adapter(for bundleID: String?) -> AppAdapter? {
+    public static func adapter(for bundleID: String?) -> AppAdapter? {
         guard let bundleID else { return nil }
         return adapters.first { $0.bundleID == bundleID }
     }

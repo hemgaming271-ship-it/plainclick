@@ -12,9 +12,22 @@ let package = Package(
             name: "PlainClickLicensing",
             path: "Sources/PlainClickLicensing"
         ),
+        // Accessibility command engine shared by the app and the feasibility harness.
+        .target(
+            name: "PlainClickCore",
+            path: "Sources/PlainClickCore",
+            linkerSettings: [.linkedFramework("ApplicationServices")]
+        ),
+        // Automated Phase 0 tests against real TextEdit / Finder / Safari (runs on a GitHub macOS runner or any Mac).
+        .executableTarget(
+            name: "plainclick-feasibility",
+            dependencies: ["PlainClickCore"],
+            path: "Sources/Feasibility",
+            linkerSettings: [.linkedFramework("AppKit"), .linkedFramework("ApplicationServices")]
+        ),
         .executableTarget(
             name: "PlainClickPrototype",
-            dependencies: ["PlainClickLicensing"],
+            dependencies: ["PlainClickLicensing", "PlainClickCore"],
             path: "Sources/PlainClickPrototype",
             linkerSettings: [
                 .linkedFramework("AppKit"),

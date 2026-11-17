@@ -1,5 +1,6 @@
 import AppKit
 import ApplicationServices
+import PlainClickCore
 
 enum Availability: Equatable {
     case ready, disabled, notFound, ambiguous(Int), noPermission, error(String)

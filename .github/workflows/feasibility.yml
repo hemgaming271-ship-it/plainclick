@@ -1,0 +1,39 @@
+# Phase 0 feasibility tests against REAL TextEdit, Finder and Safari on a GitHub-hosted macOS VM.
+# This is real macOS with real apps, but not a physical user's Mac: one virtual display, no human, preinstalled
+# runner permissions. Results go to the job summary and the "feasibility-report" artifact.
+name: Feasibility (real apps on macOS)
+
+on:
+  workflow_dispatch:
+  push:
+    paths: ["apps/macos/Sources/PlainClickCore/**", "apps/macos/Sources/Feasibility/**", ".github/workflows/feasibility.yml"]
+
+jobs:
+  feasibility:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-15, macos-14]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 25
+    defaults:
+      run:
+        working-directory: apps/macos
+    steps:
+      - uses: actions/checkout@v5
+      - name: Record environment
+        run: |
+          sw_vers
+          xcodebuild -version
+      - name: Build harness
+        run: swift build -c release --product plainclick-feasibility
+      - name: Run feasibility tests
+        run: |
+          mkdir -p out
+          "$(swift build -c release --show-bin-path)/plainclick-feasibility" "$PWD/out"
+      - name: Upload report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: feasibility-report-${{ matrix.os }}
+          path: apps/macos/out

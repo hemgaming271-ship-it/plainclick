@@ -1,3 +1,4 @@
+import PlainClickCore
 import SwiftUI
 
 struct SettingsView: View {

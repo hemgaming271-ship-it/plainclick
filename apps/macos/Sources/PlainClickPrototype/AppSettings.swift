@@ -1,5 +1,6 @@
 import AppKit
 import Foundation
+import PlainClickCore
 
 /// Local preferences (UserDefaults). Nothing here leaves the Mac.
 final class AppSettings: ObservableObject {
