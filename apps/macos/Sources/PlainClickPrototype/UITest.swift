@@ -69,6 +69,7 @@ final class UITestRunner {
     private func record(_ test: String, _ pass: Bool, _ detail: String) {
         rows.append(Row(test: test, pass: pass, detail: detail))
         print("\(pass ? "PASS" : "FAIL") \(test): \(detail)")
+        writeReport() // save after every check, so a later hang or crash can't lose results
     }
 
     private func open(_ args: [String]) {
@@ -168,7 +169,8 @@ final class UITestRunner {
     nonisolated private static func bfs(_ root: AXUIElement, limit: Int = 3000, _ match: (AXUIElement) -> Bool) -> AXUIElement? {
         var queue = [root]
         var seen = 0
-        while !queue.isEmpty, seen < limit {
+        let deadline = Date().addingTimeInterval(3) // a busy target app must not hang the test
+        while !queue.isEmpty, seen < limit, Date() < deadline {
             let el = queue.removeFirst()
             seen += 1
             if match(el) { return el }
@@ -250,6 +252,11 @@ final class UITestRunner {
         if app.panel.isVisible { app.panel.hide() }
 
         // Environment check BEFORE any synthetic hotkey: typing reaches TextEdit's document.
+        // Click into the document first so the caret is in the text view (a fresh window may not have it yet).
+        if let w = AX.element(AX.app(pid: tePID), kAXFocusedWindowAttribute as String), let wf = Self.frame(w) {
+            click(CGPoint(x: wf.midX, y: wf.midY))
+            wait(0.5)
+        }
         let token1 = "milk eggs 42"
         typeSystemWide(" " + token1)
         let typed1 = waitUntil(3) { textEditContent(tePID).contains(token1) }
@@ -282,6 +289,7 @@ final class UITestRunner {
             let saved = waitUntil(5) { ((try? String(contentsOf: doc, encoding: .utf8)) ?? "").contains(token1) }
             record("click Save button", saved, (saved ? "file on disk updated" : "file not updated") +
                    "; status=\"\(app.engine.model.status)\" mouse=\(seenMouse)")
+            captureScreen("02a-screen-after-save")
             waitUntil(2) { frontBundle() == te }
             let token2 = "bread 7"
             typeSystemWide(" " + token2)
