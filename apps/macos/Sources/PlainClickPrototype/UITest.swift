@@ -249,6 +249,12 @@ final class UITestRunner {
         guard let tePID = pid(te) else { record("setup", false, "TextEdit did not start"); return finish() }
         if app.panel.isVisible { app.panel.hide() }
 
+        // Environment check BEFORE any synthetic hotkey: typing reaches TextEdit's document.
+        let token1 = "milk eggs 42"
+        typeSystemWide(" " + token1)
+        let typed1 = waitUntil(3) { textEditContent(tePID).contains(token1) }
+        record("typing reaches TextEdit before panel use", typed1, typed1 ? "text arrived" : "text did not arrive (environment check)")
+
         // 1. Real global hotkey opens the panel.
         record("hotkey registered", app.hotKeyRegistered, "RegisterEventHotKey for Ctrl-Option-P")
         postHotKey()
@@ -270,10 +276,6 @@ final class UITestRunner {
 
         // 4. T4 focus: type into TextEdit, click the panel's Save button, then keep typing.
         //    Save leaves the caret in the document, so the second text must land in the document too.
-        let token1 = "milk eggs 42"
-        typeSystemWide(" " + token1)
-        let typed1 = waitUntil(3) { textEditContent(tePID).contains(token1) }
-        record("typing reaches TextEdit before panel use", typed1, typed1 ? "text arrived" : "text did not arrive (environment check)")
         if let f = panelButtonFrame("Save") {
             seenMouse.removeAll()
             click(CGPoint(x: f.midX, y: f.midY))
