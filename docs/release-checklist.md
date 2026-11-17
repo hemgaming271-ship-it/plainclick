@@ -3,7 +3,8 @@
 Tick only what has actually been done, and record who did it and when. Nothing below is done yet.
 
 ## A. Feasibility gate (friend's Mac)
-- [ ] `./scripts/build-app.sh` builds; `swift test` passes
+- [x] `./scripts/build-app.sh` builds; `swift test` passes — on GitHub Actions macOS runner, 2026-11-17 (CI only, not a real-Mac run)
+- [ ] App launched on a real Mac; menu bar icon, panel and permission prompt appear
 - [ ] Feasibility tests T0–T12 run and recorded in `feasibility-report.md`
 - [ ] At least 3 actions across 2 apps verified; `compatibility.md` and `src/lib/compatibility.ts` updated with the macOS build and app versions
 - [ ] Go / narrow / no-go written down

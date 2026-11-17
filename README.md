@@ -12,8 +12,8 @@ toolbar, and it doesn't change macOS appearance. "PlainClick" is a provisional n
 | Website (Next.js 16, Tailwind 4): 12 pages in pre-release state, checkout off, no download link | Built | `next build` passes; checked in a browser (desktop + mobile, light + dark) on Windows |
 | Licensing backend: Paddle webhook, licences, 2-Mac activation, Ed25519 entitlements, email outbox, recovery, rate limits | Built | **19 automated tests pass** (`npm test`) against embedded Postgres (PGlite) |
 | DB migrations | Written | Applied by the tests (PGlite); not yet run against a real Postgres server |
-| Mac app: menu bar, panel, AX command engine, settings, per-app config, licence, trial, appearance guide | **Source only** | **Never compiled or run.** No Mac yet |
-| Swift licensing tests (shared vector with the Node signer) | Written | Not run (needs macOS — CI workflow provided) |
+| Mac app: menu bar, panel, AX command engine, settings, per-app config, licence, trial, appearance guide | **Compiles** | GitHub Actions macOS runner (arm64), 2026-11-17: `swift build` + ad-hoc signed `.app` bundle succeed. **Never launched or used on a real Mac.** |
+| Swift licensing tests (shared vector with the Node signer) | Passing | Same CI run: `swift test` passes, so CryptoKit accepts the Node-signed entitlement and rejects tampered ones |
 | Real-Mac feasibility tests | **Not run** | Planned on a friend's Mac — `docs/feasibility-report.md` |
 | Paddle, email provider, hosting, Apple Developer ID | **Not set up** | Needs your accounts |
 
