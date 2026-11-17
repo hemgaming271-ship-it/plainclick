@@ -65,8 +65,12 @@ jobs:
           mkdir -p ui-out
           "build/PlainClick Prototype.app/Contents/MacOS/PlainClickPrototype" --ui-test "$PWD/ui-out" > ui-out/stdout.txt 2>&1 &
           APP_PID=$!
-          for i in $(seq 1 240); do kill -0 $APP_PID 2>/dev/null || break; sleep 1; done
-          kill $APP_PID 2>/dev/null || true
+          for i in $(seq 1 180); do kill -0 $APP_PID 2>/dev/null || break; sleep 1; done
+          if kill -0 $APP_PID 2>/dev/null; then
+            echo "App still running after 180 s: sampling its call stacks before killing it"
+            sample $APP_PID 3 -file ui-out/hang-sample.txt || true
+            kill $APP_PID 2>/dev/null || true
+          fi
           sleep 15
           # Keep any crash report so failures can be diagnosed without a Mac.
           find ~/Library/Logs/DiagnosticReports /Library/Logs/DiagnosticReports -iname '*PlainClick*' -exec cp {} ui-out/ \; 2>/dev/null || true
