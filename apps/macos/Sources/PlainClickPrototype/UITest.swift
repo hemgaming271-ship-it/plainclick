@@ -265,7 +265,7 @@ final class UITestRunner {
         }
         let token1 = "milk eggs 42"
         typeSystemWide(" " + token1)
-        let typed1 = waitUntil(3) { textEditContent(tePID).contains(token1) }
+        let typed1 = waitUntil(3) { textEditContent(tePID).localizedCaseInsensitiveContains(token1) }
         record("typing reaches TextEdit before panel use", typed1, typed1 ? "text arrived" : "text did not arrive (environment check)")
 
         // 1. Real global hotkey opens the panel.
@@ -292,14 +292,14 @@ final class UITestRunner {
         if let f = panelButtonFrame("Save") {
             seenMouse.removeAll()
             click(CGPoint(x: f.midX, y: f.midY))
-            let saved = waitUntil(5) { ((try? String(contentsOf: doc, encoding: .utf8)) ?? "").contains(token1) }
+            let saved = waitUntil(5) { ((try? String(contentsOf: doc, encoding: .utf8)) ?? "").localizedCaseInsensitiveContains(token1) /* TextEdit auto-capitalises */ }
             record("click Save button", saved, (saved ? "file on disk updated" : "file not updated") +
                    "; status=\"\(app.engine.model.status)\" mouse=\(seenMouse)")
             captureScreen("02a-screen-after-save")
             waitUntil(2) { frontBundle() == te }
             let token2 = "bread 7"
             typeSystemWide(" " + token2)
-            let typed2 = waitUntil(3) { textEditContent(tePID).contains(token2) }
+            let typed2 = waitUntil(3) { textEditContent(tePID).localizedCaseInsensitiveContains(token2) }
             record("typing continues in TextEdit after panel click", typed2,
                    (typed2 ? "text arrived in the document" : "text did not arrive") + "; front=\(frontBundle() ?? "?")")
         } else {
