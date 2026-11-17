@@ -65,6 +65,9 @@ struct PanelView: View {
                     .help(action.availability.explanation)
                     .accessibilityLabel(action.def.label)
                     .accessibilityHint(action.availability.explanation)
+                    .background(GeometryReader { g in
+                        Color.clear.preference(key: ButtonFramesKey.self, value: [action.def.label: g.frame(in: .global)])
+                    })
                 }
             }
 
@@ -83,7 +86,25 @@ struct PanelView: View {
         }
         .padding(comfortable ? 16 : 10)
         .frame(width: comfortable ? 260 : 220, alignment: .leading)
+        .onPreferenceChange(ButtonFramesKey.self) { frames in PanelButtonFrames.shared.set(frames) }
     }
+}
+
+/// Button frames in the hosting view's coordinate space (top-left origin). Used only by the --ui-test runner
+/// to click the real buttons; harmless in normal use.
+struct ButtonFramesKey: PreferenceKey {
+    static let defaultValue: [String: CGRect] = [:]
+    static func reduce(value: inout [String: CGRect], nextValue: () -> [String: CGRect]) {
+        value.merge(nextValue(), uniquingKeysWith: { $1 })
+    }
+}
+
+final class PanelButtonFrames: @unchecked Sendable {
+    static let shared = PanelButtonFrames()
+    private let lock = NSLock()
+    private var frames: [String: CGRect] = [:]
+    func set(_ f: [String: CGRect]) { lock.lock(); frames = f; lock.unlock() }
+    func frame(_ label: String) -> CGRect? { lock.lock(); defer { lock.unlock() }; return frames[label] }
 }
 
 /// Solid, bordered, high-legibility buttons. No translucency.

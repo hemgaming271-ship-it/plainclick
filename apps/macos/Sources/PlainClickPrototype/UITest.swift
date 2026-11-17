@@ -169,21 +169,14 @@ final class UITestRunner {
     /// accessibility tree on the main thread (the same tree VoiceOver sees). No cross-process AX call into ourselves:
     /// that deadlocked against the panel's refresh timer in CI (stack sample, 2026-11-17).
     private func panelButtonFrame(_ label: String) -> CGRect? {
-        guard let root = app.panel.window.contentView else { return nil }
-        var queue: [AnyObject] = [root]
-        var best: NSRect?
-        var seen = 0
-        while !queue.isEmpty, seen < 2000 {
-            let el = queue.removeFirst()
-            seen += 1
-            if let l = el.accessibilityLabel?(), l == label, let f = el.accessibilityFrame?(), f.width > 0, f.height > 0 {
-                best = f // keep the deepest match (the button itself)
-            }
-            if let kids = el.accessibilityChildren?() { queue.append(contentsOf: kids.map { $0 as AnyObject }) }
-        }
-        guard let f = best, let primary = NSScreen.screens.first else { return nil }
-        // Cocoa screen coords (bottom-left origin) → CGEvent global coords (top-left origin of the primary display).
-        return CGRect(x: f.minX, y: primary.frame.height - f.maxY, width: f.width, height: f.height)
+        let w = app.panel.window
+        guard let local = PanelButtonFrames.shared.frame(label), let content = w.contentView,
+              let primary = NSScreen.screens.first else { return nil }
+        // SwiftUI .global = hosting view space, top-left origin → Cocoa screen rect → CGEvent (top-left of primary display).
+        let contentOnScreen = w.convertToScreen(content.convert(content.bounds, to: nil))
+        let cocoaTop = contentOnScreen.maxY - local.minY
+        return CGRect(x: contentOnScreen.minX + local.minX, y: primary.frame.height - cocoaTop,
+                      width: local.width, height: local.height)
     }
 
     private func textEditHasFindField(_ pid: pid_t) -> Bool {
