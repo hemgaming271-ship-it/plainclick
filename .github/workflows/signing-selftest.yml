@@ -94,7 +94,8 @@ jobs:
       - name: "FREE mode: self-signed cert, imported and trusted exactly like release.yml, signs with a stable identity"
         working-directory: apps/macos
         run: |
-          set -euo pipefail
+          set -eEuo pipefail
+          trap 'echo "::error::FREE-mode step failed at line $LINENO: $BASH_COMMAND"' ERR
           KC="$RUNNER_TEMP/self.keychain-db"; KC_PASS="$(uuidgen)"
           base64 --decode < ../../p12/self/SELFSIGNED_P12_BASE64.txt > "$RUNNER_TEMP/self.p12"
           security create-keychain -p "$KC_PASS" "$KC"
