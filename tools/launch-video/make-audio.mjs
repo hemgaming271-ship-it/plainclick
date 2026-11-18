@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const SR = 48000;
-const DUR = Number(process.argv[2]) || 57.5;
+const DUR = Number(process.argv[2]) || 52.0;
 const N = Math.round(SR * DUR);
 const L = new Float32Array(N), R = new Float32Array(N);
 
@@ -66,15 +66,15 @@ for (let b = 0; b < bars; b++) {
   const chord = b === bars - 1 ? CHORDS[0] : CHORDS[b % 4];
   pad(b * BAR, Math.min(DUR - 1.6, (b + 1) * BAR), chord, 0.16);
 }
-// Plucked pulse while the product is on screen (7 s - 46 s): arpeggio of the current chord, every 0.6 s
-for (let t = 7.2; t < 46.0; t += 0.6) {
+// Plucked pulse while the product is on screen (9.4 s - 40.6 s): arpeggio of the current chord, every 0.6 s
+for (let t = 9.4; t < 40.6; t += 0.6) {
   const b = Math.floor(t / BAR), chord = CHORDS[b % 4];
-  const step = Math.round((t - 7.2) / 0.6);
+  const step = Math.round((t - 9.4) / 0.6);
   const note = chord[1 + (step % 4)] + 12;
   pluck(t, note, step % 4 === 0 ? 0.05 : 0.032, step % 2 ? 0.3 : -0.3);
 }
 // A gentle "arrival" note for the title and the end card
-pluck(0.5, 76, 0.06); pluck(52.3, 72, 0.07); pluck(52.3, 79, 0.05);
+pluck(0.5, 76, 0.06); pluck(46.5, 72, 0.07); pluck(46.5, 79, 0.05);
 
 // ---- simple stereo ping-pong delay as "space" (music only) ----
 const d = Math.floor(0.36 * SR), fb = 0.32, mix = 0.22;
@@ -86,8 +86,9 @@ for (let i = 0; i < N; i++) {
 }
 
 // Clicks synced to timeline.html (keycap press + panel button clicks), added dry so they don't echo
-click(14.05, 900, 0.18);
-for (const t of [19.0, 26.1, 35.4, 37.4]) click(t + 0.02);
+// keep in sync with CLICKS / keycap press in timeline.html
+click(12.6, 900, 0.18);
+for (const t of [17.4, 23.8, 30.75, 32.35]) click(t + 0.02);
 
 // ---- master: fade in/out, soft limit, normalise ----
 let peak = 0;

@@ -2,294 +2,315 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>PlainClick launch video</title>
+<title>PlainClick launch video v2</title>
 <style>
-  :root { --bg:#101214; --ink:#f2f1ec; --muted:#a7abb0; --accent:#8cc3dd; --line:#2a2e33; }
+  @font-face { font-family:Inter; font-weight:400; src:url(node_modules/@fontsource/inter/files/inter-latin-400-normal.woff2) format("woff2"); }
+  @font-face { font-family:Inter; font-weight:500; src:url(node_modules/@fontsource/inter/files/inter-latin-500-normal.woff2) format("woff2"); }
+  @font-face { font-family:Inter; font-weight:600; src:url(node_modules/@fontsource/inter/files/inter-latin-600-normal.woff2) format("woff2"); }
+  @font-face { font-family:Inter; font-weight:700; src:url(node_modules/@fontsource/inter/files/inter-latin-700-normal.woff2) format("woff2"); }
+  :root { --ink:#f5f4f0; --muted:#9ba2a9; --dim:#6c737a; --accent:#8cc3dd; --accent2:#5a9bbd; }
   * { box-sizing:border-box; margin:0; padding:0; }
-  html, body { width:1920px; height:1080px; overflow:hidden; background:var(--bg); }
-  body { font-family:"Segoe UI Variable Display","Segoe UI",system-ui,sans-serif; color:var(--ink); -webkit-font-smoothing:antialiased; }
-  #bg { position:absolute; inset:0; background:
-          radial-gradient(1200px 700px at 50% 38%, #1b2026 0%, #121417 55%, #0d0f11 100%); }
-  #world { position:absolute; left:0; top:0; width:1920px; height:1080px; transform-origin:0 0; will-change:transform; }
-  #device { position:absolute; border-radius:22px; overflow:hidden; background:#000;
-            box-shadow:0 0 0 1px #2f343a, 0 40px 120px rgba(0,0,0,.55), 0 10px 30px rgba(0,0,0,.35); }
-  #device img.screen { position:absolute; left:0; top:0; width:100%; height:100%; opacity:0; }
-  .panel { position:absolute; opacity:0; border-radius:0 0 10px 10px; }
-  #cursor { position:absolute; width:22px; height:32px; opacity:0; filter:drop-shadow(0 2px 3px rgba(0,0,0,.45)); }
-  #ripple { position:absolute; width:46px; height:46px; margin:-23px 0 0 -23px; border-radius:50%;
-            border:3px solid var(--accent); opacity:0; }
-  .center { position:absolute; left:0; right:0; text-align:center; }
-  #title1 { top:410px; font-size:96px; font-weight:650; letter-spacing:-1.5px; }
-  #title2 { top:540px; font-size:40px; color:var(--muted); font-weight:400; }
-  #big { top:380px; font-size:92px; font-weight:650; letter-spacing:-1.5px; line-height:1.08; }
-  #big .accent { color:var(--accent); }
-  #caption { position:absolute; left:50%; bottom:64px; transform:translateX(-50%); white-space:nowrap;
-             padding:18px 34px; border-radius:16px; background:rgba(16,18,20,.82);
-             box-shadow:0 0 0 1px rgba(255,255,255,.08), 0 18px 50px rgba(0,0,0,.45);
-             font-size:38px; font-weight:560; opacity:0; }
-  #caption small { color:var(--muted); font-weight:450; }
-  #keys { position:absolute; left:50%; top:470px; transform:translateX(-50%); display:flex; gap:22px; opacity:0; }
-  .key { width:128px; height:128px; border-radius:24px; background:linear-gradient(#2a2f35,#1d2125);
-         box-shadow:0 0 0 1px #3a4047, 0 10px 0 #0c0e10, 0 18px 40px rgba(0,0,0,.5);
-         display:flex; align-items:center; justify-content:center; flex-direction:column; font-size:52px; font-weight:600; }
-  .key small { font-size:20px; color:var(--muted); font-weight:500; margin-top:4px; }
-  #features { position:absolute; left:50%; top:300px; transform:translateX(-50%); display:grid;
-              grid-template-columns:repeat(2, 560px); gap:28px; }
-  .feat { padding:34px 38px; border-radius:22px; background:#171a1e; box-shadow:0 0 0 1px var(--line); opacity:0; }
-  .feat h3 { font-size:36px; font-weight:620; margin-bottom:10px; }
-  .feat p { font-size:24px; color:var(--muted); line-height:1.35; }
-  #featTitle { top:170px; font-size:58px; font-weight:650; letter-spacing:-.8px; opacity:0; }
-  #end { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; opacity:0; }
-  #end .mark { font-size:120px; font-weight:680; letter-spacing:-2px; }
-  #end .tag { font-size:42px; color:var(--muted); margin-top:10px; }
-  #end .cta { margin-top:56px; font-size:40px; font-weight:620; color:#0f1f28; background:var(--accent);
-              padding:18px 46px; border-radius:16px; }
-  #end .price { margin-top:22px; font-size:28px; color:var(--muted); }
-  #fine { position:absolute; left:0; right:0; bottom:46px; text-align:center; font-size:21px; color:#7d8288; opacity:0; }
-  #fade { position:absolute; inset:0; background:#000; opacity:1; pointer-events:none; }
-  /* ---- 9:16 vertical layout ---- */
+  html, body { width:1920px; height:1080px; overflow:hidden; background:#0c0e10; }
   html.vertical, html.vertical body { width:1080px; height:1920px; }
-  html.vertical #world { width:1080px; height:1920px; }
-  html.vertical #bg { background:radial-gradient(900px 1100px at 50% 45%, #1b2026 0%, #121417 55%, #0d0f11 100%); }
-  html.vertical #title1 { top:800px; font-size:104px; }
-  html.vertical #title2 { top:940px; font-size:42px; }
-  html.vertical #big { top:740px; font-size:76px; padding:0 40px; }
-  html.vertical #caption { white-space:normal; width:max-content; max-width:940px; text-align:center; bottom:300px; font-size:38px; line-height:1.3; }
-  html.vertical #caption small { display:block; margin-top:6px; }
-  html.vertical #keys { top:1480px; }
-  html.vertical #featTitle { top:430px; font-size:60px; padding:0 40px; }
-  html.vertical #features { top:600px; grid-template-columns:900px; gap:26px; }
-  html.vertical #end .mark { font-size:118px; }
-  html.vertical #end .price { font-size:30px; }
-  html.vertical #fine { bottom:110px; padding:0 70px; font-size:23px; line-height:1.4; }
+  body { font-family:Inter, system-ui, sans-serif; color:var(--ink); -webkit-font-smoothing:antialiased; font-feature-settings:"ss01","cv11"; }
+  .abs { position:absolute; }
+  #bg { position:absolute; inset:0;
+        background:
+          radial-gradient(900px 700px at 78% 30%, rgba(140,195,221,.13), transparent 70%),
+          radial-gradient(800px 600px at 10% 90%, rgba(244,194,122,.06), transparent 70%),
+          linear-gradient(160deg, #13171b 0%, #0d0f12 55%, #0a0b0d 100%); }
+  /* logo mark: a rounded tile with three "buttons" */
+  .mark { width:132px; height:132px; border-radius:32px; background:linear-gradient(145deg,#a6d4ea,#4f8fb0);
+          box-shadow:0 24px 60px rgba(79,143,176,.35), inset 0 1px 0 rgba(255,255,255,.35);
+          display:flex; flex-direction:column; justify-content:center; gap:12px; padding:0 28px; }
+  .mark i { display:block; height:16px; border-radius:6px; background:rgba(255,255,255,.95); }
+  .mark i:nth-child(2) { width:76%; opacity:.85; } .mark i:nth-child(3) { width:52%; opacity:.7; }
+  #logo { left:0; right:0; top:360px; display:flex; flex-direction:column; align-items:center; }
+  #logo .word { font-size:112px; font-weight:700; letter-spacing:-.035em; margin-top:34px; }
+  #logo .tag { font-size:36px; color:var(--muted); margin-top:6px; letter-spacing:-.01em; }
+  #hero { left:0; right:0; top:400px; text-align:center; font-size:96px; font-weight:700; letter-spacing:-.04em; line-height:1.06; }
+  #hero .line { display:block; overflow:hidden; padding-bottom:.08em; }
+  #hero .w { display:inline-block; }
+  #hero .accent { color:var(--accent); }
+  /* chapter headline */
+  #chap { left:120px; top:330px; width:590px; }
+  #chap .eyebrow { font-size:22px; font-weight:600; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+  #chap h2 { font-size:72px; font-weight:700; letter-spacing:-.035em; line-height:1.04; margin-top:18px; }
+  #chap p { font-size:30px; color:var(--muted); line-height:1.38; margin-top:22px; letter-spacing:-.01em; }
+  #chap .slot { position:absolute; left:0; top:0; width:100%; }
+  /* product composition, in screenshot points (1 css px = 1 pt), scaled as a whole */
+  #comp { width:764px; height:330px; transform-origin:0 0; }
+  .win { position:absolute; background-repeat:no-repeat; background-size:1024px 768px; border-radius:12px;
+         box-shadow:0 0 0 .5px rgba(0,0,0,.35), 0 28px 70px rgba(0,0,0,.55), 0 8px 18px rgba(0,0,0,.3); }
+  .fadebottom { -webkit-mask-image:linear-gradient(#000 62%, transparent 100%); }
+  #card { position:absolute; left:504px; top:13px; width:260px; transform-origin:0 0; border-radius:12px; overflow:hidden; background:#fbfbfa;
+          box-shadow:0 0 0 .5px rgba(0,0,0,.28), 0 26px 60px rgba(0,0,0,.5), 0 6px 14px rgba(0,0,0,.25); }
+  #card .chrome { height:24px; display:flex; align-items:center; gap:6px; padding:0 9px; background:#f3f3f2; border-bottom:.5px solid #e1e1df; position:relative; }
+  #card .chrome b { width:8px; height:8px; border-radius:50%; background:#d6d6d4; }
+  #card .chrome span { position:absolute; left:0; right:0; text-align:center; font:500 10.5px Inter; color:#9a9a98; }
+  #card .body { position:relative; }
+  #card .body img { position:absolute; left:0; top:0; width:260px; }
+  #ring { position:absolute; border:2.5px solid var(--accent); border-radius:9px; opacity:0; box-shadow:0 0 0 6px rgba(140,195,221,.18); }
+  #cursor { position:absolute; width:16px; height:23px; opacity:0; filter:drop-shadow(0 1.5px 2px rgba(0,0,0,.45)); }
+  #ripple { position:absolute; width:30px; height:30px; margin:-15px 0 0 -15px; border-radius:50%; border:2px solid var(--accent); opacity:0; }
+  /* keycaps */
+  #keys { display:flex; gap:16px; opacity:0; }
+  .key { width:96px; height:96px; border-radius:20px; background:linear-gradient(#2b3036,#1c2024);
+         box-shadow:0 0 0 1px #3a4148, 0 7px 0 #0b0d0f, 0 16px 30px rgba(0,0,0,.45);
+         display:flex; flex-direction:column; align-items:center; justify-content:center; font-size:40px; font-weight:600; }
+  .key small { font-size:14px; font-weight:500; color:var(--muted); margin-top:2px; }
+  /* features */
+  #ftitle { left:0; right:0; top:250px; text-align:center; font-size:64px; font-weight:700; letter-spacing:-.035em; }
+  #feats { left:50%; top:420px; transform:translateX(-50%); display:grid; grid-template-columns:repeat(4, 360px); gap:24px; }
+  .feat { padding:34px 30px 32px; border-radius:24px; background:rgba(255,255,255,.035); box-shadow:inset 0 0 0 1px rgba(255,255,255,.07); opacity:0; }
+  .feat svg { width:44px; height:44px; stroke:var(--accent); fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+  .feat h3 { font-size:28px; font-weight:650; letter-spacing:-.02em; margin-top:22px; }
+  .feat p { font-size:21px; color:var(--muted); line-height:1.4; margin-top:10px; }
+  /* end card */
+  #end { inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; opacity:0; }
+  #end .word { font-size:104px; font-weight:700; letter-spacing:-.035em; margin-top:30px; }
+  #end .tag { font-size:34px; color:var(--muted); margin-top:4px; }
+  #end .cta { margin-top:50px; font-size:32px; font-weight:600; color:#0d1b23; background:var(--accent); padding:16px 40px; border-radius:999px; }
+  #end .price { margin-top:22px; font-size:24px; color:var(--muted); }
+  #fine { left:0; right:0; bottom:44px; text-align:center; font-size:18px; color:var(--dim); opacity:0; padding:0 80px; line-height:1.5; }
+  #fade { position:absolute; inset:0; background:#000; pointer-events:none; }
+
+  /* ---------- 9:16 ---------- */
+  html.vertical #logo { top:700px; }
+  html.vertical #hero { top:760px; font-size:84px; padding:0 50px; }
+  html.vertical #chap { left:80px; top:250px; width:920px; }
+  html.vertical #chap h2 { font-size:76px; }
+  html.vertical #chap p { font-size:32px; }
+  html.vertical #ftitle { top:330px; font-size:66px; padding:0 60px; }
+  html.vertical #feats { top:520px; grid-template-columns:900px; gap:22px; }
+  html.vertical .feat { display:grid; grid-template-columns:64px 1fr; column-gap:22px; padding:30px 34px; }
+  html.vertical .feat svg { grid-row:span 2; margin-top:4px; }
+  html.vertical .feat h3 { margin-top:0; }
+  html.vertical #fine { bottom:110px; }
 </style>
 </head>
 <body>
 <div id="bg"></div>
-<div id="world">
-  <div id="device"></div>
+
+<div id="logo" class="abs"><div class="mark"><i></i><i></i><i></i></div><div class="word">PlainClick</div><div class="tag">Clear controls. Less clutter.</div></div>
+<div id="hero" class="abs"><span class="line"><span class="w">Your</span> <span class="w">everyday</span> <span class="w">Mac</span> <span class="w">actions,</span></span><span class="line"><span class="w accent">made clearer.</span></span></div>
+
+<div id="chap" class="abs"></div>
+
+<div id="comp" class="abs">
+  <div id="w-typed" class="win"></div><div id="w-save" class="win"></div><div id="w-find" class="win"></div>
+  <div id="w-safari" class="win fadebottom"></div><div id="w-calc" class="win fadebottom"></div>
+  <div id="card"><div class="chrome"><b></b><b></b><b></b><span>PlainClick</span></div><div class="body"></div></div>
+  <div id="ring"></div>
   <div id="ripple"></div>
-  <svg id="cursor" viewBox="0 0 22 32"><path d="M2 2 L2 26 L8.2 20.3 L12.4 30 L16.4 28.3 L12.3 18.8 L20.5 18.8 Z" fill="#111" stroke="#fff" stroke-width="2" stroke-linejoin="round"/></svg>
+  <svg id="cursor" viewBox="0 0 16 23"><path d="M1.5 1.5 L1.5 18.8 L6 14.7 L9 21.6 L11.9 20.4 L9 13.6 L14.9 13.6 Z" fill="#111" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/></svg>
 </div>
-<div id="title1" class="center">PlainClick</div>
-<div id="title2" class="center">Clear controls. Less clutter.</div>
-<div id="big" class="center">Your everyday Mac actions,<br><span class="accent">made clearer.</span></div>
-<div id="keys"><div class="key">⌃<small>control</small></div><div class="key">⌥<small>option</small></div><div class="key">P</div></div>
-<div id="featTitle" class="center">Built to be plain, on purpose.</div>
-<div id="features">
-  <div class="feat"><h3>Clearly labelled buttons</h3><p>Every action says what it does, in words, with solid edges.</p></div>
-  <div class="feat"><h3>Your actions, together</h3><p>Pin and reorder the few commands you use all day.</p></div>
-  <div class="feat"><h3>Compact or comfortable</h3><p>Light, dark, or follow your Mac. Icons optional.</p></div>
-  <div class="feat"><h3>Runs on your Mac</h3><p>No screen contents or documents ever leave it.</p></div>
+<div id="keys" class="abs"><div class="key">⌃<small>control</small></div><div class="key">⌥<small>option</small></div><div class="key">P</div></div>
+
+<div id="ftitle" class="abs">Plain, on purpose.</div>
+<div id="feats" class="abs">
+  <div class="feat"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h10M4 17h7"/></svg><h3>Labelled in words</h3><p>Every button says what it does. Solid edges, no guessing.</p></div>
+  <div class="feat"><svg viewBox="0 0 24 24"><path d="M12 3l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.4 6.8 19.1l1-5.8L3.5 9.2l5.9-.9z"/></svg><h3>Your actions, together</h3><p>Pin and reorder the few commands you use all day.</p></div>
+  <div class="feat"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M3 9h18M9 9v11"/></svg><h3>Your layout</h3><p>Compact or comfortable. Light, dark or automatic.</p></div>
+  <div class="feat"><svg viewBox="0 0 24 24"><path d="M12 3l7 3v6c0 4.4-3 7.6-7 9-4-1.4-7-4.6-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg><h3>Stays on your Mac</h3><p>No screen contents or documents ever leave it.</p></div>
 </div>
-<div id="caption"></div>
-<div id="end">
-  <div class="mark">PlainClick</div>
-  <div class="tag">Clear controls. Less clutter.</div>
-  <div class="cta">Join the beta</div>
-  <div class="price">US$5.99 one time at launch · 7-day free trial</div>
-</div>
-<div id="fine">Screens from the PlainClick pre-release build on macOS 26. Works with the apps and actions listed on our compatibility page. Not affiliated with Apple.</div>
+
+<div id="end" class="abs"><div class="mark"><i></i><i></i><i></i></div><div class="word">PlainClick</div><div class="tag">Clear controls. Less clutter.</div><div class="cta">Join the beta</div><div class="price">US$5.99 one time at launch · 7-day free trial</div></div>
+<div id="fine" class="abs">Screens from the PlainClick pre-release build on macOS 26. Works with the apps and actions listed on our compatibility page. Not affiliated with Apple.</div>
 <div id="fade"></div>
 
 <script>
-// ---------- assets ----------
-const SCREENS = ['typed','open','save','find','safari','reload','newtab','unsupported'];
-const PANELS  = ['open','save','find','safari','reload','newtab','unsupported'];
-let LAYOUT = {};
-// Layout: 16:9 (default) or 9:16 (?vertical) for Reels / Shorts / TikTok.
+// ---------- layout ----------
 const VERT = location.search.includes('vertical');
-const W = VERT ? 1080 : 1920, H = VERT ? 1920 : 1080;
 if (VERT) document.documentElement.classList.add('vertical');
-const S = VERT ? 1000/1024 : 1.171875;                       // 1024x768 screenshot -> device size
-const DEV = VERT ? { x:40, y:585, w:1000, h:750 } : { x:360, y:90, w:1200, h:900 };
-const ZP = VERT ? 1.25 : 1;                                   // tighter close-ups on the narrow canvas
+const W = VERT ? 1080 : 1920, H = VERT ? 1920 : 1080;
+const CS = VERT ? 1.7 : 1.28;                                     // composition scale (pt -> px)
+const COMP = VERT ? { x:(1080 - 480*1.7)/2, y:740 } : { x:770, y:(1080 - 330*1.28)/2 + 6 };
+const PANEL_K = VERT ? 1.55 : 1.25;                               // the panel is the hero: shown larger than the window
+const CARD = VERT ? { x:38, y:322 } : { x:504, y:13 };           // card top-left in comp space (screen panel window top-left = 724,71); 9:16 stacks it below the window
+const ORIGIN = { x:80, y:58 };                                    // composition origin in screenshot points
+const KEYS = VERT ? { x:540, y:650 } : { x:140 + 160, y:740 };    // keycaps centre
+let LAYOUT = {};
 
 // ---------- easing ----------
 const clamp = (v,a=0,b=1) => Math.min(b, Math.max(a, v));
 const prog  = (t,a,b) => clamp((t-a)/(b-a));
-const ease  = p => p<.5 ? 4*p*p*p : 1-Math.pow(-2*p+2,3)/2;          // cubic in-out
-const out   = p => 1-Math.pow(1-p,3);                                  // cubic out
+const ease  = p => p<.5 ? 4*p*p*p : 1-Math.pow(-2*p+2,3)/2;
+const out   = p => 1-Math.pow(1-p,4);
 const lerp  = (a,b,p) => a+(b-a)*p;
-const fade  = (t,a,b,fi=.5,fo=.5) => Math.min(ease(prog(t,a,a+fi)), 1-ease(prog(t,b-fo,b)));
-
-// world-space point of a screen-space (screenshot points) coordinate
-const wx = x => DEV.x + x*S, wy = y => DEV.y + y*S;
-const panelLayout = name => LAYOUT[name] || LAYOUT.open || {x:724,y:99,w:260,h:150};
-const btn = (state, label) => {
-  const L = panelLayout(state);
-  if (L['btn.'+label+'.x'] != null) return {x:wx(L['btn.'+label+'.x']), y:wy(L['btn.'+label+'.y'])};
-  const order = {Save:0, Find:1, Reload:0, 'New Tab':1}[label] || 0;     // fallback estimate
-  return {x:wx(L.x + L.w*0.55), y:wy(L.y + 56 + order*44)};
-};
+const win   = (t,a,b,fi=.5,fo=.5) => Math.min(out(prog(t,a,a+fi)), 1-ease(prog(t,b-fo,b)));
 
 // ---------- timeline (seconds) ----------
-// Each screen state: [start, end] when visible (crossfaded 0.45 s). All screens are real stills of that exact state.
-const SHOTS = {
-  typed:[7.6,14.6], open:[14.2,22.6], save:[22.2,27.3], find:[26.9,33.1],
-  safari:[33.1,36.3], reload:[35.9,38.1], newtab:[37.7,40.9], unsupported:[40.9,45.3]
+const T = {
+  logo:[0.2,4.6], hero:[4.6,9.2],
+  A:[9.2,15.6], B:[15.6,22.4], C:[22.4,28.4], D:[28.4,34.8], E:[34.8,40.2],
+  feats:[40.2,46.2], end:[46.4,52.0], DUR:52.0,
 };
-// The panel overlay switches right after the click (as on the real screen); the screen behind switches later,
-// when the camera is on the title, so the viewer sees "Edited" disappear.
-const PANEL_SHOTS = { open:[14.2,19.8], save:[19.4,27.3] };
-const CAPTIONS = [
-  [8.3, 12.9, 'You\'re writing in TextEdit.'],
-  [15.4, 19.8, 'A clear panel appears. <small>TextEdit itself doesn\'t change.</small>'],
-  [20.2, 22.0, 'Click <b>Save</b>.'],
-  [22.3, 25.2, 'Saved. <small>"Edited" is gone from the title.</small>'],
-  [27.5, 32.9, 'Click <b>Find</b>. Search starts right away.'],
-  [33.5, 40.7, 'Only actions we\'ve tested. <small>Safari: Reload and New Tab.</small>'],
-  [41.3, 45.1, 'Other apps? An honest <b>"not supported yet"</b>.'],
+const CHAPTERS = [
+  { t:T.A, n:'01', eyebrow:'One shortcut', h:'Press ⌃⌥P.', p:'A plain panel appears beside the app you’re using. The app itself stays exactly as it is.' },
+  { t:T.B, n:'02', eyebrow:'Clear buttons', h:'Click Save.<br>TextEdit saves.', p:'Every action is a real menu command in the app, sent only to the app in front.' },
+  { t:T.C, n:'03', eyebrow:'Real commands', h:'Click Find.<br>Search is ready.', p:'One clearly labelled click instead of hunting for an icon.' },
+  { t:T.D, n:'04', eyebrow:'Tested per app', h:'Only actions<br>we’ve tested.', p:'In Safari: Reload and New Tab. More apps as each one passes testing.' },
+  { t:T.E, n:'05', eyebrow:'Honest', h:'Honest about<br>the rest.', p:'Apps we haven’t tested get a clear message, never a guess.' },
 ];
-const TITLE = { x: 235, y: 76 };   // TextEdit title "Notes.txt — Edited" in screen points (measured on the still)
-// Camera keyframes: [t, zoom, focusX, focusY] in world coords; eased between.
-function camera(t) {
-  const P = panelLayout('open');
-  const pc = { x: wx(P.x + P.w/2), y: wy(P.y + 90) };
-  const tc = { x: wx(TITLE.x + 40), y: wy(TITLE.y + 26) };
-  // All focus points are defined in screenshot points, so both layouts frame the same content.
-  const full = { x: wx(512), y: wy(384) }, intro = { x: wx(512), y: wy(401) };
-  const pz = { x: pc.x - 51.2*S, y: pc.y + 17*S };            // panel close-up
-  const fb = { x: wx(461), y: wy(247) };                       // find bar + document
-  const un = { x: pc.x - 102.4*S, y: pc.y + 102.4*S };         // Calculator + panel
-  const K = [
-    [7.0, 0.92, intro.x, intro.y], [13.5, 1.00, full.x, full.y],
-    [15.6, 1.00, full.x, full.y], [18.4, 2.05*ZP, pz.x, pz.y],
-    [20.4, 2.05*ZP, pz.x, pz.y], [21.7, 2.6*ZP, tc.x, tc.y],        // pan to the title: "Edited" is gone
-    [24.6, 2.6*ZP, tc.x, tc.y], [25.8, 2.05*ZP, pz.x, pz.y],
-    [26.5, 2.05*ZP, pz.x, pz.y], [28.9, 1.25, fb.x, fb.y],          // pull out to show the find bar
-    [32.7, 1.25, fb.x, fb.y], [33.7, 2.05*ZP, pz.x, pz.y],
-    [40.5, 2.05*ZP, pz.x, pz.y], [41.9, 1.55, un.x, un.y],
-    [45.1, 1.55, un.x, un.y], [46.1, 1.0, full.x, full.y],
-  ];
-  if (t <= K[0][0]) return K[0];
-  for (let i=0;i<K.length-1;i++) {
-    const [t0,z0,x0,y0] = K[i], [t1,z1,x1,y1] = K[i+1];
-    if (t <= t1) { const p = ease(prog(t,t0,t1)); return [t, lerp(z0,z1,p), lerp(x0,x1,p), lerp(y0,y1,p)]; }
-  }
-  return K[K.length-1];
-}
-// Cursor path: [t, x, y, click?] in world coords
-function cursorPath() {
-  const sv = btn('open','Save'), fd = btn('save','Find'), rl = btn('safari','Reload'), nt = btn('reload','New Tab');
-  const rest = { x: wx(560), y: wy(300) };
-  return [
-    [16.0, rest.x, rest.y], [19.0, sv.x, sv.y, true],                  // click Save at 19.0
-    [24.1, sv.x+20, sv.y+20], [26.1, fd.x, fd.y, true],                // click Find at 26.1 -> find state 26.9
-    [29.5, fd.x-40, fd.y+120], [34.3, rl.x, rl.y], [35.4, rl.x, rl.y, true],  // Reload 35.4
-    [36.5, nt.x, nt.y], [37.4, nt.x, nt.y, true],                      // New Tab 37.4
-    [40.0, nt.x+60, nt.y+150],
-  ];
-}
+// Window states (crop of the real screenshot) and panel states (real 3x render), with their visible spans.
+const WINS = {
+  typed:  { still:'typed',  rect:[80,58,480,300],  at:[0,0],    span:[9.6,18.8] },
+  save:   { still:'save',   rect:[80,58,480,300],  at:[0,0],    span:[18.4,24.6] },
+  find:   { still:'find',   rect:[80,58,480,300],  at:[0,0],    span:[24.2,29.2] },
+  safari: { still:'safari', rect:[0,30,480,290],   at:[0,4],    span:[28.6,35.4] },
+  calc:   { still:'unsupported', rect:[62,352,230,330], at:VERT ? [125,-14] : [150,0], span:[35.0,40.6] },
+};
+const PANELS = [  // [state, start]
+  ['open',12.9], ['save',17.6], ['find',24.0], ['safari',28.8], ['reload',30.95], ['newtab',32.55], ['unsupported',35.2],
+];
+const CLICKS = { save:17.4, find:23.8, reload:30.75, newtab:32.35 };  // keep in sync with make-audio.mjs
 
-// ---------- build DOM ----------
-const device = document.getElementById('device');
-Object.assign(device.style, { left:DEV.x+'px', top:DEV.y+'px', width:DEV.w+'px', height:DEV.h+'px' });
-const screenImgs = {}, panelImgs = {};
-function img(src, cls) { const i = new Image(); i.src = src; i.className = cls; i.decoding = 'sync'; return i; }
-
+// ---------- build ----------
+const $ = id => document.getElementById(id);
+const comp = $('comp'), cardBody = document.querySelector('#card .body');
+const panelImgs = {};
+function setupWin(id, w) {
+  const el = $('w-' + id), [x,y,ww,hh] = w.rect;
+  Object.assign(el.style, { left:w.at[0]+'px', top:w.at[1]+'px', width:ww+'px', height:hh+'px',
+    backgroundImage:`url(assets/still-${w.still}.png)`, backgroundPosition:`${-x}px ${-y}px` });
+  if (id === 'calc') el.style.borderRadius = '22px';
+}
 async function load() {
   try { LAYOUT = await (await fetch('assets/layout.json')).json(); } catch { LAYOUT = {}; }
-  for (const s of SCREENS) { screenImgs[s] = img(`assets/still-${s}.png`, 'screen'); device.appendChild(screenImgs[s]); }
-  for (const p of PANELS) { const i = img(`assets/panel-${p}.png`, 'panel'); panelImgs[p] = i; document.getElementById('world').insertBefore(i, document.getElementById('ripple')); }
-  await Promise.all([...Object.values(screenImgs), ...Object.values(panelImgs)].map(i => i.decode().catch(()=>{})));
-  for (const p of PANELS) {
-    const L = panelLayout(p), i = panelImgs[p];
-    // The render is the panel's real content at 3x; place it exactly over the panel content area in the screenshot.
-    const w = L.w * S, h = i.naturalHeight / i.naturalWidth * w;
-    Object.assign(i.style, { left:wx(L.x)+'px', top:wy(L.y)+'px', width:w+'px', height:h+'px' });
-  }
+  for (const [id, w] of Object.entries(WINS)) setupWin(id, w);
+  const imgs = [];
+  for (const [s] of PANELS) { const i = new Image(); i.src = `assets/panel-${s}.png`; panelImgs[s] = i; cardBody.appendChild(i); imgs.push(i); }
+  for (const w of Object.values(WINS)) { const i = new Image(); i.src = `assets/still-${w.still}.png`; imgs.push(i); }
+  await Promise.all(imgs.map(i => i.decode().catch(()=>{})));
+  await document.fonts.ready;
+  Object.assign(comp.style, { left:COMP.x+'px', top:COMP.y+'px' });
+  Object.assign(document.getElementById('card').style, { left:CARD.x+'px', top:CARD.y+'px' });
   window.__ready = true;
 }
 
+// comp-space (pt) point for a panel button, from the real layout captured on the Mac
+function btn(state, label) {
+  const L = LAYOUT[state] || {};
+  const x = L['btn.'+label+'.x'], y = L['btn.'+label+'.y'];
+  return x == null ? { x:CARD.x+160, y:CARD.y+100 } : { x:CARD.x + (x-724)*PANEL_K, y:CARD.y + (y-71)*PANEL_K };
+}
+function panelHeight(state) { const i = panelImgs[state]; return i && i.naturalWidth ? 260 * i.naturalHeight / i.naturalWidth : 160; }
+
 // ---------- render one frame ----------
-const $ = id => document.getElementById(id);
+let lastChap = -1;
 window.renderAt = function(t) {
-  $('fade').style.opacity = 1 - Math.min(ease(prog(t,0,0.8)), 1 - ease(prog(t,56.7,57.5)));
+  $('fade').style.opacity = 1 - Math.min(ease(prog(t,0,0.7)), 1 - ease(prog(t,T.DUR-0.9,T.DUR)));
 
-  // Title + tagline (0-4)
-  const a1 = fade(t,0.4,4.0,.8,.6);
-  $('title1').style.opacity = a1; $('title1').style.transform = `translateY(${(1-out(prog(t,0.4,1.4)))*24}px)`;
-  const a2 = fade(t,1.0,4.0,.8,.6);
-  $('title2').style.opacity = a2; $('title2').style.transform = `translateY(${(1-out(prog(t,1.0,2.0)))*18}px)`;
+  // Logo
+  const lg = win(t, T.logo[0], T.logo[1], .9, .6);
+  $('logo').style.opacity = lg;
+  document.querySelector('#logo .mark').style.transform = `scale(${lerp(.82,1,out(prog(t,.2,1.3)))})`;
+  const lw = document.querySelector('#logo .word'), lt = document.querySelector('#logo .tag');
+  lw.style.opacity = out(prog(t,.7,1.6)); lw.style.transform = `translateY(${(1-out(prog(t,.7,1.6)))*18}px)`;
+  lt.style.opacity = out(prog(t,1.2,2.1)); lt.style.transform = `translateY(${(1-out(prog(t,1.2,2.1)))*14}px)`;
 
-  // Big line (4.2-7.6)
-  const ab = fade(t,4.2,7.8,.7,.6);
-  $('big').style.opacity = ab; $('big').style.transform = `translateY(${(1-out(prog(t,4.2,5.2)))*28}px) scale(${lerp(1.02,1,out(prog(t,4.2,7.8)))})`;
-
-  // Device in/out (7.0-44)
-  const dv = fade(t,7.0,46.7,.8,.7);
-  device.style.opacity = dv;
-  // Later screens sit on top: each one fades in over the previous, which stays fully opaque until covered
-  // (no dip to black between states).
-  for (const s of SCREENS) {
-    const [a,b] = SHOTS[s];
-    const on = s==='typed' ? 1 : ease(prog(t,a,a+.45));
-    const until = s === SCREENS[SCREENS.length-1] ? Infinity : b + 0.5;   // last screen leaves with the device
-    screenImgs[s].style.opacity = (t >= (s==='typed' ? 0 : a) && t <= until) ? on : 0;
-  }
-  // Crisp panel overlays: quick switch (0.15 s) when the panel's state changes, like the real panel.
-  PANELS.forEach((p, idx) => {
-    const [a,b] = PANEL_SHOTS[p] || SHOTS[p];
-    const nxt = PANELS[idx+1], ns = nxt ? (PANEL_SHOTS[nxt] || SHOTS[nxt])[0] : Infinity;
-    // true crossfade with the next state, so a taller previous panel never shows below a shorter one
-    let o = t >= a ? ease(prog(t,a,a+.15)) * (1 - ease(prog(t,ns,ns+.15))) : 0;
-    if (p==='open') o = Math.min(o, ease(prog(t,14.6,15.2)));       // panel appears after the key press
-    panelImgs[p].style.opacity = o * dv;                               // the last state leaves with the device
-    if (p==='open') panelImgs[p].style.transform = `translateY(${(1-out(prog(t,14.6,15.3)))*-14}px)`;
+  // Hero line: words rise from a mask, one after another
+  const hv = 1 - ease(prog(t, T.hero[1]-.6, T.hero[1]));
+  $('hero').style.opacity = t < T.hero[0] ? 0 : hv;
+  [...document.querySelectorAll('#hero .w')].forEach((w,i) => {
+    const s = T.hero[0] + .15 + i*.16, p = out(prog(t, s, s+.75));
+    w.style.transform = `translateY(${(1-p)*110}%)`; w.style.opacity = p;
   });
 
-  // Camera
-  const [,z,fx,fy] = camera(t);
-  $('world').style.transform = `translate(${W/2 - fx*z}px, ${H/2 - fy*z}px) scale(${z})`;
+  // Chapter headline (cross-fade between chapters)
+  let ci = CHAPTERS.findIndex(c => t >= c.t[0] && t < c.t[1]);
+  const chapEl = $('chap');
+  if (ci !== lastChap) {
+    chapEl.innerHTML = ci < 0 ? '' : `<div class="slot"><div class="eyebrow">${CHAPTERS[ci].n} · ${CHAPTERS[ci].eyebrow}</div><h2>${CHAPTERS[ci].h}</h2><p>${CHAPTERS[ci].p}</p></div>`;
+    lastChap = ci;
+  }
+  if (ci >= 0) {
+    const [a,b] = CHAPTERS[ci].t, d = ci === 0 ? .3 : 0;
+    const pin = out(prog(t, a+d, a+d+.7)), pout = ease(prog(t, b-.35, b));
+    const slot = chapEl.firstChild;
+    slot.style.opacity = Math.min(pin, 1-pout);
+    slot.style.transform = `translateY(${(1-pin)*24 - pout*10}px)`;
+    slot.querySelector('.eyebrow').style.opacity = out(prog(t, a+d, a+d+.5));
+    slot.querySelector('p').style.opacity = out(prog(t, a+d+.25, a+d+.95));
+  }
 
-  // Keycaps (13.0-15.2) with press animation
-  const ak = fade(t,12.6,15.4,.4,.5);
-  $('keys').style.opacity = ak;
-  const press = Math.sin(Math.PI*prog(t,14.0,14.5));
-  [...$('keys').children].forEach((k,i) => k.style.transform = `translateY(${press*8}px)`);
+  // Composition in/out + gentle push-in
+  const ca = win(t, 9.4, 40.6, .9, .6);
+  const push = lerp(1, 1.025, prog(t, 9.4, 40.6));
+  const enter = (1 - out(prog(t, 9.4, 10.5))) * 40;
+  comp.style.opacity = ca;
+  comp.style.transform = `translateY(${enter}px) scale(${CS * push})`;
 
-  // Cursor + click ripple
-  const path = cursorPath(), c = $('cursor'), r = $('ripple');
-  let cx = path[0][1], cy = path[0][2], rippleT = -1;
-  for (let i=0;i<path.length;i++) {
-    const [ti,xi,yi,click] = path[i];
-    if (click && t >= ti && t < ti+0.6) rippleT = t-ti;
-    if (i < path.length-1) {
-      const [tn,xn,yn] = path[i+1];
-      if (t >= ti && t <= tn) { const p = ease(prog(t,ti+ (click?0.25:0),tn)); cx = lerp(xi,xn,p); cy = lerp(yi,yn,p); }
+  for (const [id, w] of Object.entries(WINS)) {
+    const [a,b] = w.span, el = $('w-' + id);
+    el.style.opacity = Math.min(out(prog(t, a, a+.5)), 1 - ease(prog(t, b-.5, b)));
+    if (id === 'safari' || id === 'calc') el.style.transform = `translateY(${(1-out(prog(t,a,a+.7)))*16}px)`;
+  }
+
+  // Panel card: appears on the key press, then switches state like the real panel (quick 0.15 s cross-fade)
+  const card = $('card');
+  const cardIn = out(prog(t, 12.85, 13.45));
+  card.style.opacity = Math.min(cardIn, 1 - ease(prog(t, 40.0, 40.6)));
+  card.style.transform = `translateY(${(1-cardIn)*-12}px) scale(${PANEL_K * lerp(.97,1,cardIn)})`;
+  let h = panelHeight('open');
+  PANELS.forEach(([s, a], i) => {
+    const next = PANELS[i+1] ? PANELS[i+1][1] : 1e9;
+    const o = t >= a ? ease(prog(t, a, a+.15)) * (1 - ease(prog(t, next, next+.15))) : (i === 0 ? 1 : 0);
+    panelImgs[s].style.opacity = o;
+    if (t >= a) h = lerp(h, panelHeight(s), ease(prog(t, a, a+.25)));
+  });
+  cardBody.style.height = h + 'px';
+
+  // Title highlight after Save: "Notes.txt — Edited" -> "Notes.txt"
+  const ring = $('ring'), rv = win(t, 18.3, 21.6, .35, .5);
+  Object.assign(ring.style, { left:'92px', top:'4px', width:'148px', height:'22px', opacity:rv,
+    transform:`scale(${lerp(1.08,1,out(prog(t,18.3,18.8)))})` });
+
+  // Cursor path in comp space
+  const sv = btn('open','Save'), fd = btn('save','Find'), rl = btn('safari','Reload'), nt = btn('reload','New Tab');
+  const P = [
+    [15.9, 420, 280], [17.4, sv.x, sv.y, 'save'], [20.6, sv.x+30, sv.y+60], [23.8, fd.x, fd.y, 'find'],
+    [26.6, fd.x-60, fd.y+110], [30.75, rl.x, rl.y, 'reload'], [32.35, nt.x, nt.y, 'newtab'], [34.2, nt.x+40, nt.y+120],
+  ];
+  let cx = P[0][1], cy = P[0][2], rip = -1;
+  for (let i=0;i<P.length;i++) {
+    const [ti,xi,yi,click] = P[i];
+    if (click && t >= ti && t < ti+.55) rip = t - ti;
+    if (i < P.length-1) {
+      const [tn,xn,yn] = P[i+1];
+      const start = ti + (click ? .3 : 0), arrive = tn - .25;   // dwell briefly before each click
+      if (t >= ti && t <= tn) { const p = ease(prog(t, start, arrive)); cx = lerp(xi,xn,p); cy = lerp(yi,yn,p); }
       else if (t > tn) { cx = xn; cy = yn; }
     }
   }
-  const curOn = fade(t,15.8,40.5,.4,.5);
-  c.style.opacity = curOn; c.style.left = cx+'px'; c.style.top = cy+'px';
-  const down = rippleT >= 0 && rippleT < 0.16 ? 0.88 : 1;
-  c.style.transform = `scale(${down}) translate(-2px,-2px)`;
-  if (rippleT >= 0) { const p = out(prog(rippleT,0,0.6)); r.style.opacity = (1-p)*curOn; r.style.left = cx+'px'; r.style.top = cy+'px'; r.style.transform = `scale(${0.4+p*1.1})`; }
+  const cur = $('cursor'), co = win(t, 15.8, 34.6, .4, .4);
+  Object.assign(cur.style, { opacity:co, left:cx+'px', top:cy+'px', transform:`scale(${rip>=0 && rip<.14 ? .86 : 1})` });
+  const r = $('ripple');
+  if (rip >= 0) { const p = out(prog(rip,0,.55)); Object.assign(r.style, { opacity:(1-p)*co, left:cx+'px', top:cy+'px', transform:`scale(${.4+p*1.3})` }); }
   else r.style.opacity = 0;
 
-  // Captions
-  let cap = null, ca = 0;
-  for (const [a,b,txt] of CAPTIONS) if (t >= a && t <= b) { cap = txt; ca = fade(t,a,b,.35,.35); }
-  const ce = $('caption');
-  if (cap !== null && ce.dataset.txt !== cap) { ce.innerHTML = cap; ce.dataset.txt = cap; }
-  ce.style.opacity = cap ? ca : 0;
-  ce.style.transform = `translateX(-50%) translateY(${(1-ca)*10}px)`;
+  // Keycaps (chapter 01): appear, press at 12.6
+  const kv = win(t, 11.0, 15.2, .5, .5), keys = $('keys');
+  keys.style.opacity = kv;
+  keys.style.left = (KEYS.x - 160) + 'px'; keys.style.top = (KEYS.y - 48) + 'px';
+  const press = Math.sin(Math.PI * prog(t, 12.45, 12.85));
+  [...keys.children].forEach(k => { k.style.transform = `translateY(${press*6}px)`; k.style.boxShadow = press > .2 ? '0 0 0 1px #8cc3dd, 0 2px 0 #0b0d0f, 0 8px 20px rgba(140,195,221,.25)' : ''; });
 
-  // Features (44-49.4)
-  const af = fade(t,46.5,52.1,.6,.5);
-  $('featTitle').style.opacity = af; $('featTitle').style.transform = `translateY(${(1-out(prog(t,46.5,47.5)))*20}px)`;
+  // Features
+  const fv = win(t, T.feats[0], T.feats[1], .6, .5);
+  $('ftitle').style.opacity = fv; $('ftitle').style.transform = `translateY(${(1-out(prog(t,T.feats[0],T.feats[0]+.8)))*20}px)`;
   [...document.querySelectorAll('.feat')].forEach((el,i) => {
-    const s = 46.9 + i*0.35, o = fade(t,s,52.1,.55,.5);
+    const s = T.feats[0] + .35 + i*.18, o = Math.min(out(prog(t,s,s+.7)), 1-ease(prog(t,T.feats[1]-.5,T.feats[1])));
     el.style.opacity = o; el.style.transform = `translateY(${(1-out(prog(t,s,s+.7)))*26}px)`;
   });
 
-  // End card (49.6-51)
-  const ae = ease(prog(t,52.2,52.9));
-  $('end').style.opacity = ae; $('end').style.transform = `scale(${lerp(.985,1,ae)})`;
-  $('fine').style.opacity = ae;
+  // End card
+  const ev = out(prog(t, T.end[0], T.end[0]+.9));
+  $('end').style.opacity = ev; $('end').style.transform = `scale(${lerp(.98,1,ev)})`;
+  $('fine').style.opacity = out(prog(t, T.end[0]+.6, T.end[0]+1.4));
 };
-window.DURATION = 57.5;
+window.DURATION = T.DUR;
 load().then(() => window.renderAt(Number(new URLSearchParams(location.search).get('t') || 0)));
 </script>
 </body>

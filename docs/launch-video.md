@@ -30,7 +30,18 @@ Re-run the workflow from the Actions tab to record fresh footage after any UI ch
 End card small print: "Requires macOS 14 or later. Works with listed apps only. Not affiliated with Apple."
 Before checkout opens, replace the price line with **"Join the beta"**.
 
-## Launch video v1 (motion graphics) — `docs/video/plainclick-launch.mp4`
+## Launch video v2 (current) — clean product-shot design
+52 s; 1920×1080 `plainclick-launch.mp4` and 1080×1920 `plainclick-launch-vertical.mp4`, with music.
+- Instead of full VM screens, only the real app windows are shown (TextEdit, Safari's toolbar, Calculator), cropped from
+  the macOS 26 stills, on a calm brand background. No dock, menu bar or desktop clutter.
+- The PlainClick panel is the hero: the real 3× render, shown larger than the window, in its real state for each moment.
+  The cursor and clicks land on the real button positions from `assets/layout.json`.
+- Five numbered chapters with bold headlines: 01 shortcut · 02 Save (the title highlight shows "Edited" disappearing) ·
+  03 Find · 04 only tested actions (Safari) · 05 honest "not supported". Then features and the end card.
+- Typography: Inter (SIL Open Font License, bundled via `@fontsource/inter`). The logo mark is drawn in CSS.
+- The 9:16 version stacks the window above a larger panel for phones.
+
+## Launch video v1 (motion graphics, superseded)
 57.5 s, 1920×1080, 30 fps, H.264, no audio. Built by `tools/launch-video`:
 - Every frame is rendered deterministically from `timeline.html` (headless Chrome/Edge → ffmpeg), so motion is perfectly smooth.
 - Content is real. The screens are full-screen stills that the app's `--demo` mode captured on macOS 26 at each state.
