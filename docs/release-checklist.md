@@ -12,7 +12,9 @@ self-signed signing and no notarization. In that setup:
 - [x] Self-signed signing: CI self-test #10 shows a valid signature, and the designated requirement stays **identical across two different builds**, so the Accessibility grant survives updates (ad-hoc changes every build)
 - [x] Release dry run #3 passes with the Dodo licence code, and feasibility + real-app UI test run #30 passes (commit 31f2b8f). Draft-release job is ready but hasn't run yet (needs `SELFSIGNED_*` secrets + `DODO_ENV=live`)
 - [x] Static site: `npm run build:static` makes 15 pages with no API routes. Buy link = Dodo link (USD, quantity 1, no coupons). The thanks page shows the key and clears it from the URL. The download page explains Open Anyway. Checked in a browser on Windows
-- [ ] Self-signed certificate made and secrets set (`docs/free-release.md` §2–3)
+- [x] Self-signed certificate made (SHA-1 3EA62358…4B6217) and secrets + `BUNDLE_ID`/`DODO_ENV` set. Release build #8 (2026-11-18): `PlainClick-0.1.0.zip`, universal (x86_64 + arm64), signature valid, designated requirement tied to that certificate, Gatekeeper rejects as expected (not notarized), Dodo env `test`
+- [x] Website live at https://plainclick.pages.dev (static, Cloudflare Pages direct upload) with the seller name and support email
+- [ ] Dodo Product Information form: locked after the earlier trading-product rejection. Support asked by email (2026-11-18) to re-open it for PlainClick
 - [ ] Dodo test product with licence keys (limit 2), plus a test purchase → activate → deactivate → 3rd Mac refused, on a real Mac
 - [ ] What happens to a key after a refund confirmed (automatic disable, or manual)
 - [ ] Cloudflare Pages site live with real support email and seller name
