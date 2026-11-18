@@ -40,10 +40,41 @@ export const site = {
 };
 
 export const nav = [
-  { href: "/how-it-works", label: "How it works" },
-  { href: "/compatibility", label: "Compatibility" },
+  { href: "/#features", label: "Features" },
+  { href: "/compatibility", label: "Apps" },
+  { href: "/#privacy", label: "Privacy" },
   { href: "/pricing", label: "Pricing" },
   { href: "/help", label: "Help" },
+];
+
+export const footerGroups = [
+  {
+    title: "Product",
+    links: [
+      { href: "/#features", label: "Features" },
+      { href: "/how-it-works", label: "How it works" },
+      { href: "/compatibility", label: "Supported apps" },
+      { href: "/pricing", label: "Pricing" },
+      { href: "/changelog", label: "Changelog" },
+    ],
+  },
+  {
+    title: "Help",
+    links: [
+      { href: "/help", label: "Help & FAQ" },
+      { href: "/download", label: "Download & install" },
+      { href: "/recover", label: "Find my licence" },
+      { href: "/contact", label: "Support" },
+    ],
+  },
+  {
+    title: "Legal",
+    links: [
+      { href: "/privacy", label: "Privacy" },
+      { href: "/terms", label: "Terms" },
+      { href: "/refunds", label: "Refunds" },
+    ],
+  },
 ];
 
 export const footerNav = [

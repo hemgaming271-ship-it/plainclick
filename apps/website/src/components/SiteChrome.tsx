@@ -1,63 +1,103 @@
 import Link from "next/link";
-import { footerNav, nav, site } from "@/lib/site";
+import { footerGroups, nav, site } from "@/lib/site";
+import { LogoMark } from "./Logo";
 import { Container } from "./ui";
 
 export function SiteHeader() {
   return (
-    <header className="border-b border-line bg-paper">
-      <a href="#main" className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-10 focus:bg-surface focus:p-3">
+    <header className="sticky top-0 z-40 bg-[var(--nav)] text-white backdrop-blur-md">
+      <a
+        href="#main"
+        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-3 focus:z-50 focus:rounded-md focus:bg-white focus:px-3 focus:py-2 focus:text-ink"
+      >
         Skip to content
       </a>
-      <Container className="flex flex-wrap items-center justify-between gap-x-6 gap-y-2 py-4">
-        <Link href="/" className="text-xl font-bold tracking-tight">
+      <Container className="flex h-12 items-center justify-between gap-4">
+        <Link href="/" className="flex shrink-0 items-center gap-2 text-[15px] font-semibold tracking-tight text-white">
+          <LogoMark size={22} />
           {site.name}
         </Link>
-        <nav aria-label="Main">
-          <ul className="flex flex-wrap gap-x-5 gap-y-1 text-base">
+        <nav aria-label="Main" className="flex min-w-0 items-center gap-1 sm:gap-2">
+          <ul className="hidden items-center gap-6 text-[13px] text-white/85 md:flex">
             {nav.map((n) => (
               <li key={n.href}>
-                <Link href={n.href} className="py-2 text-ink underline-offset-4 hover:underline">
+                <Link href={n.href} className="transition hover:text-white">
                   {n.label}
                 </Link>
               </li>
             ))}
           </ul>
+          <Link href="/pricing" className="ml-4 rounded-full bg-accent px-3.5 py-1.5 text-[13px] font-semibold text-white transition hover:bg-[var(--accent-hover)]">
+            {site.checkoutEnabled ? `Buy · ${site.price.replace("US", "")}` : `${site.price.replace("US", "")} · Pricing`}
+          </Link>
         </nav>
       </Container>
-      {!site.releaseAvailable && (
-        <div className="border-t border-line bg-surface">
-          <Container className="py-2 text-sm text-muted">
-            Pre-release: PlainClick is in development and not yet available to buy or download.
-          </Container>
-        </div>
-      )}
+      {/* Small screens: same links, scrollable row. */}
+      <div className="border-t border-white/10 md:hidden">
+        <Container>
+          <ul className="flex gap-5 overflow-x-auto py-2 text-[13px] text-white/85">
+            {nav.map((n) => (
+              <li key={n.href} className="shrink-0">
+                <Link href={n.href}>{n.label}</Link>
+              </li>
+            ))}
+          </ul>
+        </Container>
+      </div>
     </header>
+  );
+}
+
+export function PreReleaseBar() {
+  if (site.releaseAvailable) return null;
+  return (
+    <div className="border-b border-line bg-surface">
+      <Container className="py-2 text-center text-[13px] text-muted">
+        Pre-release: PlainClick is finishing testing and isn&apos;t on sale yet. Everything shown here comes from the real
+        pre-release build.
+      </Container>
+    </div>
   );
 }
 
 export function SiteFooter() {
   return (
-    <footer className="mt-16 border-t border-line">
-      <Container className="grid gap-6 py-10 text-sm text-muted sm:grid-cols-[1fr_auto]">
-        <div className="space-y-2">
-          <p className="font-semibold text-ink">{site.name}</p>
-          <p>{site.tagline}</p>
+    <footer className="mt-24 bg-surface text-[13px] text-muted">
+      <Container className="py-10">
+        <div className="space-y-2 border-b border-line pb-6">
           <p>
-            PlainClick is an independent product. It is not made, approved, or endorsed by Apple. Mac, macOS, Safari and
-            Finder are trademarks of Apple Inc.
+            PlainClick is an independent Mac app. It is not affiliated with, or endorsed by, Apple Inc. Mac, macOS, Safari,
+            Finder and TextEdit are trademarks of Apple Inc.
+          </p>
+          <p>
+            Screens on this site come from the PlainClick pre-release build running on macOS 26 test machines. It works
+            only with the apps and actions listed on the <Link href="/compatibility" className="text-link hover:underline">compatibility page</Link>.
           </p>
         </div>
-        <nav aria-label="Footer">
-          <ul className="grid grid-cols-2 gap-x-8 gap-y-1">
-            {footerNav.map((n) => (
-              <li key={n.href}>
-                <Link href={n.href} className="inline-block py-1 underline-offset-4 hover:underline">
-                  {n.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
+        <div className="grid gap-8 pt-8 sm:grid-cols-[1.4fr_repeat(3,1fr)]">
+          <div className="space-y-3">
+            <p className="flex items-center gap-2 text-[15px] font-semibold text-ink">
+              <LogoMark size={20} /> {site.name}
+            </p>
+            <p className="max-w-xs">{site.tagline} A plain, labelled panel for the Mac apps you use every day.</p>
+            <p>Sold by {site.sellerName}.</p>
+          </div>
+          {footerGroups.map((g) => (
+            <nav key={g.title} aria-label={g.title}>
+              <p className="mb-3 font-semibold text-ink">{g.title}</p>
+              <ul className="space-y-2">
+                {g.links.map((l) => (
+                  <li key={l.href}>
+                    <Link href={l.href} className="hover:text-ink hover:underline">
+                      {l.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          ))}
+        </div>
+        <p className="mt-10">© {new Date().getFullYear()} {site.sellerName}. All rights reserved.</p>
       </Container>
     </footer>
   );

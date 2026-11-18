@@ -7,22 +7,31 @@ import { site } from "@/lib/site";
 
 export const metadata = { title: "Pricing" };
 
-const buyClass = "inline-flex min-h-11 items-center rounded-md bg-accent px-6 py-2.5 text-base font-semibold text-accent-ink no-underline";
+const buyClass = "inline-flex min-h-11 items-center rounded-full bg-accent px-6 py-3 text-[17px] font-semibold text-white no-underline transition hover:bg-[var(--accent-hover)]";
 
 export default function Page() {
   const staticBuyUrl = site.mode === "static" ? dodoBuyUrl(site.dodo.paymentLink, site.url) : null;
   return (
     <>
       <PageHeader title="Pricing" intro="One price, one time. A 7-day free trial first." />
-      <Container className="py-10">
-        <div className="max-w-xl rounded-lg border-2 border-line bg-surface p-6">
-          <p className="text-4xl font-bold">US$5.99</p>
-          <p className="mt-1 text-muted">one time · no subscription</p>
-          <p className="mt-4 text-lg">{site.licenceSummary}</p>
-          <p className="mt-3 text-muted">
-            Sales tax or VAT may be added at checkout depending on where you live. The total is shown before you pay.
+      <Container className="py-6">
+        <div className="max-w-2xl rounded-[28px] border border-line bg-white p-8 shadow-soft sm:p-10">
+          <p className="flex items-baseline gap-3">
+            <span className="text-[64px] font-bold leading-none tracking-[-0.03em]">{site.price.replace("US", "")}</span>
+            <span className="text-[17px] text-muted">one time · no subscription</span>
           </p>
-          <div className="mt-6">
+          <p className="mt-5 text-[17px] leading-relaxed">{site.licenceSummary}</p>
+          <ul className="mt-5 grid gap-2 text-[15px] sm:grid-cols-2">
+            {["Up to 2 Macs you own", "Every 1.x update", "7-day free trial first", "14 days to ask for a refund"].map((x) => (
+              <li key={x} className="flex items-center gap-2">
+                <span className="text-[#28a745]" aria-hidden="true">✓</span> {x}
+              </li>
+            ))}
+          </ul>
+          <p className="mt-5 text-[13px] text-muted">
+            Price in US dollars. Sales tax or VAT may be added at checkout depending on where you live. The total is shown before you pay.
+          </p>
+          <div className="mt-7">
             <CheckoutNotice />
             {site.checkoutEnabled && site.mode === "static" && staticBuyUrl ? (
               // Dodo's hosted checkout. Dodo emails the licence key; nothing is unlocked on our side.
@@ -49,16 +58,19 @@ export default function Page() {
               <CheckoutButton clientToken={site.paddle.clientToken} priceId={site.paddle.priceId} env={site.paddle.env} />
             ) : (
               <>
-                <Notice>Checkout isn&apos;t open yet. PlainClick will go on sale only once the download is released and tested.</Notice>
-                <div className="mt-4">
-                  <ButtonLink href="/#beta">Join the beta</ButtonLink>
-                </div>
+                <span className="inline-flex min-h-11 items-center rounded-full bg-surface px-6 py-3 text-[17px] font-semibold text-muted">
+                  Checkout opens at launch
+                </span>
+                <p className="mt-3 text-[15px] text-muted">
+                  PlainClick goes on sale once the download is released and tested. Until then, see it in the{" "}
+                  <Link href="/#film" className="text-link hover:underline">launch film</Link>.
+                </p>
               </>
             )}
           </div>
-          <p className="mt-4 text-sm text-muted">
-            Before you buy, please read the <Link href="/terms" className="underline">licence terms</Link> and{" "}
-            <Link href="/refunds" className="underline">refund policy</Link>.
+          <p className="mt-6 text-[13px] text-muted">
+            Before you buy, please read the <Link href="/terms" className="text-link hover:underline">licence terms</Link> and{" "}
+            <Link href="/refunds" className="text-link hover:underline">refund policy</Link>.
           </p>
         </div>
       </Container>

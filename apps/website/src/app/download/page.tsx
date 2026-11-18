@@ -16,7 +16,7 @@ export default function Page() {
               <strong>There is no public download yet.</strong> PlainClick is still being built and tested. We won&apos;t
               post a download link until a build has passed testing.
             </Notice>
-            <ButtonLink href="/#beta">Join the beta</ButtonLink>
+            <ButtonLink href="/#film">Watch the launch film</ButtonLink>
           </div>
         </Container>
       ) : (
