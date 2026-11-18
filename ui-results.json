@@ -1,0 +1,97 @@
+[
+  {
+    "pass" : true,
+    "detail" : "macOS Version 15.8.2 (Build 24H232); AX trusted=true",
+    "test" : "environment"
+  },
+  {
+    "pass" : true,
+    "detail" : "text arrived",
+    "test" : "typing reaches TextEdit before panel use"
+  },
+  {
+    "pass" : true,
+    "detail" : "RegisterEventHotKey for Ctrl-Option-P",
+    "test" : "hotkey registered"
+  },
+  {
+    "pass" : true,
+    "detail" : "Ctrl-Option-P via HID event",
+    "test" : "hotkey opens panel"
+  },
+  {
+    "pass" : true,
+    "detail" : "front=com.apple.TextEdit, PlainClick active=false",
+    "test" : "panel does not steal focus"
+  },
+  {
+    "pass" : true,
+    "detail" : "target=TextEdit",
+    "test" : "panel shows target"
+  },
+  {
+    "pass" : true,
+    "detail" : "buttons=[\"Save\", \"Find\"]",
+    "test" : "panel shows tested actions"
+  },
+  {
+    "pass" : true,
+    "detail" : "file on disk updated; status=\"Save sent to TextEdit.\" mouse=[\"down@PlainClick clicks=1 active=true\", \"up@PlainClick clicks=1 active=true\"]",
+    "test" : "click Save button"
+  },
+  {
+    "pass" : true,
+    "detail" : "text arrived in the document; front=com.apple.TextEdit",
+    "test" : "typing continues in TextEdit after panel click"
+  },
+  {
+    "pass" : true,
+    "detail" : "find field appeared=true; status=\"Find sent to TextEdit.\"",
+    "test" : "click Find button"
+  },
+  {
+    "pass" : true,
+    "detail" : "front=com.apple.TextEdit PlainClick active=false panelKey=false",
+    "test" : "target app in front after click"
+  },
+  {
+    "pass" : true,
+    "detail" : "button frame=(740.0, 173.0, 228.0, 32.0) panel frame(AppKit)=(724.0, 495.0, 260.0, 208.0) mouse events seen=[\"down@PlainClick clicks=1 active=false\", \"up@PlainClick clicks=1 active=false\"] nonactivating=true floating=true",
+    "test" : "diagnostic: click"
+  },
+  {
+    "pass" : true,
+    "detail" : "\"2026-11-18T10:01:20Z\",\"Version 15.8.2 (Build 24H232)\",\"none\",\"unknown\",\"-\",\"launched\",\"0\",\"trusted\" \/ \"2026-11-18T10:01:31Z\",\"Version 15.8.2 (Build 24H232)\",\"com.apple.TextEdit\",\"1.20 (409)\",\"textedit.save\",\"pressed\",\"223\",\"\" \/ \"2026-11-18T10:01:33Z\",\"Version 15.8.2 (Build 24H232)\",\"com.apple.TextEdit\",\"1.20 (409)\",\"textedit.find\",\"pressed\",\"277\",\"\"",
+    "test" : "diagnostic: last engine log rows"
+  },
+  {
+    "pass" : true,
+    "detail" : "buttons=[\"Basic\", \"Scientific\", \"Programmer\", \"Copy Result\"]",
+    "test" : "Calculator shows tested actions"
+  },
+  {
+    "pass" : true,
+    "detail" : "width 198 -> 574; status=\"Scientific sent to Calculator.\"",
+    "test" : "click Scientific in Calculator"
+  },
+  {
+    "pass" : true,
+    "detail" : "target=Stickies supported=false",
+    "test" : "unsupported app message"
+  },
+  {
+    "pass" : true,
+    "detail" : "buttons=[\"Reload\", \"New Tab\"]",
+    "test" : "Safari actions exclude Back\/Forward"
+  },
+  {
+    "pass" : true,
+    "detail" : "state=trial(daysLeft: 7)",
+    "test" : "trial active on first use"
+  },
+  {
+    "pass" : true,
+    "detail" : "visible=false",
+    "test" : "hotkey hides panel"
+  }
+]
