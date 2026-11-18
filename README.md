@@ -19,8 +19,9 @@ toolbar, and it doesn't change macOS appearance. "PlainClick" is a provisional n
 | Real app UI (hotkey ⌃⌥P, panel, real clicks, focus) | **Works on CI** | `--ui-test` on macOS 15.8.2 + 26.7.2: **17/17 checks on both**. Real clicks save and find in TextEdit, and typing stays in TextEdit. Screenshots in `docs/screenshots/` |
 | Hands-on test on a physical Mac (permission flow, VoiceOver, multi-monitor) | **Not run** | No Mac available |
 | Repository | **Public** (since 2026-11-17) | GitHub-hosted macOS runners are free for public repos; no LICENSE file, so all rights are reserved |
-| Dodo Payments seller account | **Exists** (owner's) | Product, keys and webhook not configured in the app yet |
-| Email provider, hosting, Apple Developer ID | **Not set up** | Needs your accounts |
+| Dodo Payments seller account | **Exists** (owner's) | Product, licence keys and payment link not created yet |
+| **Free release path** (chosen 2026-11-18): Dodo licence keys + payment link, static site, self-signed signing, GitHub Releases | Built | App ↔ Dodo licence API unit-tested; self-signed identity proven stable across builds on CI; static site builds and was checked in a browser. Guide: `docs/free-release.md` |
+| Apple Developer ID / notarization, email provider, server hosting | Not needed for the free path | Optional later (`docs/signing-setup.md`) |
 
 The core mechanism now has evidence: five actions work reliably with the real apps on macOS 15 and 26. Navigation actions
 (Back/Forward) don't, so they're excluded. What remains unproven is the app's own UI on a real Mac. Keep checkout off until

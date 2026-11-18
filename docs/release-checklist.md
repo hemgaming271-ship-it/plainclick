@@ -2,6 +2,22 @@
 
 Tick only what has actually been done, and record who did it and when. "CI" means GitHub-hosted macOS VMs, not a physical Mac.
 
+**Chosen path (2026-11-18): the FREE setup in `docs/free-release.md`.** It uses Dodo licence keys and a static payment link, a static site,
+self-signed signing and no notarization. In that setup:
+- Section C (our backend) and the notarization items in D don't apply.
+- Section E's "Dodo test mode" item means a test purchase through the payment link, followed by activation in the app.
+
+## F. Free setup
+- [x] App activates and deactivates with Dodo's public licence endpoints, with no API key in the app. Request and response handling is unit-tested (`swift test`, CI macOS build #40+)
+- [x] Self-signed signing: CI self-test #10 shows a valid signature, and the designated requirement stays **identical across two different builds**, so the Accessibility grant survives updates (ad-hoc changes every build)
+- [x] Release dry run #3 passes with the Dodo licence code, and feasibility + real-app UI test run #30 passes (commit 31f2b8f). Draft-release job is ready but hasn't run yet (needs `SELFSIGNED_*` secrets + `DODO_ENV=live`)
+- [x] Static site: `npm run build:static` makes 15 pages with no API routes. Buy link = Dodo link (USD, quantity 1, no coupons). The thanks page shows the key and clears it from the URL. The download page explains Open Anyway. Checked in a browser on Windows
+- [ ] Self-signed certificate made and secrets set (`docs/free-release.md` §2–3)
+- [ ] Dodo test product with licence keys (limit 2), plus a test purchase → activate → deactivate → 3rd Mac refused, on a real Mac
+- [ ] What happens to a key after a refund confirmed (automatic disable, or manual)
+- [ ] Cloudflare Pages site live with real support email and seller name
+- [ ] Someone opens the downloaded zip on a real Mac via Open Anyway, grants Accessibility, then installs an update and the grant is still there
+
 ## A. Feasibility gate (friend's Mac)
 - [x] `./scripts/build-app.sh` builds; `swift test` passes — on GitHub Actions macOS runner, 2026-11-17 (CI only, not a real-Mac run)
 - [ ] App launched on a real Mac; menu bar icon, panel and permission prompt appear
