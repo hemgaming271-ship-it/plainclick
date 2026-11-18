@@ -116,6 +116,8 @@ jobs:
         run: |
           chmod +x scripts/build-app.sh
           UNIVERSAL=1 ./scripts/build-app.sh
+          ARCHS="$(lipo -archs "build/$APP_NAME.app/Contents/MacOS/PlainClickPrototype")"
+          case "$ARCHS" in *arm64*x86_64*|*x86_64*arm64*) echo "Universal: $ARCHS" ;; *) echo "::error::Not universal: $ARCHS"; exit 1 ;; esac
 
       - name: Notarize and staple
         if: steps.mode.outputs.signed == 'true'
