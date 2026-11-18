@@ -229,7 +229,7 @@ jobs:
           ARCHS="$(lipo -archs "$APP/Contents/MacOS/PlainClickPrototype")"
           set +e
           VERIFY="$(codesign --verify --strict --verbose=2 "$APP" 2>&1)"; VERIFY_RC=$?
-          DR="$(codesign -d -r- "$APP" 2>&1 | grep -E '^designated' )"
+          DR="$(codesign -d -r- "$APP" 2>&1 | grep -E 'designated =>' | sed -E 's/^# //')"
           SPCTL="$(spctl --assess --type execute --verbose=4 "$APP" 2>&1)"; SPCTL_RC=$?
           STAPLE="$(xcrun stapler validate "$APP" 2>&1)"; STAPLE_RC=$?
           LIC="$(/usr/libexec/PlistBuddy -c 'Print :PCDodoEnvironment' "$APP/Contents/Info.plist" 2>/dev/null) $(/usr/libexec/PlistBuddy -c 'Print :PCDodoProductID' "$APP/Contents/Info.plist" 2>/dev/null)"

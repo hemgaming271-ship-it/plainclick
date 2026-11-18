@@ -109,7 +109,8 @@ jobs:
           [ -n "$ID" ] || { echo "::error::self-signed identity not valid after import: $(security find-identity -p codesigning "$KC" | tr '\n' ' ')"; exit 1; }
           # Two builds with DIFFERENT code: the designated requirement (what Accessibility permission is tied to)
           # must stay identical with the self-signed cert, and changes with ad-hoc signing.
-          dr_of() { codesign -d -r- "$1" 2>&1 | grep -E '^designated'; }
+          # Ad-hoc builds print an implicit requirement as "# designated => cdhash …", so don't anchor on "^".
+          dr_of() { codesign -d -r- "$1" 2>&1 | grep -E 'designated =>' | sed -E 's/^# //' || true; }
           # "Version 1" and "version 2" = two genuinely different executables under the same bundle id.
           mkapp() {
             rm -rf "$1"; mkdir -p "$1/Contents/MacOS"
