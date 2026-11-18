@@ -20,8 +20,10 @@ export default function Page() {
         </ul>
         <h2>Moving or resetting activations</h2>
         <p>
-          Deactivate a Mac from inside the app to free its slot. If a Mac is lost or broken, use the licence recovery
-          page, which confirms you own the purchase email, to reset your activations.
+          Deactivate a Mac from inside the app to free its slot. If a Mac is lost or broken,{" "}
+          {site.mode === "server"
+            ? "use the licence recovery page, which confirms you own the purchase email, to reset your activations."
+            : "email support from your purchase email address and we'll free that Mac's slot."}
         </p>
         <h2>What it isn&apos;t</h2>
         <ul>
@@ -38,7 +40,20 @@ export default function Page() {
         <h2>Liability</h2>
         <p>[To be completed with legal review for the seller&apos;s jurisdiction. This will not exclude rights that cannot be excluded by law.]</p>
         <h2>Seller</h2>
-        <p>{site.sellerName}. Orders are processed by our payment provider, which acts as the reseller and merchant of record.</p>
+        <p>
+          {site.sellerName}. Orders are processed by {site.mode === "static" ? "Dodo Payments" : "our payment provider"},
+          which acts as the reseller and merchant of record.
+        </p>
+        {!site.releaseNotarized && (
+          <>
+            <h2>Not notarized</h2>
+            <p>
+              Current builds are signed with our own certificate but not notarized by Apple, so macOS asks you to allow
+              PlainClick once (see the <a href="/download#open-anyway">download page</a>). This is not an Apple
+              review or endorsement.
+            </p>
+          </>
+        )}
       </Prose>
     </>
   );

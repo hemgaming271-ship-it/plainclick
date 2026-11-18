@@ -1,19 +1,16 @@
 import Link from "next/link";
 import { CheckoutButton } from "@/components/CheckoutButton";
+import { CheckoutNotice } from "@/components/CheckoutNotice";
 import { ButtonLink, Container, Notice, PageHeader, Prose } from "@/components/ui";
+import { dodoBuyUrl } from "@/lib/dodoLink";
 import { site } from "@/lib/site";
 
 export const metadata = { title: "Pricing" };
 
-const checkoutMessages: Record<string, string> = {
-  error: "Checkout couldn't start. Nothing was charged. Please try again in a minute, or contact support.",
-  busy: "Too many checkout attempts from this connection. Please wait a little and try again.",
-  closed: "Checkout isn't open right now.",
-};
+const buyClass = "inline-flex min-h-11 items-center rounded-md bg-accent px-6 py-2.5 text-base font-semibold text-accent-ink no-underline";
 
-export default async function Page({ searchParams }: { searchParams: Promise<{ checkout?: string }> }) {
-  const { checkout } = await searchParams;
-  const checkoutMessage = checkout ? checkoutMessages[checkout] : undefined;
+export default function Page() {
+  const staticBuyUrl = site.mode === "static" ? dodoBuyUrl(site.dodo.paymentLink, site.url) : null;
   return (
     <>
       <PageHeader title="Pricing" intro="One price, one time. A 7-day free trial first." />
@@ -26,12 +23,18 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ c
             Sales tax or VAT may be added at checkout depending on where you live. The total is shown before you pay.
           </p>
           <div className="mt-6">
-            {checkoutMessage && (
-              <div className="mb-4" role="alert">
-                <Notice>{checkoutMessage}</Notice>
+            <CheckoutNotice />
+            {site.checkoutEnabled && site.mode === "static" && staticBuyUrl ? (
+              // Dodo's hosted checkout. Dodo emails the licence key; nothing is unlocked on our side.
+              <div>
+                <a href={staticBuyUrl} className={buyClass} rel="noopener">
+                  Buy PlainClick — US$5.99
+                </a>
+                <p className="mt-2 text-sm text-muted">
+                  You&apos;ll pay on Dodo Payments&apos; secure checkout page. Your licence key arrives by email right after.
+                </p>
               </div>
-            )}
-            {site.checkoutEnabled && site.checkoutProvider === "dodo" ? (
+            ) : site.checkoutEnabled && site.mode === "server" && site.checkoutProvider === "dodo" ? (
               // Plain form POST: works without JavaScript. The server creates a single-use Dodo checkout session.
               <form action="/api/checkout" method="post">
                 <button
@@ -42,7 +45,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ c
                 </button>
                 <p className="mt-2 text-sm text-muted">You&apos;ll pay on Dodo Payments&apos; secure checkout page.</p>
               </form>
-            ) : site.checkoutEnabled ? (
+            ) : site.checkoutEnabled && site.mode === "server" ? (
               <CheckoutButton clientToken={site.paddle.clientToken} priceId={site.paddle.priceId} env={site.paddle.env} />
             ) : (
               <>
@@ -64,7 +67,14 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ c
         <ul>
           <li>Your licence for PlainClick v1 never expires and has no subscription.</li>
           <li>It includes every v1.x update. A future v2, if there is one, would be optional and sold separately.</li>
-          <li>It covers up to two Macs you own. Move it by deactivating it on the old Mac. If a Mac is lost or broken, you can <Link href="/recover">reset your activations</Link> yourself.</li>
+          <li>
+            It covers up to two Macs you own. Move it by deactivating it on the old Mac. If a Mac is lost or broken,{" "}
+            {site.mode === "server" ? (
+              <>you can <Link href="/recover">reset your activations</Link> yourself.</>
+            ) : (
+              <>email <a href={`mailto:${site.supportEmail}`}>support</a> and we&apos;ll free its slot.</>
+            )}
+          </li>
           <li>The first activation needs an internet connection. After that the panel works offline.</li>
           <li>It is not a promise that v1 will keep working with every future macOS release, and it doesn&apos;t include unlimited custom development or support forever.</li>
         </ul>

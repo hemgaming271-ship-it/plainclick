@@ -18,7 +18,10 @@ export default function Page() {
           <li>The PlainClick version and the app you were using.</li>
           <li>What you expected and what happened.</li>
         </ul>
-        <p><strong>Never send your licence key by email.</strong> For lost keys, use <a href="/recover">licence recovery</a>.</p>
+        <p>
+          <strong>Never send your licence key or card details by email.</strong> For lost keys, see{" "}
+          <a href="/recover">{site.mode === "server" ? "licence recovery" : "Find your licence key"}</a>.
+        </p>
         <p>{site.sellerName}</p>
       </Prose>
     </>

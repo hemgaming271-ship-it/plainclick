@@ -123,8 +123,21 @@ export default function Home() {
         <section id="beta" className="border-t border-line bg-surface py-14" aria-labelledby="beta-h">
           <Container className="max-w-3xl">
             <h2 id="beta-h" className="text-2xl font-bold">Join the beta</h2>
-            <p className="mt-3 mb-6 text-lg">PlainClick isn&apos;t available yet. Leave your email and we&apos;ll write once, when the beta opens.</p>
-            <WaitlistForm />
+            {site.mode === "server" ? (
+              <>
+                <p className="mt-3 mb-6 text-lg">PlainClick isn&apos;t available yet. Leave your email and we&apos;ll write once, when the beta opens.</p>
+                <WaitlistForm />
+              </>
+            ) : (
+              <>
+                <p className="mt-3 mb-6 text-lg">
+                  PlainClick isn&apos;t available yet. New builds are published on our releases page. To be told when one
+                  appears, use &ldquo;Watch → Custom → Releases&rdquo; there (needs a free GitHub account). We don&apos;t
+                  collect email addresses on this site.
+                </p>
+                <ButtonLink href={site.releasesUrl}>See releases</ButtonLink>
+              </>
+            )}
           </Container>
         </section>
       )}

@@ -14,7 +14,20 @@ export const site = {
   },
   // Live checkout needs BOTH flags: never sell before a working download exists.
   checkoutEnabled: process.env.NEXT_PUBLIC_CHECKOUT_ENABLED === "true" && process.env.NEXT_PUBLIC_RELEASE_AVAILABLE === "true",
-  // Server-side only (pricing page is a server component). "dodo" → hosted checkout via POST /api/checkout.
+  /**
+   * "static" (default, FREE): no server of ours. Static site; Buy = Dodo payment link; Dodo issues, emails and limits
+   * licence keys; the app checks keys with Dodo directly. "server": our own Next.js API (webhooks, recovery, waitlist).
+   */
+  mode: (process.env.NEXT_PUBLIC_SITE_MODE === "server" ? "server" : "static") as "static" | "server",
+  dodo: {
+    // Copy the product's payment link from the Dodo dashboard, e.g. https://checkout.dodopayments.com/buy/pdt_…
+    paymentLink: process.env.NEXT_PUBLIC_DODO_PAYMENT_LINK ?? "",
+  },
+  // Release notes / "watch releases" link (GitHub Releases host the free download).
+  releasesUrl: process.env.NEXT_PUBLIC_RELEASES_URL ?? "https://github.com/hemgaming271-ship-it/plainclick/releases",
+  // true only for a build that is Developer ID signed AND notarized by Apple.
+  releaseNotarized: process.env.NEXT_PUBLIC_RELEASE_NOTARIZED === "true",
+  // Server mode only. "dodo" → hosted checkout via POST /api/checkout.
   checkoutProvider: (process.env.PAYMENT_PROVIDER === "dodo" ? "dodo" : "paddle") as "dodo" | "paddle",
   paddle: {
     clientToken: process.env.NEXT_PUBLIC_PADDLE_CLIENT_TOKEN ?? "",

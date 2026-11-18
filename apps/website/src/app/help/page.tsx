@@ -49,9 +49,24 @@ export default function Page() {
         </p>
         <h3>How do I move my licence to a new Mac?</h3>
         <p>
-          On the old Mac, open PlainClick → Manage Licence → Deactivate this Mac, then activate on the new one. If the
-          old Mac is lost or broken, use <a href="/recover">licence recovery</a> and choose to reset your activations.
+          On the old Mac, open PlainClick → Settings → Licence → Deactivate this Mac, then activate on the new one. If the
+          old Mac is lost or broken,{" "}
+          {site.mode === "server" ? (
+            <>use <a href="/recover">licence recovery</a> and choose to reset your activations.</>
+          ) : (
+            <>email support from your purchase address and we&apos;ll free its slot (see <a href="/recover">Find your licence key</a>).</>
+          )}
         </p>
+        {!site.releaseNotarized && (
+          <>
+            <h3>macOS says it can&apos;t verify PlainClick.</h3>
+            <p>
+              Current builds aren&apos;t notarized by Apple yet. Allow PlainClick once in System Settings → Privacy &amp;
+              Security → Open Anyway. The <a href="/download#open-anyway">download page</a> has the steps. Never turn off
+              Gatekeeper.
+            </p>
+          </>
+        )}
         <h3>How is the trial limited?</h3>
         <p>
           The 7-day trial is tracked on your Mac. It isn&apos;t tamper-proof, and we chose not to add invasive copy
