@@ -1,0 +1,216 @@
+# TextEdit - path	cmdChar	modifiers	identifier	enabled	title
+0.0.0		0	_aboutThisMacRequested:	yes	About This Mac
+0.0.1		10	_systemInformationRequested:	yes	System Information
+0.0.3		0	_systemSettingsRequested:	yes	System Settings…
+0.0.4		0	_appStoreRequested:	yes	App Store
+0.0.6		0	_recentsRequested:	yes	Recent Items
+0.0.6.0.1		8	_recentItemRequested:	yes	Finder
+0.0.6.0.2		0	_recentItemRequested:	yes	Show “Finder” in Finder
+0.0.6.0.3		8	_recentItemRequested:	yes	Installer
+0.0.6.0.4		0	_recentItemRequested:	yes	Show “Installer” in Finder
+0.0.6.0.5		8	_recentItemRequested:	yes	Safari
+0.0.6.0.6		0	_recentItemRequested:	yes	Show “Safari” in Finder
+0.0.6.0.7		8	_recentItemRequested:	yes	System Settings
+0.0.6.0.8		0	_recentItemRequested:	yes	Show “System Settings” in Finder
+0.0.6.0.9		8	_recentItemRequested:	yes	TextEdit
+0.0.6.0.10		0	_recentItemRequested:	yes	Show “TextEdit” in Finder
+0.0.6.0.13		8	_recentItemRequested:	yes	a.html
+0.0.6.0.14		0	_recentItemRequested:	yes	Show “a.html” in Finder
+0.0.6.0.15		8	_recentItemRequested:	yes	AnkaGuestAddons.pkg
+0.0.6.0.16		0	_recentItemRequested:	yes	Show “AnkaGuestAddons.pkg” in Finder
+0.0.6.0.17		8	_recentItemRequested:	yes	doc.txt
+0.0.6.0.18		0	_recentItemRequested:	yes	Show “doc.txt” in Finder
+0.0.6.0.21		0	_recentItemRequested:	yes	Macintosh HD
+0.0.6.0.23		0	_clearRecentItemsRequested:	yes	Clear Menu
+0.0.8	⎋	2	_forceQuitPanelRequested:	yes	Force Quit…
+0.0.9	⎋	3	_forceQuitRequested:	yes	Force Quit TextEdit
+0.0.11		0	_sleepRequested:	yes	Sleep
+0.0.12		0	_restartRequested:	yes	Restart…
+0.0.13		10	_restartNowRequested:	yes	Restart
+0.0.14		0	_shutDownRequested:	yes	Shut Down…
+0.0.15		10	_shutDownNowRequested:	yes	Shut Down
+0.0.17	Q	4	_lockScreenRequested:	yes	Lock Screen
+0.0.18	Q	1	_logOutRequested:	yes	Log Out Anka…
+0.0.19	Q	3	_logOutNowRequested:	yes	Log Out Anka
+1.0.0		0	_NS:211	yes	About TextEdit
+1.0.1		0	_NS:846	no	
+1.0.2	,	0	_NS:508	yes	Settings…
+1.0.3		0	_NS:847	no	
+1.0.4		0	_NS:848	yes	Services
+1.0.4.0.0		0	_processRequest:	yes	Activity Monitor
+1.0.4.0.1		0	_processRequest:	yes	Allocations & Leaks
+1.0.4.0.2		0	_processRequest:	yes	File Activity
+1.0.4.0.3		0	_processRequest:	yes	System Trace
+1.0.4.0.4		0	_processRequest:	yes	Time Profile Active Application
+1.0.4.0.5		0	_processRequest:	yes	Time Profile App Under Mouse
+1.0.4.0.6		0	_processRequest:	yes	Time Profile Entire System
+1.0.4.0.7		0	_processRequest:	yes	Toggle Instruments Recording
+1.0.4.0.8		0	_configureServicesMenu:	yes	Services Settings…
+1.0.5		0	_NS:857	no	
+1.0.6	H	0	_NS:515	yes	Hide TextEdit
+1.0.7	H	2	_NS:529	yes	Hide Others
+1.0.8		0	_NS:535	no	Show All
+1.0.9		0	_NS:858	no	
+1.0.10	Q	0	_NS:522	yes	Quit TextEdit
+1.0.11	Q	2	NSAlternateQuitMenuItem	yes	Quit and Keep Windows
+2.0.0	N	0	_NS:344	yes	New
+2.0.1	O	0	_NS:331	yes	Open…
+2.0.2		0	_NS:868	yes	Open Recent
+2.0.2.0.0		0	_openRecentDocument:	yes	doc.txt
+2.0.2.0.2		0	clearRecentDocuments:	yes	Clear Menu
+2.0.3		0	_NS:877	no	
+2.0.4	W	0	_NS:430	no	Close
+2.0.5	W	2	closeAll:	yes	Close All
+2.0.6	S	0	_NS:358	no	Save
+2.0.7	S	3	_NS:351	no	Save As…
+2.0.8	S	1	duplicateDocument:	no	Duplicate
+2.0.9		0	renameDocument:	no	Rename…
+2.0.10		0	moveDocument:	no	Move To…
+2.0.12		0	_NS:878	no	
+2.0.13		8	NSMenuItemImportFromDeviceIdentifier	yes	<<Import From Device - unlocalized>>
+2.0.14		8	_NS:704	no	Export as PDF…
+2.0.16		0	_NS:884	no	
+2.0.17	P	2	_NS:588	yes	Show Properties
+2.0.18		0	_NS:885	no	
+2.0.19	P	1	_NS:423	no	Page Setup…
+2.0.20	P	0	_NS:416	no	Print…
+3.0.0	Z	0	_NS:449	no	Undo
+3.0.1	Z	1	_NS:456	no	Redo
+3.0.2		0	_NS:893	no	
+3.0.3	X	0	_NS:243	no	Cut
+3.0.4	C	0	_NS:237	no	Copy
+3.0.5	V	0	_NS:231	no	Paste
+3.0.6	V	3	_NS:581	no	Paste and Match Style
+3.0.7		0	_NS:571	no	Delete
+3.0.8		10	_NS:224	no	Complete
+3.0.9	A	0	_NS:217	no	Select All
+3.0.10		0	_NS:894	no	
+3.0.11		0	_NS:895	yes	Insert
+3.0.11.0.0		0	_NS:605	no	Line Break
+3.0.11.0.1		8	_NS:611	no	Paragraph Break
+3.0.11.0.2		0	_NS:617	no	Page Break
+3.0.12	A	1	_NS:785	no	Attach Files…
+3.0.13	K	0	_NS:623	no	Link…
+3.0.14		0	_NS:902	no	
+3.0.15		0	_NS:903	yes	Find
+3.0.15.0.0	F	0	_NS:371	no	Find…
+3.0.15.0.1	F	2	_NS:761	no	Find and Replace…
+3.0.15.0.2	G	0	_NS:378	no	Find Next
+3.0.15.0.3	G	1	_NS:384	no	Find Previous
+3.0.15.0.4	E	0	_NS:397	no	Use Selection for Find
+3.0.15.0.5	J	0	_NS:390	no	Jump to Selection
+3.0.15.0.6	L	0	_NS:654	yes	Select Line...
+3.0.16		0	_NS:911	yes	Spelling and Grammar
+3.0.16.0.0	:	0	_NS:488	yes	Show Spelling and Grammar
+3.0.16.0.1	;	0	_NS:495	no	Check Document Now
+3.0.16.0.2		8	_NS:919	no	
+3.0.16.0.3		0	_NS:502	no	Check Spelling While Typing
+3.0.16.0.4		0	_NS:630	no	Check Grammar With Spelling
+3.0.16.0.5		0	_NS:680	no	Correct Spelling Automatically
+3.0.17		0	_NS:920	yes	Substitutions
+3.0.17.0.0		8	_NS:698	no	Show Substitutions
+3.0.17.0.1		8	_NS:928	no	
+3.0.17.0.2		8	_NS:648	no	Smart Copy/Paste
+3.0.17.0.3		8	_NS:642	no	Smart Quotes
+3.0.17.0.4		8	_NS:668	no	Smart Dashes
+3.0.17.0.5		0	_NS:636	no	Smart Links
+3.0.17.0.6		0	_NS:722	no	Data Detectors
+3.0.17.0.7		0	_NS:674	no	Text Replacement
+3.0.18		8	_NS:929	yes	Transformations
+3.0.18.0.0		8	_NS:662	no	Make Upper Case
+3.0.18.0.1		8	_NS:686	no	Make Lower Case
+3.0.18.0.2		8	_NS:692	no	Capitalize
+3.0.19		0	_NS:937	yes	Speech
+3.0.19.0.0		0	_NS:556	no	Start Speaking
+3.0.19.0.1		0	_NS:562	no	Stop Speaking
+3.0.21		0	_NSMenuItemAutoFillIdentifier	yes	AutoFill
+3.0.21.0.0		0	_handleInsertFromContactsCommand:	no	Contact…
+3.0.21.0.1		0	_handleInsertFromPasswordsCommand:	no	Passwords…
+3.0.21.0.2		0	_handleInsertFromCreditCardsCommand:	no	Credit Card…
+3.0.22	D	24	startDictation:	yes	Start Dictation…
+3.0.23	E	24	orderFrontCharacterPalette:	yes	Emoji & Symbols
+4.0.0		0	_NS:953	yes	Font
+4.0.0.0.0	T	0	_NS:36	yes	Show Fonts
+4.0.0.0.1	B	0	_NS:41	no	Bold
+4.0.0.0.2	I	0	_NS:46	no	Italic
+4.0.0.0.3	U	0	_NS:51	no	Underline
+4.0.0.0.4		8	_NS:56	no	Outline
+4.0.0.0.5		0	highlight:	no	Highlight
+4.0.0.0.6		8	_NS:64	no	Styles...
+4.0.0.0.7		0	_NS:68	no	
+4.0.0.0.8	+	0	_NS:69	no	Bigger
+4.0.0.0.9	-	0	_NS:74	no	Smaller
+4.0.0.0.10		0	_NS:79	no	
+4.0.0.0.11		0	_NS:80	yes	Kern
+4.0.0.0.12		0	_NS:107	yes	Ligatures
+4.0.0.0.13		0	_NS:125	yes	Baseline
+4.0.0.0.14		0	_NS:152	yes	Character Shape
+4.0.0.0.15		0	_NS:164	no	
+4.0.0.0.16	C	1	_NS:165	yes	Show Colors
+4.0.0.0.17		0	_NS:170	no	
+4.0.0.0.18	C	2	_NS:171	no	Copy Style
+4.0.0.0.19	V	2	_NS:176	no	Paste Style
+4.0.1		0	_NS:956	yes	Text
+4.0.1.0.0	{	0	_NS:261	no	Align Left
+4.0.1.0.1	|	0	_NS:254	no	Center
+4.0.1.0.2		0	_NS:443	no	Justify
+4.0.1.0.3	}	0	_NS:281	no	Align Right
+4.0.1.0.4		0	_NS:964	no	
+4.0.1.0.5		8	_NS:965	yes	Writing Direction
+4.0.1.0.6		0	_NS:974	no	
+4.0.1.0.7	R	0	_NS:296	no	Show Ruler
+4.0.1.0.8	C	4	_NS:288	no	Copy Ruler
+4.0.1.0.9	V	4	_NS:303	no	Paste Ruler
+4.0.1.0.10		0	_NS:975	no	
+4.0.1.0.11		8	_NS:599	no	Spacing...
+4.0.2		0	_NS:976	no	
+4.0.3	T	1	_NS:273	no	Make Rich Text
+4.0.4		0	_NS:550	no	Prevent Editing
+4.0.5	W	1	_NS:409	no	Wrap to Page
+4.0.6		8	_NS:437	no	Allow Hyphenation
+4.0.7		8	_NS:766	no	Make Vertical Layout
+4.0.8		0	_NS:977	no	
+4.0.9		8	_NS:710	no	List…
+4.0.10		8	_NS:716	no	Table…
+5.0.0		0	toggleTabBar:	no	Show Tab Bar
+5.0.1		0	toggleTabOverview:	no	Show All Tabs
+5.0.3		8	_NS:986	no	
+5.0.4	0	0	_NS:803	no	Actual Size
+5.0.5	.	1	_NS:772	no	Zoom In
+5.0.6	,	1	_NS:779	no	Zoom Out
+5.0.7		8	_NS:987	no	
+5.0.8	F	24	_NS:797	no	Enter Full Screen
+6.0.0	M	0	_NS:475	no	Minimize
+6.0.1	M	2	miniaturizeAll:	yes	Minimize All
+6.0.2		8	_NS:482	no	Zoom
+6.0.3		10	zoomAll:	yes	Zoom All
+6.0.4	F	28	_zoomFill:	no	Fill
+6.0.5	C	28	_zoomCenter:	no	Center
+6.0.7.0.1		28	_zoomLeft:	no	Left
+6.0.7.0.2		28	_zoomRight:	no	Right
+6.0.7.0.3		28	_zoomTop:	no	Top
+6.0.7.0.4		28	_zoomBottom:	no	Bottom
+6.0.7.0.7		0	_zoomTopLeft:	no	Top Left
+6.0.7.0.8		0	_zoomTopRight:	no	Top Right
+6.0.7.0.9		0	_zoomBottomLeft:	no	Bottom Left
+6.0.7.0.10		0	_zoomBottomRight:	no	Bottom Right
+6.0.7.0.13		29	_zoomLeftAndRight:	no	Left & Right
+6.0.7.0.14		31	_zoomLeftThreeUp:	no	Left & Quarters
+6.0.7.0.15		29	_zoomRightAndLeft:	no	Right & Left
+6.0.7.0.16		31	_zoomRightThreeUp:	no	Right & Quarters
+6.0.7.0.17		29	_zoomTopAndBottom:	no	Top & Bottom
+6.0.7.0.18		31	_zoomTopThreeUp:	no	Top & Quarters
+6.0.7.0.19		29	_zoomBottomAndTop:	no	Bottom & Top
+6.0.7.0.20		31	_zoomBottomThreeUp:	no	Bottom & Quarters
+6.0.7.0.21		0	_zoomQuarters:	no	Quarters
+6.0.7.0.23	R	28	_zoomUntile:	no	Return to Previous Size
+6.0.10		0	_removeWindowFromStageManagerSet:	no	Remove Window from Set
+6.0.11		0	_NS:996	no	
+6.0.12		0	_NS:469	yes	Bring All to Front
+6.0.13		10	alternateArrangeInFront:	yes	Arrange in Front
+6.0.15			13	selectPreviousTab:	no	Show Previous Tab
+6.0.16			12	selectNextTab:	no	Show Next Tab
+6.0.17		0	moveTabToNewWindow:	no	Move Tab to New Window
+6.0.18		0	mergeAllWindows:	no	Merge All Windows
+6.0.21		0	makeKeyAndOrderFront:	yes	doc.txt
+7.0.0		0	_NS:541	yes	TextEdit Help

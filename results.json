@@ -1,0 +1,2612 @@
+[
+  {
+    "action" : "Save",
+    "app" : "TextEdit",
+    "detail" : "",
+    "latencyMs" : 24,
+    "outcome" : "resolved_exactly_one",
+    "pass" : true,
+    "run" : 1,
+    "test" : "T0-discovery"
+  },
+  {
+    "action" : "Find",
+    "app" : "TextEdit",
+    "detail" : "",
+    "latencyMs" : 31,
+    "outcome" : "resolved_exactly_one",
+    "pass" : true,
+    "run" : 1,
+    "test" : "T0-discovery"
+  },
+  {
+    "action" : "Back",
+    "app" : "Finder",
+    "detail" : "",
+    "latencyMs" : 53,
+    "outcome" : "resolved_exactly_one",
+    "pass" : true,
+    "run" : 1,
+    "test" : "T0-discovery"
+  },
+  {
+    "action" : "Forward",
+    "app" : "Finder",
+    "detail" : "",
+    "latencyMs" : 70,
+    "outcome" : "resolved_exactly_one",
+    "pass" : true,
+    "run" : 1,
+    "test" : "T0-discovery"
+  },
+  {
+    "action" : "New Folder",
+    "app" : "Finder",
+    "detail" : "",
+    "latencyMs" : 59,
+    "outcome" : "resolved_exactly_one",
+    "pass" : true,
+    "run" : 1,
+    "test" : "T0-discovery"
+  },
+  {
+    "action" : "Back",
+    "app" : "Safari",
+    "detail" : "",
+    "latencyMs" : 41,
+    "outcome" : "resolved_exactly_one",
+    "pass" : true,
+    "run" : 1,
+    "test" : "T0-discovery"
+  },
+  {
+    "action" : "Forward",
+    "app" : "Safari",
+    "detail" : "",
+    "latencyMs" : 44,
+    "outcome" : "resolved_exactly_one",
+    "pass" : true,
+    "run" : 1,
+    "test" : "T0-discovery"
+  },
+  {
+    "action" : "Reload",
+    "app" : "Safari",
+    "detail" : "",
+    "latencyMs" : 43,
+    "outcome" : "resolved_exactly_one",
+    "pass" : true,
+    "run" : 1,
+    "test" : "T0-discovery"
+  },
+  {
+    "action" : "New Tab",
+    "app" : "Safari",
+    "detail" : "",
+    "latencyMs" : 52,
+    "outcome" : "resolved_exactly_one",
+    "pass" : true,
+    "run" : 1,
+    "test" : "T0-discovery"
+  },
+  {
+    "action" : "Save",
+    "app" : "TextEdit",
+    "detail" : "file updated on disk",
+    "latencyMs" : 1264,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 1,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Save",
+    "app" : "TextEdit",
+    "detail" : "file updated on disk",
+    "latencyMs" : 244,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 2,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Save",
+    "app" : "TextEdit",
+    "detail" : "file updated on disk",
+    "latencyMs" : 118,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 3,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Save",
+    "app" : "TextEdit",
+    "detail" : "file updated on disk",
+    "latencyMs" : 142,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 4,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Save",
+    "app" : "TextEdit",
+    "detail" : "file updated on disk",
+    "latencyMs" : 106,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 5,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Save",
+    "app" : "TextEdit",
+    "detail" : "file updated on disk",
+    "latencyMs" : 108,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 6,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Save",
+    "app" : "TextEdit",
+    "detail" : "file updated on disk",
+    "latencyMs" : 120,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 7,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Save",
+    "app" : "TextEdit",
+    "detail" : "file updated on disk",
+    "latencyMs" : 98,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 8,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Save",
+    "app" : "TextEdit",
+    "detail" : "file updated on disk",
+    "latencyMs" : 160,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 9,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Save",
+    "app" : "TextEdit",
+    "detail" : "file updated on disk",
+    "latencyMs" : 95,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 10,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Save",
+    "app" : "TextEdit",
+    "detail" : "file updated on disk",
+    "latencyMs" : 104,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 11,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Save",
+    "app" : "TextEdit",
+    "detail" : "file updated on disk",
+    "latencyMs" : 110,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 12,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Save",
+    "app" : "TextEdit",
+    "detail" : "file updated on disk",
+    "latencyMs" : 105,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 13,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Save",
+    "app" : "TextEdit",
+    "detail" : "file updated on disk",
+    "latencyMs" : 109,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 14,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Save",
+    "app" : "TextEdit",
+    "detail" : "file updated on disk",
+    "latencyMs" : 117,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 15,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Save",
+    "app" : "TextEdit",
+    "detail" : "file updated on disk",
+    "latencyMs" : 123,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 16,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Save",
+    "app" : "TextEdit",
+    "detail" : "file updated on disk",
+    "latencyMs" : 92,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 17,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Save",
+    "app" : "TextEdit",
+    "detail" : "file updated on disk",
+    "latencyMs" : 110,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 18,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Save",
+    "app" : "TextEdit",
+    "detail" : "file updated on disk",
+    "latencyMs" : 150,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 19,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Save",
+    "app" : "TextEdit",
+    "detail" : "file updated on disk",
+    "latencyMs" : 104,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 20,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Find",
+    "app" : "TextEdit",
+    "detail" : "find field before=false after=true",
+    "latencyMs" : 61,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 1,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Find",
+    "app" : "TextEdit",
+    "detail" : "find field before=false after=true",
+    "latencyMs" : 148,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 2,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Find",
+    "app" : "TextEdit",
+    "detail" : "find field before=false after=true",
+    "latencyMs" : 38,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 3,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Find",
+    "app" : "TextEdit",
+    "detail" : "find field before=false after=true",
+    "latencyMs" : 107,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 4,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Find",
+    "app" : "TextEdit",
+    "detail" : "find field before=false after=true",
+    "latencyMs" : 40,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 5,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Find",
+    "app" : "TextEdit",
+    "detail" : "find field before=false after=true",
+    "latencyMs" : 99,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 6,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Find",
+    "app" : "TextEdit",
+    "detail" : "find field before=false after=true",
+    "latencyMs" : 38,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 7,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Find",
+    "app" : "TextEdit",
+    "detail" : "find field before=false after=true",
+    "latencyMs" : 84,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 8,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Find",
+    "app" : "TextEdit",
+    "detail" : "find field before=false after=true",
+    "latencyMs" : 38,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 9,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Find",
+    "app" : "TextEdit",
+    "detail" : "find field before=false after=true",
+    "latencyMs" : 90,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 10,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Find",
+    "app" : "TextEdit",
+    "detail" : "find field before=false after=true",
+    "latencyMs" : 40,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 11,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Find",
+    "app" : "TextEdit",
+    "detail" : "find field before=false after=true",
+    "latencyMs" : 88,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 12,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Find",
+    "app" : "TextEdit",
+    "detail" : "find field before=false after=true",
+    "latencyMs" : 38,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 13,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Find",
+    "app" : "TextEdit",
+    "detail" : "find field before=false after=true",
+    "latencyMs" : 104,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 14,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Find",
+    "app" : "TextEdit",
+    "detail" : "find field before=false after=true",
+    "latencyMs" : 38,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 15,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Find",
+    "app" : "TextEdit",
+    "detail" : "find field before=false after=true",
+    "latencyMs" : 90,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 16,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Find",
+    "app" : "TextEdit",
+    "detail" : "find field before=false after=true",
+    "latencyMs" : 52,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 17,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Find",
+    "app" : "TextEdit",
+    "detail" : "find field before=false after=true",
+    "latencyMs" : 168,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 18,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Find",
+    "app" : "TextEdit",
+    "detail" : "find field before=false after=true",
+    "latencyMs" : 39,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 19,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Find",
+    "app" : "TextEdit",
+    "detail" : "find field before=false after=true",
+    "latencyMs" : 123,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 20,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "New Folder",
+    "app" : "Finder",
+    "detail" : "folders 0->1",
+    "latencyMs" : 74,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 1,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "New Folder",
+    "app" : "Finder",
+    "detail" : "folders 1->2",
+    "latencyMs" : 65,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 2,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "New Folder",
+    "app" : "Finder",
+    "detail" : "folders 2->3",
+    "latencyMs" : 46,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 3,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "New Folder",
+    "app" : "Finder",
+    "detail" : "folders 3->4",
+    "latencyMs" : 106,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 4,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "New Folder",
+    "app" : "Finder",
+    "detail" : "folders 4->5",
+    "latencyMs" : 49,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 5,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "New Folder",
+    "app" : "Finder",
+    "detail" : "folders 5->6",
+    "latencyMs" : 43,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 6,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "New Folder",
+    "app" : "Finder",
+    "detail" : "folders 6->7",
+    "latencyMs" : 59,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 7,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "New Folder",
+    "app" : "Finder",
+    "detail" : "folders 7->8",
+    "latencyMs" : 46,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 8,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "New Folder",
+    "app" : "Finder",
+    "detail" : "folders 8->9",
+    "latencyMs" : 40,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 9,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "New Folder",
+    "app" : "Finder",
+    "detail" : "folders 9->10",
+    "latencyMs" : 35,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 10,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "New Folder",
+    "app" : "Finder",
+    "detail" : "folders 10->11",
+    "latencyMs" : 38,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 11,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "New Folder",
+    "app" : "Finder",
+    "detail" : "folders 11->12",
+    "latencyMs" : 45,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 12,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "New Folder",
+    "app" : "Finder",
+    "detail" : "folders 12->13",
+    "latencyMs" : 63,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 13,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "New Folder",
+    "app" : "Finder",
+    "detail" : "folders 13->14",
+    "latencyMs" : 67,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 14,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "New Folder",
+    "app" : "Finder",
+    "detail" : "folders 14->15",
+    "latencyMs" : 87,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 15,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "New Folder",
+    "app" : "Finder",
+    "detail" : "folders 15->16",
+    "latencyMs" : 41,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 16,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "New Folder",
+    "app" : "Finder",
+    "detail" : "folders 16->17",
+    "latencyMs" : 49,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 17,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "New Folder",
+    "app" : "Finder",
+    "detail" : "folders 17->18",
+    "latencyMs" : 69,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 18,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "New Folder",
+    "app" : "Finder",
+    "detail" : "folders 18->19",
+    "latencyMs" : 64,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 19,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "New Folder",
+    "app" : "Finder",
+    "detail" : "folders 19->20",
+    "latencyMs" : 58,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 20,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Back",
+    "app" : "Finder",
+    "detail" : "new window (pressed), title=Recents",
+    "latencyMs" : 53,
+    "outcome" : "disabled_not_sent",
+    "pass" : true,
+    "run" : 1,
+    "test" : "T5-disabled"
+  },
+  {
+    "action" : "Forward",
+    "app" : "Finder",
+    "detail" : "new window (pressed), title=Recents",
+    "latencyMs" : 33,
+    "outcome" : "disabled_not_sent",
+    "pass" : true,
+    "run" : 1,
+    "test" : "T5-disabled"
+  },
+  {
+    "action" : "Back",
+    "app" : "Finder",
+    "detail" : "",
+    "latencyMs" : 0,
+    "outcome" : "raw=disabled truth=enabled",
+    "pass" : false,
+    "run" : 1,
+    "test" : "T7-R2-raw-state"
+  },
+  {
+    "action" : "Back",
+    "app" : "Finder",
+    "detail" : "",
+    "latencyMs" : 0,
+    "outcome" : "refreshed=enabled truth=enabled",
+    "pass" : true,
+    "run" : 1,
+    "test" : "T7-R2-menu-refresh"
+  },
+  {
+    "action" : "Back",
+    "app" : "Finder",
+    "detail" : "",
+    "latencyMs" : 0,
+    "outcome" : "raw=enabled truth=enabled",
+    "pass" : true,
+    "run" : 1,
+    "test" : "T7-R2-raw-after-refresh"
+  },
+  {
+    "action" : "Back",
+    "app" : "Finder",
+    "detail" : "Applications -> Recents",
+    "latencyMs" : 0,
+    "outcome" : "forced:success",
+    "pass" : true,
+    "run" : 1,
+    "test" : "T7-force-press-available"
+  },
+  {
+    "action" : "Forward",
+    "app" : "Finder",
+    "detail" : "",
+    "latencyMs" : 0,
+    "outcome" : "raw=disabled truth=enabled",
+    "pass" : false,
+    "run" : 1,
+    "test" : "T7-R2-raw-state"
+  },
+  {
+    "action" : "Forward",
+    "app" : "Finder",
+    "detail" : "-> Recents",
+    "latencyMs" : 0,
+    "outcome" : "forced:success",
+    "pass" : false,
+    "run" : 1,
+    "test" : "T7-force-press-available"
+  },
+  {
+    "action" : "Forward",
+    "app" : "Finder",
+    "detail" : "title stays Applications",
+    "latencyMs" : 0,
+    "outcome" : "forced:success",
+    "pass" : false,
+    "run" : 1,
+    "test" : "T7-force-press-unavailable"
+  },
+  {
+    "action" : "Find",
+    "app" : "TextEdit->Finder",
+    "detail" : "no side effects",
+    "latencyMs" : 0,
+    "outcome" : "refused_target_changed",
+    "pass" : true,
+    "run" : 1,
+    "test" : "T2-wrong-app-guard"
+  },
+  {
+    "action" : "Find",
+    "app" : "TextEdit->Finder",
+    "detail" : "no side effects",
+    "latencyMs" : 0,
+    "outcome" : "refused_target_changed",
+    "pass" : true,
+    "run" : 2,
+    "test" : "T2-wrong-app-guard"
+  },
+  {
+    "action" : "Find",
+    "app" : "TextEdit->Finder",
+    "detail" : "no side effects",
+    "latencyMs" : 0,
+    "outcome" : "refused_target_changed",
+    "pass" : true,
+    "run" : 3,
+    "test" : "T2-wrong-app-guard"
+  },
+  {
+    "action" : "Find",
+    "app" : "TextEdit->Finder",
+    "detail" : "no side effects",
+    "latencyMs" : 0,
+    "outcome" : "refused_target_changed",
+    "pass" : true,
+    "run" : 4,
+    "test" : "T2-wrong-app-guard"
+  },
+  {
+    "action" : "Find",
+    "app" : "TextEdit->Finder",
+    "detail" : "no side effects",
+    "latencyMs" : 0,
+    "outcome" : "refused_target_changed",
+    "pass" : true,
+    "run" : 5,
+    "test" : "T2-wrong-app-guard"
+  },
+  {
+    "action" : "Find",
+    "app" : "TextEdit->Finder",
+    "detail" : "no side effects",
+    "latencyMs" : 0,
+    "outcome" : "refused_target_changed",
+    "pass" : true,
+    "run" : 6,
+    "test" : "T2-wrong-app-guard"
+  },
+  {
+    "action" : "Find",
+    "app" : "TextEdit->Finder",
+    "detail" : "no side effects",
+    "latencyMs" : 0,
+    "outcome" : "refused_target_changed",
+    "pass" : true,
+    "run" : 7,
+    "test" : "T2-wrong-app-guard"
+  },
+  {
+    "action" : "Find",
+    "app" : "TextEdit->Finder",
+    "detail" : "no side effects",
+    "latencyMs" : 0,
+    "outcome" : "refused_target_changed",
+    "pass" : true,
+    "run" : 8,
+    "test" : "T2-wrong-app-guard"
+  },
+  {
+    "action" : "Find",
+    "app" : "TextEdit->Finder",
+    "detail" : "no side effects",
+    "latencyMs" : 0,
+    "outcome" : "refused_target_changed",
+    "pass" : true,
+    "run" : 9,
+    "test" : "T2-wrong-app-guard"
+  },
+  {
+    "action" : "Find",
+    "app" : "TextEdit->Finder",
+    "detail" : "no side effects",
+    "latencyMs" : 0,
+    "outcome" : "refused_target_changed",
+    "pass" : true,
+    "run" : 10,
+    "test" : "T2-wrong-app-guard"
+  },
+  {
+    "action" : "Find",
+    "app" : "TextEdit->Finder",
+    "detail" : "no side effects",
+    "latencyMs" : 0,
+    "outcome" : "refused_target_changed",
+    "pass" : true,
+    "run" : 11,
+    "test" : "T2-wrong-app-guard"
+  },
+  {
+    "action" : "Find",
+    "app" : "TextEdit->Finder",
+    "detail" : "no side effects",
+    "latencyMs" : 10,
+    "outcome" : "refused_target_changed",
+    "pass" : true,
+    "run" : 12,
+    "test" : "T2-wrong-app-guard"
+  },
+  {
+    "action" : "Find",
+    "app" : "TextEdit->Finder",
+    "detail" : "no side effects",
+    "latencyMs" : 0,
+    "outcome" : "refused_target_changed",
+    "pass" : true,
+    "run" : 13,
+    "test" : "T2-wrong-app-guard"
+  },
+  {
+    "action" : "Find",
+    "app" : "TextEdit->Finder",
+    "detail" : "no side effects",
+    "latencyMs" : 0,
+    "outcome" : "refused_target_changed",
+    "pass" : true,
+    "run" : 14,
+    "test" : "T2-wrong-app-guard"
+  },
+  {
+    "action" : "Find",
+    "app" : "TextEdit->Finder",
+    "detail" : "no side effects",
+    "latencyMs" : 0,
+    "outcome" : "refused_target_changed",
+    "pass" : true,
+    "run" : 15,
+    "test" : "T2-wrong-app-guard"
+  },
+  {
+    "action" : "Find",
+    "app" : "TextEdit->Finder",
+    "detail" : "no side effects",
+    "latencyMs" : 0,
+    "outcome" : "refused_target_changed",
+    "pass" : true,
+    "run" : 16,
+    "test" : "T2-wrong-app-guard"
+  },
+  {
+    "action" : "Find",
+    "app" : "TextEdit->Finder",
+    "detail" : "no side effects",
+    "latencyMs" : 0,
+    "outcome" : "refused_target_changed",
+    "pass" : true,
+    "run" : 17,
+    "test" : "T2-wrong-app-guard"
+  },
+  {
+    "action" : "Find",
+    "app" : "TextEdit->Finder",
+    "detail" : "no side effects",
+    "latencyMs" : 0,
+    "outcome" : "refused_target_changed",
+    "pass" : true,
+    "run" : 18,
+    "test" : "T2-wrong-app-guard"
+  },
+  {
+    "action" : "Find",
+    "app" : "TextEdit->Finder",
+    "detail" : "no side effects",
+    "latencyMs" : 0,
+    "outcome" : "refused_target_changed",
+    "pass" : true,
+    "run" : 19,
+    "test" : "T2-wrong-app-guard"
+  },
+  {
+    "action" : "Find",
+    "app" : "TextEdit->Finder",
+    "detail" : "no side effects",
+    "latencyMs" : 0,
+    "outcome" : "refused_target_changed",
+    "pass" : true,
+    "run" : 20,
+    "test" : "T2-wrong-app-guard"
+  },
+  {
+    "action" : "New Folder",
+    "app" : "Finder",
+    "detail" : "created=true textEditUntouched=true",
+    "latencyMs" : 67,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 1,
+    "test" : "T2-app-switching"
+  },
+  {
+    "action" : "Save",
+    "app" : "TextEdit",
+    "detail" : "saved=true finderUntouched=true",
+    "latencyMs" : 115,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 2,
+    "test" : "T2-app-switching"
+  },
+  {
+    "action" : "New Folder",
+    "app" : "Finder",
+    "detail" : "created=true textEditUntouched=true",
+    "latencyMs" : 62,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 3,
+    "test" : "T2-app-switching"
+  },
+  {
+    "action" : "Save",
+    "app" : "TextEdit",
+    "detail" : "saved=true finderUntouched=true",
+    "latencyMs" : 113,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 4,
+    "test" : "T2-app-switching"
+  },
+  {
+    "action" : "New Folder",
+    "app" : "Finder",
+    "detail" : "created=true textEditUntouched=true",
+    "latencyMs" : 61,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 5,
+    "test" : "T2-app-switching"
+  },
+  {
+    "action" : "Save",
+    "app" : "TextEdit",
+    "detail" : "saved=true finderUntouched=true",
+    "latencyMs" : 110,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 6,
+    "test" : "T2-app-switching"
+  },
+  {
+    "action" : "New Folder",
+    "app" : "Finder",
+    "detail" : "created=true textEditUntouched=true",
+    "latencyMs" : 51,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 7,
+    "test" : "T2-app-switching"
+  },
+  {
+    "action" : "Save",
+    "app" : "TextEdit",
+    "detail" : "saved=true finderUntouched=true",
+    "latencyMs" : 92,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 8,
+    "test" : "T2-app-switching"
+  },
+  {
+    "action" : "New Folder",
+    "app" : "Finder",
+    "detail" : "created=true textEditUntouched=true",
+    "latencyMs" : 60,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 9,
+    "test" : "T2-app-switching"
+  },
+  {
+    "action" : "Save",
+    "app" : "TextEdit",
+    "detail" : "saved=true finderUntouched=true",
+    "latencyMs" : 119,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 10,
+    "test" : "T2-app-switching"
+  },
+  {
+    "action" : "New Folder",
+    "app" : "Finder",
+    "detail" : "created=true textEditUntouched=true",
+    "latencyMs" : 62,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 11,
+    "test" : "T2-app-switching"
+  },
+  {
+    "action" : "Save",
+    "app" : "TextEdit",
+    "detail" : "saved=true finderUntouched=true",
+    "latencyMs" : 113,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 12,
+    "test" : "T2-app-switching"
+  },
+  {
+    "action" : "New Folder",
+    "app" : "Finder",
+    "detail" : "created=true textEditUntouched=true",
+    "latencyMs" : 62,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 13,
+    "test" : "T2-app-switching"
+  },
+  {
+    "action" : "Save",
+    "app" : "TextEdit",
+    "detail" : "saved=true finderUntouched=true",
+    "latencyMs" : 120,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 14,
+    "test" : "T2-app-switching"
+  },
+  {
+    "action" : "New Folder",
+    "app" : "Finder",
+    "detail" : "created=true textEditUntouched=true",
+    "latencyMs" : 47,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 15,
+    "test" : "T2-app-switching"
+  },
+  {
+    "action" : "Save",
+    "app" : "TextEdit",
+    "detail" : "saved=true finderUntouched=true",
+    "latencyMs" : 111,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 16,
+    "test" : "T2-app-switching"
+  },
+  {
+    "action" : "New Folder",
+    "app" : "Finder",
+    "detail" : "created=true textEditUntouched=true",
+    "latencyMs" : 45,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 17,
+    "test" : "T2-app-switching"
+  },
+  {
+    "action" : "Save",
+    "app" : "TextEdit",
+    "detail" : "saved=true finderUntouched=true",
+    "latencyMs" : 112,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 18,
+    "test" : "T2-app-switching"
+  },
+  {
+    "action" : "New Folder",
+    "app" : "Finder",
+    "detail" : "created=true textEditUntouched=true",
+    "latencyMs" : 47,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 19,
+    "test" : "T2-app-switching"
+  },
+  {
+    "action" : "Save",
+    "app" : "TextEdit",
+    "detail" : "saved=true finderUntouched=true",
+    "latencyMs" : 96,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 20,
+    "test" : "T2-app-switching"
+  },
+  {
+    "action" : "Find",
+    "app" : "TextEdit",
+    "detail" : "pid 1467->5850",
+    "latencyMs" : 241,
+    "outcome" : "stale=cannotComplete (app busy or gone); fresh=pressed",
+    "pass" : true,
+    "run" : 1,
+    "test" : "T6-stale"
+  },
+  {
+    "action" : "Find",
+    "app" : "TextEdit",
+    "detail" : "pid 5850->6199",
+    "latencyMs" : 201,
+    "outcome" : "stale=cannotComplete (app busy or gone); fresh=pressed",
+    "pass" : true,
+    "run" : 2,
+    "test" : "T6-stale"
+  },
+  {
+    "action" : "Find",
+    "app" : "TextEdit",
+    "detail" : "pid 6199->6359",
+    "latencyMs" : 221,
+    "outcome" : "stale=cannotComplete (app busy or gone); fresh=pressed",
+    "pass" : true,
+    "run" : 3,
+    "test" : "T6-stale"
+  },
+  {
+    "action" : "Find",
+    "app" : "TextEdit",
+    "detail" : "pid 6359->6484",
+    "latencyMs" : 206,
+    "outcome" : "stale=cannotComplete (app busy or gone); fresh=pressed",
+    "pass" : true,
+    "run" : 4,
+    "test" : "T6-stale"
+  },
+  {
+    "action" : "Find",
+    "app" : "TextEdit",
+    "detail" : "pid 6484->6519",
+    "latencyMs" : 231,
+    "outcome" : "stale=cannotComplete (app busy or gone); fresh=pressed",
+    "pass" : true,
+    "run" : 5,
+    "test" : "T6-stale"
+  },
+  {
+    "action" : "Reload",
+    "app" : "Safari",
+    "detail" : "PC-B 1794996361511 -> PC-B 1794996513744",
+    "latencyMs" : 200,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 1,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Reload",
+    "app" : "Safari",
+    "detail" : "PC-B 1794996513744 -> PC-B 1794996514508",
+    "latencyMs" : 43,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 2,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Reload",
+    "app" : "Safari",
+    "detail" : "PC-B 1794996514508 -> PC-B 1794996515326",
+    "latencyMs" : 79,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 3,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Reload",
+    "app" : "Safari",
+    "detail" : "PC-B 1794996515326 -> PC-B 1794996516128",
+    "latencyMs" : 57,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 4,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Reload",
+    "app" : "Safari",
+    "detail" : "PC-B 1794996516128 -> PC-B 1794996516908",
+    "latencyMs" : 53,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 5,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Reload",
+    "app" : "Safari",
+    "detail" : "PC-B 1794996516908 -> PC-B 1794996517765",
+    "latencyMs" : 63,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 6,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Reload",
+    "app" : "Safari",
+    "detail" : "PC-B 1794996517765 -> PC-B 1794996518635",
+    "latencyMs" : 71,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 7,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Reload",
+    "app" : "Safari",
+    "detail" : "PC-B 1794996518635 -> PC-B 1794996519491",
+    "latencyMs" : 60,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 8,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Reload",
+    "app" : "Safari",
+    "detail" : "PC-B 1794996519491 -> PC-B 1794996520351",
+    "latencyMs" : 70,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 9,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Reload",
+    "app" : "Safari",
+    "detail" : "PC-B 1794996520351 -> PC-B 1794996521173",
+    "latencyMs" : 62,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 10,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Reload",
+    "app" : "Safari",
+    "detail" : "PC-B 1794996521173 -> PC-B 1794996522001",
+    "latencyMs" : 73,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 11,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Reload",
+    "app" : "Safari",
+    "detail" : "PC-B 1794996522001 -> PC-B 1794996522859",
+    "latencyMs" : 82,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 12,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Reload",
+    "app" : "Safari",
+    "detail" : "PC-B 1794996522859 -> PC-B 1794996523724",
+    "latencyMs" : 69,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 13,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Reload",
+    "app" : "Safari",
+    "detail" : "PC-B 1794996523724 -> PC-B 1794996524569",
+    "latencyMs" : 64,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 14,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Reload",
+    "app" : "Safari",
+    "detail" : "PC-B 1794996524569 -> PC-B 1794996525374",
+    "latencyMs" : 52,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 15,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Reload",
+    "app" : "Safari",
+    "detail" : "PC-B 1794996525374 -> PC-B 1794996526226",
+    "latencyMs" : 71,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 16,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Reload",
+    "app" : "Safari",
+    "detail" : "PC-B 1794996526226 -> PC-B 1794996527025",
+    "latencyMs" : 60,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 17,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Reload",
+    "app" : "Safari",
+    "detail" : "PC-B 1794996527025 -> PC-B 1794996527852",
+    "latencyMs" : 70,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 18,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Reload",
+    "app" : "Safari",
+    "detail" : "PC-B 1794996527852 -> PC-B 1794996528724",
+    "latencyMs" : 69,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 19,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Reload",
+    "app" : "Safari",
+    "detail" : "PC-B 1794996528724 -> PC-B 1794996529556",
+    "latencyMs" : 50,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 20,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Back",
+    "app" : "Safari",
+    "detail" : "",
+    "latencyMs" : 0,
+    "outcome" : "raw=enabled truth=enabled",
+    "pass" : true,
+    "run" : 1,
+    "test" : "T7-R2-raw-state"
+  },
+  {
+    "action" : "Back",
+    "app" : "Safari",
+    "detail" : "title=PC-A",
+    "latencyMs" : 0,
+    "outcome" : "forced:success",
+    "pass" : true,
+    "run" : 1,
+    "test" : "T7-force-press-available"
+  },
+  {
+    "action" : "Forward",
+    "app" : "Safari",
+    "detail" : "",
+    "latencyMs" : 0,
+    "outcome" : "raw=disabled truth=enabled",
+    "pass" : false,
+    "run" : 1,
+    "test" : "T7-R2-raw-state"
+  },
+  {
+    "action" : "Forward",
+    "app" : "Safari",
+    "detail" : "",
+    "latencyMs" : 0,
+    "outcome" : "refreshed=disabled truth=enabled",
+    "pass" : false,
+    "run" : 1,
+    "test" : "T7-R2-menu-refresh"
+  },
+  {
+    "action" : "Forward",
+    "app" : "Safari",
+    "detail" : "title=PC-A",
+    "latencyMs" : 0,
+    "outcome" : "forced:success",
+    "pass" : false,
+    "run" : 1,
+    "test" : "T7-force-press-available"
+  },
+  {
+    "action" : "Back",
+    "app" : "Safari",
+    "detail" : "",
+    "latencyMs" : 0,
+    "outcome" : "raw=disabled truth=enabled",
+    "pass" : false,
+    "run" : 2,
+    "test" : "T7-R2-raw-state"
+  },
+  {
+    "action" : "Back",
+    "app" : "Safari",
+    "detail" : "title=PC-A",
+    "latencyMs" : 0,
+    "outcome" : "forced:success",
+    "pass" : true,
+    "run" : 2,
+    "test" : "T7-force-press-available"
+  },
+  {
+    "action" : "Forward",
+    "app" : "Safari",
+    "detail" : "",
+    "latencyMs" : 0,
+    "outcome" : "raw=disabled truth=enabled",
+    "pass" : false,
+    "run" : 2,
+    "test" : "T7-R2-raw-state"
+  },
+  {
+    "action" : "Forward",
+    "app" : "Safari",
+    "detail" : "",
+    "latencyMs" : 0,
+    "outcome" : "refreshed=disabled truth=enabled",
+    "pass" : false,
+    "run" : 2,
+    "test" : "T7-R2-menu-refresh"
+  },
+  {
+    "action" : "Forward",
+    "app" : "Safari",
+    "detail" : "title=PC-A",
+    "latencyMs" : 0,
+    "outcome" : "forced:success",
+    "pass" : false,
+    "run" : 2,
+    "test" : "T7-force-press-available"
+  },
+  {
+    "action" : "Back",
+    "app" : "Safari",
+    "detail" : "",
+    "latencyMs" : 0,
+    "outcome" : "raw=disabled truth=enabled",
+    "pass" : false,
+    "run" : 3,
+    "test" : "T7-R2-raw-state"
+  },
+  {
+    "action" : "Back",
+    "app" : "Safari",
+    "detail" : "title=PC-A",
+    "latencyMs" : 0,
+    "outcome" : "forced:success",
+    "pass" : true,
+    "run" : 3,
+    "test" : "T7-force-press-available"
+  },
+  {
+    "action" : "Forward",
+    "app" : "Safari",
+    "detail" : "",
+    "latencyMs" : 0,
+    "outcome" : "raw=disabled truth=enabled",
+    "pass" : false,
+    "run" : 3,
+    "test" : "T7-R2-raw-state"
+  },
+  {
+    "action" : "Forward",
+    "app" : "Safari",
+    "detail" : "",
+    "latencyMs" : 0,
+    "outcome" : "refreshed=disabled truth=enabled",
+    "pass" : false,
+    "run" : 3,
+    "test" : "T7-R2-menu-refresh"
+  },
+  {
+    "action" : "Forward",
+    "app" : "Safari",
+    "detail" : "title=PC-A",
+    "latencyMs" : 0,
+    "outcome" : "forced:success",
+    "pass" : false,
+    "run" : 3,
+    "test" : "T7-force-press-available"
+  },
+  {
+    "action" : "Back",
+    "app" : "Safari",
+    "detail" : "",
+    "latencyMs" : 0,
+    "outcome" : "raw=disabled truth=enabled",
+    "pass" : false,
+    "run" : 4,
+    "test" : "T7-R2-raw-state"
+  },
+  {
+    "action" : "Back",
+    "app" : "Safari",
+    "detail" : "title=PC-A",
+    "latencyMs" : 0,
+    "outcome" : "forced:success",
+    "pass" : true,
+    "run" : 4,
+    "test" : "T7-force-press-available"
+  },
+  {
+    "action" : "Forward",
+    "app" : "Safari",
+    "detail" : "",
+    "latencyMs" : 0,
+    "outcome" : "raw=disabled truth=enabled",
+    "pass" : false,
+    "run" : 4,
+    "test" : "T7-R2-raw-state"
+  },
+  {
+    "action" : "Forward",
+    "app" : "Safari",
+    "detail" : "title=PC-A",
+    "latencyMs" : 0,
+    "outcome" : "forced:success",
+    "pass" : false,
+    "run" : 4,
+    "test" : "T7-force-press-available"
+  },
+  {
+    "action" : "Back",
+    "app" : "Safari",
+    "detail" : "",
+    "latencyMs" : 0,
+    "outcome" : "raw=disabled truth=enabled",
+    "pass" : false,
+    "run" : 5,
+    "test" : "T7-R2-raw-state"
+  },
+  {
+    "action" : "Back",
+    "app" : "Safari",
+    "detail" : "title=PC-A",
+    "latencyMs" : 0,
+    "outcome" : "forced:success",
+    "pass" : true,
+    "run" : 5,
+    "test" : "T7-force-press-available"
+  },
+  {
+    "action" : "Forward",
+    "app" : "Safari",
+    "detail" : "",
+    "latencyMs" : 0,
+    "outcome" : "raw=disabled truth=enabled",
+    "pass" : false,
+    "run" : 5,
+    "test" : "T7-R2-raw-state"
+  },
+  {
+    "action" : "Forward",
+    "app" : "Safari",
+    "detail" : "title=PC-A",
+    "latencyMs" : 0,
+    "outcome" : "forced:success",
+    "pass" : false,
+    "run" : 5,
+    "test" : "T7-force-press-available"
+  },
+  {
+    "action" : "Back",
+    "app" : "Safari",
+    "detail" : "",
+    "latencyMs" : 0,
+    "outcome" : "raw=disabled truth=enabled",
+    "pass" : false,
+    "run" : 6,
+    "test" : "T7-R2-raw-state"
+  },
+  {
+    "action" : "Back",
+    "app" : "Safari",
+    "detail" : "title=PC-A",
+    "latencyMs" : 0,
+    "outcome" : "forced:success",
+    "pass" : true,
+    "run" : 6,
+    "test" : "T7-force-press-available"
+  },
+  {
+    "action" : "Forward",
+    "app" : "Safari",
+    "detail" : "",
+    "latencyMs" : 0,
+    "outcome" : "raw=disabled truth=enabled",
+    "pass" : false,
+    "run" : 6,
+    "test" : "T7-R2-raw-state"
+  },
+  {
+    "action" : "Forward",
+    "app" : "Safari",
+    "detail" : "title=PC-A",
+    "latencyMs" : 0,
+    "outcome" : "forced:success",
+    "pass" : false,
+    "run" : 6,
+    "test" : "T7-force-press-available"
+  },
+  {
+    "action" : "Back",
+    "app" : "Safari",
+    "detail" : "",
+    "latencyMs" : 0,
+    "outcome" : "raw=disabled truth=enabled",
+    "pass" : false,
+    "run" : 7,
+    "test" : "T7-R2-raw-state"
+  },
+  {
+    "action" : "Back",
+    "app" : "Safari",
+    "detail" : "title=PC-A",
+    "latencyMs" : 0,
+    "outcome" : "forced:success",
+    "pass" : true,
+    "run" : 7,
+    "test" : "T7-force-press-available"
+  },
+  {
+    "action" : "Forward",
+    "app" : "Safari",
+    "detail" : "",
+    "latencyMs" : 0,
+    "outcome" : "raw=disabled truth=enabled",
+    "pass" : false,
+    "run" : 7,
+    "test" : "T7-R2-raw-state"
+  },
+  {
+    "action" : "Forward",
+    "app" : "Safari",
+    "detail" : "title=PC-A",
+    "latencyMs" : 0,
+    "outcome" : "forced:success",
+    "pass" : false,
+    "run" : 7,
+    "test" : "T7-force-press-available"
+  },
+  {
+    "action" : "Back",
+    "app" : "Safari",
+    "detail" : "",
+    "latencyMs" : 0,
+    "outcome" : "raw=disabled truth=enabled",
+    "pass" : false,
+    "run" : 8,
+    "test" : "T7-R2-raw-state"
+  },
+  {
+    "action" : "Back",
+    "app" : "Safari",
+    "detail" : "title=PC-A",
+    "latencyMs" : 0,
+    "outcome" : "forced:success",
+    "pass" : true,
+    "run" : 8,
+    "test" : "T7-force-press-available"
+  },
+  {
+    "action" : "Forward",
+    "app" : "Safari",
+    "detail" : "",
+    "latencyMs" : 0,
+    "outcome" : "raw=disabled truth=enabled",
+    "pass" : false,
+    "run" : 8,
+    "test" : "T7-R2-raw-state"
+  },
+  {
+    "action" : "Forward",
+    "app" : "Safari",
+    "detail" : "title=PC-A",
+    "latencyMs" : 0,
+    "outcome" : "forced:success",
+    "pass" : false,
+    "run" : 8,
+    "test" : "T7-force-press-available"
+  },
+  {
+    "action" : "Back",
+    "app" : "Safari",
+    "detail" : "",
+    "latencyMs" : 0,
+    "outcome" : "raw=disabled truth=enabled",
+    "pass" : false,
+    "run" : 9,
+    "test" : "T7-R2-raw-state"
+  },
+  {
+    "action" : "Back",
+    "app" : "Safari",
+    "detail" : "title=PC-A",
+    "latencyMs" : 0,
+    "outcome" : "forced:success",
+    "pass" : true,
+    "run" : 9,
+    "test" : "T7-force-press-available"
+  },
+  {
+    "action" : "Forward",
+    "app" : "Safari",
+    "detail" : "",
+    "latencyMs" : 0,
+    "outcome" : "raw=disabled truth=enabled",
+    "pass" : false,
+    "run" : 9,
+    "test" : "T7-R2-raw-state"
+  },
+  {
+    "action" : "Forward",
+    "app" : "Safari",
+    "detail" : "title=PC-A",
+    "latencyMs" : 0,
+    "outcome" : "forced:success",
+    "pass" : false,
+    "run" : 9,
+    "test" : "T7-force-press-available"
+  },
+  {
+    "action" : "Back",
+    "app" : "Safari",
+    "detail" : "",
+    "latencyMs" : 0,
+    "outcome" : "raw=disabled truth=enabled",
+    "pass" : false,
+    "run" : 10,
+    "test" : "T7-R2-raw-state"
+  },
+  {
+    "action" : "Back",
+    "app" : "Safari",
+    "detail" : "title=PC-A",
+    "latencyMs" : 0,
+    "outcome" : "forced:success",
+    "pass" : true,
+    "run" : 10,
+    "test" : "T7-force-press-available"
+  },
+  {
+    "action" : "Forward",
+    "app" : "Safari",
+    "detail" : "",
+    "latencyMs" : 0,
+    "outcome" : "raw=disabled truth=enabled",
+    "pass" : false,
+    "run" : 10,
+    "test" : "T7-R2-raw-state"
+  },
+  {
+    "action" : "Forward",
+    "app" : "Safari",
+    "detail" : "title=PC-A",
+    "latencyMs" : 0,
+    "outcome" : "forced:success",
+    "pass" : false,
+    "run" : 10,
+    "test" : "T7-force-press-available"
+  },
+  {
+    "action" : "Forward",
+    "app" : "Safari",
+    "detail" : "title stays PC-A",
+    "latencyMs" : 0,
+    "outcome" : "forced:success",
+    "pass" : true,
+    "run" : 1,
+    "test" : "T7-force-press-unavailable"
+  },
+  {
+    "action" : "New Tab",
+    "app" : "Safari",
+    "detail" : "title=Start Page",
+    "latencyMs" : 68,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 1,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "New Tab",
+    "app" : "Safari",
+    "detail" : "title=Start Page",
+    "latencyMs" : 54,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 2,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "New Tab",
+    "app" : "Safari",
+    "detail" : "title=Start Page",
+    "latencyMs" : 45,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 3,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "New Tab",
+    "app" : "Safari",
+    "detail" : "title=Start Page",
+    "latencyMs" : 65,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 4,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "New Tab",
+    "app" : "Safari",
+    "detail" : "title=Start Page",
+    "latencyMs" : 56,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 5,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "New Tab",
+    "app" : "Safari",
+    "detail" : "title=Start Page",
+    "latencyMs" : 56,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 6,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "New Tab",
+    "app" : "Safari",
+    "detail" : "title=Start Page",
+    "latencyMs" : 47,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 7,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "New Tab",
+    "app" : "Safari",
+    "detail" : "title=Start Page",
+    "latencyMs" : 44,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 8,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "New Tab",
+    "app" : "Safari",
+    "detail" : "title=Start Page",
+    "latencyMs" : 63,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 9,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "New Tab",
+    "app" : "Safari",
+    "detail" : "title=Start Page",
+    "latencyMs" : 47,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 10,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "New Tab",
+    "app" : "Safari",
+    "detail" : "title=Start Page",
+    "latencyMs" : 58,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 11,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "New Tab",
+    "app" : "Safari",
+    "detail" : "title=Start Page",
+    "latencyMs" : 62,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 12,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "New Tab",
+    "app" : "Safari",
+    "detail" : "title=Start Page",
+    "latencyMs" : 63,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 13,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "New Tab",
+    "app" : "Safari",
+    "detail" : "title=Start Page",
+    "latencyMs" : 47,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 14,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "New Tab",
+    "app" : "Safari",
+    "detail" : "title=Start Page",
+    "latencyMs" : 62,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 15,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "New Tab",
+    "app" : "Safari",
+    "detail" : "title=Start Page",
+    "latencyMs" : 128,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 16,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "New Tab",
+    "app" : "Safari",
+    "detail" : "title=Start Page",
+    "latencyMs" : 68,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 17,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "New Tab",
+    "app" : "Safari",
+    "detail" : "title=Start Page",
+    "latencyMs" : 70,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 18,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "New Tab",
+    "app" : "Safari",
+    "detail" : "title=Start Page",
+    "latencyMs" : 66,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 19,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "New Tab",
+    "app" : "Safari",
+    "detail" : "title=Start Page",
+    "latencyMs" : 64,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 20,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Basic",
+    "app" : "Calculator",
+    "detail" : "",
+    "latencyMs" : 15,
+    "outcome" : "resolved_exactly_one",
+    "pass" : true,
+    "run" : 1,
+    "test" : "T0-discovery"
+  },
+  {
+    "action" : "Scientific",
+    "app" : "Calculator",
+    "detail" : "",
+    "latencyMs" : 14,
+    "outcome" : "resolved_exactly_one",
+    "pass" : true,
+    "run" : 1,
+    "test" : "T0-discovery"
+  },
+  {
+    "action" : "Programmer",
+    "app" : "Calculator",
+    "detail" : "",
+    "latencyMs" : 15,
+    "outcome" : "resolved_exactly_one",
+    "pass" : true,
+    "run" : 1,
+    "test" : "T0-discovery"
+  },
+  {
+    "action" : "Copy Result",
+    "app" : "Calculator",
+    "detail" : "",
+    "latencyMs" : 15,
+    "outcome" : "resolved_exactly_one",
+    "pass" : true,
+    "run" : 1,
+    "test" : "T0-discovery"
+  },
+  {
+    "action" : "Scientific",
+    "app" : "Calculator",
+    "detail" : "size 230x408 -> 674x408",
+    "latencyMs" : 26,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 1,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Programmer",
+    "app" : "Calculator",
+    "detail" : "size 674x408 -> 488x582",
+    "latencyMs" : 38,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 1,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Basic",
+    "app" : "Calculator",
+    "detail" : "size 488x582 -> 230x408",
+    "latencyMs" : 30,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 1,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Scientific",
+    "app" : "Calculator",
+    "detail" : "size 230x408 -> 674x408",
+    "latencyMs" : 37,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 2,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Programmer",
+    "app" : "Calculator",
+    "detail" : "size 674x408 -> 488x582",
+    "latencyMs" : 37,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 2,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Basic",
+    "app" : "Calculator",
+    "detail" : "size 488x582 -> 230x408",
+    "latencyMs" : 28,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 2,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Scientific",
+    "app" : "Calculator",
+    "detail" : "size 230x408 -> 674x408",
+    "latencyMs" : 31,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 3,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Programmer",
+    "app" : "Calculator",
+    "detail" : "size 674x408 -> 488x582",
+    "latencyMs" : 32,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 3,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Basic",
+    "app" : "Calculator",
+    "detail" : "size 488x582 -> 230x408",
+    "latencyMs" : 47,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 3,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Scientific",
+    "app" : "Calculator",
+    "detail" : "size 230x408 -> 674x408",
+    "latencyMs" : 38,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 4,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Programmer",
+    "app" : "Calculator",
+    "detail" : "size 674x408 -> 488x582",
+    "latencyMs" : 30,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 4,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Basic",
+    "app" : "Calculator",
+    "detail" : "size 488x582 -> 230x408",
+    "latencyMs" : 47,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 4,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Scientific",
+    "app" : "Calculator",
+    "detail" : "size 230x408 -> 674x408",
+    "latencyMs" : 45,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 5,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Programmer",
+    "app" : "Calculator",
+    "detail" : "size 674x408 -> 488x582",
+    "latencyMs" : 49,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 5,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Basic",
+    "app" : "Calculator",
+    "detail" : "size 488x582 -> 230x408",
+    "latencyMs" : 32,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 5,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Scientific",
+    "app" : "Calculator",
+    "detail" : "size 230x408 -> 674x408",
+    "latencyMs" : 29,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 6,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Programmer",
+    "app" : "Calculator",
+    "detail" : "size 674x408 -> 488x582",
+    "latencyMs" : 48,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 6,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Basic",
+    "app" : "Calculator",
+    "detail" : "size 488x582 -> 230x408",
+    "latencyMs" : 46,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 6,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Scientific",
+    "app" : "Calculator",
+    "detail" : "size 230x408 -> 674x408",
+    "latencyMs" : 46,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 7,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Programmer",
+    "app" : "Calculator",
+    "detail" : "size 674x408 -> 488x582",
+    "latencyMs" : 44,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 7,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Basic",
+    "app" : "Calculator",
+    "detail" : "size 488x582 -> 230x408",
+    "latencyMs" : 34,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 7,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Scientific",
+    "app" : "Calculator",
+    "detail" : "size 230x408 -> 674x408",
+    "latencyMs" : 46,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 8,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Programmer",
+    "app" : "Calculator",
+    "detail" : "size 674x408 -> 488x582",
+    "latencyMs" : 47,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 8,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Basic",
+    "app" : "Calculator",
+    "detail" : "size 488x582 -> 230x408",
+    "latencyMs" : 28,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 8,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Scientific",
+    "app" : "Calculator",
+    "detail" : "size 230x408 -> 674x408",
+    "latencyMs" : 47,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 9,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Programmer",
+    "app" : "Calculator",
+    "detail" : "size 674x408 -> 488x582",
+    "latencyMs" : 33,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 9,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Basic",
+    "app" : "Calculator",
+    "detail" : "size 488x582 -> 230x408",
+    "latencyMs" : 45,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 9,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Scientific",
+    "app" : "Calculator",
+    "detail" : "size 230x408 -> 674x408",
+    "latencyMs" : 48,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 10,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Programmer",
+    "app" : "Calculator",
+    "detail" : "size 674x408 -> 488x582",
+    "latencyMs" : 45,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 10,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Basic",
+    "app" : "Calculator",
+    "detail" : "size 488x582 -> 230x408",
+    "latencyMs" : 50,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 10,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Copy Result",
+    "app" : "Calculator",
+    "detail" : "typed 417, clipboard \"417\"",
+    "latencyMs" : 32,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 1,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Copy Result",
+    "app" : "Calculator",
+    "detail" : "typed 427, clipboard \"427\"",
+    "latencyMs" : 37,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 2,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Copy Result",
+    "app" : "Calculator",
+    "detail" : "typed 437, clipboard \"437\"",
+    "latencyMs" : 36,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 3,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Copy Result",
+    "app" : "Calculator",
+    "detail" : "typed 447, clipboard \"447\"",
+    "latencyMs" : 26,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 4,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Copy Result",
+    "app" : "Calculator",
+    "detail" : "typed 457, clipboard \"457\"",
+    "latencyMs" : 35,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 5,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Copy Result",
+    "app" : "Calculator",
+    "detail" : "typed 467, clipboard \"467\"",
+    "latencyMs" : 34,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 6,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Copy Result",
+    "app" : "Calculator",
+    "detail" : "typed 477, clipboard \"477\"",
+    "latencyMs" : 21,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 7,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Copy Result",
+    "app" : "Calculator",
+    "detail" : "typed 487, clipboard \"487\"",
+    "latencyMs" : 37,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 8,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Copy Result",
+    "app" : "Calculator",
+    "detail" : "typed 497, clipboard \"497\"",
+    "latencyMs" : 34,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 9,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Copy Result",
+    "app" : "Calculator",
+    "detail" : "typed 4107, clipboard \"4107\"",
+    "latencyMs" : 33,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 10,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Copy Result",
+    "app" : "Calculator",
+    "detail" : "typed 4117, clipboard \"4117\"",
+    "latencyMs" : 33,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 11,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Copy Result",
+    "app" : "Calculator",
+    "detail" : "typed 4127, clipboard \"4127\"",
+    "latencyMs" : 34,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 12,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Copy Result",
+    "app" : "Calculator",
+    "detail" : "typed 4137, clipboard \"4137\"",
+    "latencyMs" : 26,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 13,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Copy Result",
+    "app" : "Calculator",
+    "detail" : "typed 4147, clipboard \"4147\"",
+    "latencyMs" : 36,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 14,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Copy Result",
+    "app" : "Calculator",
+    "detail" : "typed 4157, clipboard \"4157\"",
+    "latencyMs" : 36,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 15,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Copy Result",
+    "app" : "Calculator",
+    "detail" : "typed 4167, clipboard \"4167\"",
+    "latencyMs" : 20,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 16,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Copy Result",
+    "app" : "Calculator",
+    "detail" : "typed 4177, clipboard \"4177\"",
+    "latencyMs" : 37,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 17,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Copy Result",
+    "app" : "Calculator",
+    "detail" : "typed 4187, clipboard \"4187\"",
+    "latencyMs" : 35,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 18,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Copy Result",
+    "app" : "Calculator",
+    "detail" : "typed 4197, clipboard \"4197\"",
+    "latencyMs" : 17,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 19,
+    "test" : "T1-repeat"
+  },
+  {
+    "action" : "Copy Result",
+    "app" : "Calculator",
+    "detail" : "typed 4207, clipboard \"4207\"",
+    "latencyMs" : 16,
+    "outcome" : "pressed",
+    "pass" : true,
+    "run" : 20,
+    "test" : "T1-repeat"
+  }
+]

@@ -1,0 +1,245 @@
+# Finder - path	cmdChar	modifiers	identifier	enabled	title
+0.0.0		0	_aboutThisMacRequested:	yes	About This Mac
+0.0.1		10	_systemInformationRequested:	yes	System Information
+0.0.3		0	_systemSettingsRequested:	yes	System Settings…
+0.0.4		0	_appStoreRequested:	yes	App Store
+0.0.6		0	_recentsRequested:	yes	Recent Items
+0.0.6.0.1		8	_recentItemRequested:	yes	Finder
+0.0.6.0.2		0	_recentItemRequested:	yes	Show “Finder” in Finder
+0.0.6.0.3		8	_recentItemRequested:	yes	Installer
+0.0.6.0.4		0	_recentItemRequested:	yes	Show “Installer” in Finder
+0.0.6.0.5		8	_recentItemRequested:	yes	Safari
+0.0.6.0.6		0	_recentItemRequested:	yes	Show “Safari” in Finder
+0.0.6.0.7		8	_recentItemRequested:	yes	System Settings
+0.0.6.0.8		0	_recentItemRequested:	yes	Show “System Settings” in Finder
+0.0.6.0.9		8	_recentItemRequested:	yes	TextEdit
+0.0.6.0.10		0	_recentItemRequested:	yes	Show “TextEdit” in Finder
+0.0.6.0.13		8	_recentItemRequested:	yes	a.html
+0.0.6.0.14		0	_recentItemRequested:	yes	Show “a.html” in Finder
+0.0.6.0.15		8	_recentItemRequested:	yes	AnkaGuestAddons.pkg
+0.0.6.0.16		0	_recentItemRequested:	yes	Show “AnkaGuestAddons.pkg” in Finder
+0.0.6.0.17		8	_recentItemRequested:	yes	doc.txt
+0.0.6.0.18		0	_recentItemRequested:	yes	Show “doc.txt” in Finder
+0.0.6.0.21		0	_recentItemRequested:	yes	Macintosh HD
+0.0.6.0.23		0	_clearRecentItemsRequested:	yes	Clear Menu
+0.0.8	⎋	2	_forceQuitPanelRequested:	yes	Force Quit…
+0.0.9	⎋	3	_forceQuitRequested:	yes	Force Quit Finder
+0.0.11		0	_sleepRequested:	yes	Sleep
+0.0.12		0	_restartRequested:	yes	Restart…
+0.0.13		10	_restartNowRequested:	yes	Restart
+0.0.14		0	_shutDownRequested:	yes	Shut Down…
+0.0.15		10	_shutDownNowRequested:	yes	Shut Down
+0.0.17	Q	4	_lockScreenRequested:	yes	Lock Screen
+0.0.18	Q	1	_logOutRequested:	yes	Log Out Anka…
+0.0.19	Q	3	_logOutNowRequested:	yes	Log Out Anka
+1.0.0		8	_NS:397	yes	About Finder
+1.0.1		8	_NS:1101	no	
+1.0.2	,	0	_NS:403	yes	Settings…
+1.0.3		0	_NS:1102	no	
+1.0.4		1	_NS:413	no	Empty Trash…
+1.0.5		3	_NS:423	no	Empty Trash
+1.0.6		0	_NS:1103	no	
+1.0.7		0	_NS:1104	yes	Services
+1.0.7.0.0		0	_processRequest:	yes	Activity Monitor
+1.0.7.0.1		0	_processRequest:	yes	Allocations & Leaks
+1.0.7.0.2		0	_processRequest:	yes	File Activity
+1.0.7.0.3		0	_processRequest:	yes	System Trace
+1.0.7.0.4		0	_processRequest:	yes	Time Profile Active Application
+1.0.7.0.5		0	_processRequest:	yes	Time Profile App Under Mouse
+1.0.7.0.6		0	_processRequest:	yes	Time Profile Entire System
+1.0.7.0.7		0	_processRequest:	yes	Toggle Instruments Recording
+1.0.7.0.8		0	_configureServicesMenu:	yes	Services Settings…
+1.0.8		0	_NS:1113	no	
+1.0.9	H	0	_NS:428	yes	Hide Finder
+1.0.10	H	2	_NS:439	yes	Hide Others
+1.0.11		0	_NS:445	no	Show All
+2.0.0	N	0	_NS:653	yes	New Finder Window
+2.0.1	N	1	_NS:685	no	New Folder
+2.0.2	N	4	_NS:734	no	New Folder with Selection
+2.0.3		8	_NS:641	no	New Burn Folder
+2.0.4		8	_NS:647	yes	New Smart Folder
+2.0.5	T	0	_NS:862	yes	New Tab
+2.0.6	O	0	_NS:728	no	Open
+2.0.7	O	4	_NS:571	no	Open in New Window
+2.0.8	O	2	_NS:467	no	Open in New Window and Close
+2.0.9		8	_NS:663	no	Open With
+2.0.9.0.0		0	_NS:671	no	Item
+2.0.10		10	_NS:557	no	Always Open With
+2.0.10.0.0		0	_NS:565	no	Item
+2.0.11	W	0	_NS:721	no	Close Window
+2.0.12	W	2	closeAll:	yes	Close All
+2.0.13		0	_NS:1123	no	
+2.0.14	I	0	_NS:715	no	Get Info
+2.0.15	I	2	_NS:551	no	Show Inspector
+2.0.16	I	4	_NS:541	no	Get Summary Info
+2.0.17		8	_NS:929	no	Rename
+2.0.18		8	_NS:586	no	Compress
+2.0.19		10	_NS:938	no	Compress with password
+2.0.20	D	0	_NS:695	no	Duplicate
+2.0.21	D	3	_NS:766	no	Duplicate Exactly
+2.0.22	A	4	_NS:676	no	Make Alias
+2.0.23	Y	0	_NS:577	no	QuickLook
+2.0.24	Y	2	_NS:531	no	Slideshow
+2.0.25	P	0	_NS:705	no	Print
+2.0.26		0	_NS:1124	no	
+2.0.27		8	_NS:977	no	Share…
+2.0.28		8	_NS:1005	no	Create/Copy iCloud Link
+2.0.29		8	_NS:1079	no	Manage Shared File…
+2.0.30		8	_NS:601	no	Burn Disc
+2.0.31		0	_NS:1125	no	
+2.0.32	R	0	_NS:622	no	Show Original
+2.0.33	T	4	_NS:632	no	Add to Sidebar
+2.0.34	T	5	_NS:521	no	Add to Dock
+2.0.35		0	_NS:1126	no	
+2.0.36		0	_NS:616	no	Move to Trash
+2.0.37		2	_NS:509	no	Delete Immediately…
+2.0.38	E	0	_NS:610	no	Eject
+2.0.39	E	4	_NS:503	no	Eject One
+2.0.40	E	2	_NS:493	no	Eject All
+2.0.41		0	_NS:1127	no	
+2.0.42		0	cmdSetLabel:	yes	
+2.0.43		0	_NS:1128	no	
+2.0.44	F	0	_NS:595	yes	Find
+2.0.45	F	5	_NS:484	yes	Find by Name…
+3.0.0	Z	0	_NS:24	no	Undo
+3.0.1	Z	1	_NS:293	no	Redo
+3.0.2		0	_NS:1137	no	
+3.0.3	X	0	_NS:31	no	Cut
+3.0.4	C	0	_NS:8	no	Copy
+3.0.5	C	2	_NS:956	no	Copy as Pathname
+3.0.6	C	6	_NS:1067	no	Copy as Link
+3.0.7	V	0	_NS:740	no	Paste
+3.0.8	V	2	_NS:38	no	Move Items Here
+3.0.9	V	3	_NS:756	no	Paste Exactly
+3.0.10	A	0	_NS:50	no	Select All
+3.0.11	A	2	_NS:300	no	Deselect All
+3.0.12		0	_NS:1138	no	
+3.0.13		0	_NS:80	yes	Show Clipboard
+3.0.15		0	_NSMenuItemAutoFillIdentifier	yes	AutoFill
+3.0.15.0.0		0	_handleInsertFromContactsCommand:	no	Contact…
+3.0.15.0.1		0	_handleInsertFromPasswordsCommand:	no	Passwords…
+3.0.15.0.2		0	_handleInsertFromCreditCardsCommand:	no	Credit Card…
+3.0.16	D	24	startDictation:	yes	Start Dictation…
+3.0.17	E	24	orderFrontCharacterPalette:	yes	Emoji & Symbols
+4.0.0	1	0	_NS:90	no	as Icons
+4.0.1	2	0	_NS:60	no	as List
+4.0.2	3	0	_NS:100	no	as Columns
+4.0.3	4	0	_NS:276	no	as Gallery
+4.0.4		0	_NS:1147	no	
+4.0.5	0	4	_NS:1022	yes	Use Groups
+4.0.6		0	_NS:119	no	Group By
+4.0.6.0.0		4	_NS:23	no	None
+4.0.6.0.1		8	_NS:28	no	
+4.0.6.0.2	1	4	_NS:33	no	Name
+4.0.6.0.3	2	4	_NS:38	no	Kind
+4.0.6.0.4		8	_NS:43	no	Application
+4.0.6.0.5	3	4	_NS:59	no	Date Last Opened
+4.0.6.0.6	4	4	_NS:64	no	Date Added
+4.0.6.0.7	5	4	_NS:69	no	Date Modified
+4.0.6.0.8		8	_NS:74	no	Date Created
+4.0.6.0.9	6	4	_NS:78	no	Size
+4.0.6.0.10	7	4	_NS:83	no	Tags
+4.0.7		0	_NS:344	no	Sort By
+4.0.7.0.0	0	6	_NS:93	no	None
+4.0.7.0.1		8	_NS:96	no	
+4.0.7.0.2		8	_NS:97	no	Snap to Grid
+4.0.7.0.3		8	_NS:101	no	
+4.0.7.0.4	1	6	_NS:102	no	Name
+4.0.7.0.5	2	6	_NS:105	no	Kind
+4.0.7.0.6	3	6	_NS:114	no	Date Last Opened
+4.0.7.0.7	4	6	_NS:117	no	Date Added
+4.0.7.0.8	5	6	_NS:120	no	Date Modified
+4.0.7.0.9		8	_NS:123	no	Date Created
+4.0.7.0.10	6	6	_NS:126	no	Size
+4.0.7.0.11	7	6	_NS:129	no	Tags
+4.0.8		8	_NS:306	no	Clean Up
+4.0.9		10	_NS:110	no	Clean Up Selection
+4.0.10		0	_NS:801	no	Clean Up By
+4.0.10.0.0	1	2	_NS:809	no	Name
+4.0.10.0.1	2	2	_NS:813	no	Kind
+4.0.10.0.2	5	2	_NS:825	no	Date Modified
+4.0.10.0.3		8	_NS:830	no	Date Created
+4.0.10.0.4	6	2	_NS:834	no	Size
+4.0.10.0.5	7	2	_NS:839	no	Tags
+4.0.11		0	_NS:1148	no	
+4.0.12	T	1	_NS:993	no	Hide Tab Bar
+4.0.13	\	1	_NS:986	no	Show All Tabs
+4.0.14		0	_NS:1149	no	
+4.0.15	S	4	_NS:133	no	Hide Sidebar
+4.0.16	P	1	_NS:868	no	Hide Preview
+4.0.17		0	_NS:1150	no	
+4.0.18	T	2	_NS:286	no	Hide Toolbar
+4.0.19	P	2	_NS:913	no	Hide Path Bar
+4.0.20	/	0	_NS:152	no	Hide Status Bar
+4.0.21		0	_NS:1151	no	
+4.0.22		0	_NS:143	no	Customize Toolbar…
+4.0.23		0	_NS:1152	no	
+4.0.24	J	0	_NS:159	yes	Show View Options
+4.0.25		8	_NS:950	yes	Show Preview Options
+4.0.26		0	_NS:1153	no	
+4.0.27	F	24	_NS:878	no	Enter Full Screen
+5.0.0	[	0	_NS:70	no	Back
+5.0.1	]	0	_NS:169	no	Forward
+5.0.2		0	_NS:179	no	Enclosing Folder
+5.0.3		2	_NS:463	no	Enclosing Folder
+5.0.4		4	_NS:312	no	Open Enclosing Folder in New Window
+5.0.5		1	_NS:318	yes	Select Startup Disk
+5.0.6		0	_NS:1162	no	
+5.0.7	F	1	_NS:364	yes	Recents
+5.0.8	O	1	_NS:791	yes	Documents
+5.0.9	D	1	_NS:206	yes	Desktop
+5.0.10	L	2	_NS:746	yes	Downloads
+5.0.11	H	1	_NS:196	yes	Home
+5.0.12		10	_NS:772	yes	Library
+5.0.13	C	1	_NS:189	yes	Computer
+5.0.14	R	1	_NS:781	yes	AirDrop
+5.0.15	K	1	_NS:334	yes	Network
+5.0.16	I	1	_NS:1073	yes	iCloud Drive
+5.0.17	S	1	_NS:1057	yes	Shared
+5.0.18	A	1	_NS:216	yes	Applications
+5.0.19	U	1	_NS:227	yes	Utilities
+5.0.20		0	_NS:1163	no	
+5.0.21		0	_NS:247	yes	Recent Folders
+5.0.21.0.0		0	cmdRecentFoldersItem:	yes	Anka Guest Addons 3.9.2(217)
+5.0.21.0.1		0	cmdRecentFoldersItem:	yes	FolderA
+5.0.21.0.3		0	cmdClearRecentFolders:	yes	Clear Menu
+5.0.22		0	_NS:1164	no	
+5.0.23	G	1	_NS:237	yes	Go to Folder…
+5.0.24	K	0	_NS:266	yes	Connect to Server…
+6.0.0	M	0	_NS:371	no	Minimize
+6.0.1	M	2	miniaturizeAll:	yes	Minimize All
+6.0.2		8	_NS:378	no	Zoom
+6.0.3		10	zoomAll:	yes	Zoom All
+6.0.4	F	28	_zoomFill:	no	Fill
+6.0.5	C	28	_zoomCenter:	no	Center
+6.0.7.0.1		28	_zoomLeft:	no	Left
+6.0.7.0.2		28	_zoomRight:	no	Right
+6.0.7.0.3		28	_zoomTop:	no	Top
+6.0.7.0.4		28	_zoomBottom:	no	Bottom
+6.0.7.0.7		0	_zoomTopLeft:	no	Top Left
+6.0.7.0.8		0	_zoomTopRight:	no	Top Right
+6.0.7.0.9		0	_zoomBottomLeft:	no	Bottom Left
+6.0.7.0.10		0	_zoomBottomRight:	no	Bottom Right
+6.0.7.0.13		29	_zoomLeftAndRight:	no	Left & Right
+6.0.7.0.14		31	_zoomLeftThreeUp:	no	Left & Quarters
+6.0.7.0.15		29	_zoomRightAndLeft:	no	Right & Left
+6.0.7.0.16		31	_zoomRightThreeUp:	no	Right & Quarters
+6.0.7.0.17		29	_zoomTopAndBottom:	no	Top & Bottom
+6.0.7.0.18		31	_zoomTopThreeUp:	no	Top & Quarters
+6.0.7.0.19		29	_zoomBottomAndTop:	no	Bottom & Top
+6.0.7.0.20		31	_zoomBottomThreeUp:	no	Bottom & Quarters
+6.0.7.0.21		0	_zoomQuarters:	no	Quarters
+6.0.7.0.23	R	28	_zoomUntile:	no	Return to Previous Size
+6.0.10		0	_removeWindowFromStageManagerSet:	no	Remove Window from Set
+6.0.11	`	0	_NS:390	no	Cycle Through Windows
+6.0.12		8	_NS:965	no	Show Progress Window
+6.0.13		8	_NS:1173	no	
+6.0.14		8	_NS:384	yes	Bring All to Front
+6.0.15		10	alternateArrangeInFront:	yes	Arrange in Front
+6.0.17			13	selectPreviousTab:	no	Show Previous Tab
+6.0.18			12	selectNextTab:	no	Show Next Tab
+6.0.19		0	moveTabToNewWindow:	no	Move Tab to New Window
+6.0.20		0	mergeAllWindows:	no	Merge All Windows
+6.0.23		0	makeKeyAndOrderFront:	yes	FolderA
+7.0.0		0	_NS:354	yes	Mac User Guide
+7.0.1		8	_NS:1038	yes	Tips for Your Mac
