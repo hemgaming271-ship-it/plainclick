@@ -1,0 +1,271 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>PlainClick launch video</title>
+<style>
+  :root { --bg:#101214; --ink:#f2f1ec; --muted:#a7abb0; --accent:#8cc3dd; --line:#2a2e33; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html, body { width:1920px; height:1080px; overflow:hidden; background:var(--bg); }
+  body { font-family:"Segoe UI Variable Display","Segoe UI",system-ui,sans-serif; color:var(--ink); -webkit-font-smoothing:antialiased; }
+  #bg { position:absolute; inset:0; background:
+          radial-gradient(1200px 700px at 50% 38%, #1b2026 0%, #121417 55%, #0d0f11 100%); }
+  #world { position:absolute; left:0; top:0; width:1920px; height:1080px; transform-origin:0 0; will-change:transform; }
+  #device { position:absolute; border-radius:22px; overflow:hidden; background:#000;
+            box-shadow:0 0 0 1px #2f343a, 0 40px 120px rgba(0,0,0,.55), 0 10px 30px rgba(0,0,0,.35); }
+  #device img.screen { position:absolute; left:0; top:0; width:100%; height:100%; opacity:0; }
+  .panel { position:absolute; opacity:0; border-radius:0 0 10px 10px; }
+  #cursor { position:absolute; width:22px; height:32px; opacity:0; filter:drop-shadow(0 2px 3px rgba(0,0,0,.45)); }
+  #ripple { position:absolute; width:46px; height:46px; margin:-23px 0 0 -23px; border-radius:50%;
+            border:3px solid var(--accent); opacity:0; }
+  .center { position:absolute; left:0; right:0; text-align:center; }
+  #title1 { top:410px; font-size:96px; font-weight:650; letter-spacing:-1.5px; }
+  #title2 { top:540px; font-size:40px; color:var(--muted); font-weight:400; }
+  #big { top:380px; font-size:92px; font-weight:650; letter-spacing:-1.5px; line-height:1.08; }
+  #big .accent { color:var(--accent); }
+  #caption { position:absolute; left:50%; bottom:64px; transform:translateX(-50%); white-space:nowrap;
+             padding:18px 34px; border-radius:16px; background:rgba(16,18,20,.82);
+             box-shadow:0 0 0 1px rgba(255,255,255,.08), 0 18px 50px rgba(0,0,0,.45);
+             font-size:38px; font-weight:560; opacity:0; }
+  #caption small { color:var(--muted); font-weight:450; }
+  #keys { position:absolute; left:50%; top:470px; transform:translateX(-50%); display:flex; gap:22px; opacity:0; }
+  .key { width:128px; height:128px; border-radius:24px; background:linear-gradient(#2a2f35,#1d2125);
+         box-shadow:0 0 0 1px #3a4047, 0 10px 0 #0c0e10, 0 18px 40px rgba(0,0,0,.5);
+         display:flex; align-items:center; justify-content:center; flex-direction:column; font-size:52px; font-weight:600; }
+  .key small { font-size:20px; color:var(--muted); font-weight:500; margin-top:4px; }
+  #features { position:absolute; left:50%; top:300px; transform:translateX(-50%); display:grid;
+              grid-template-columns:repeat(2, 560px); gap:28px; }
+  .feat { padding:34px 38px; border-radius:22px; background:#171a1e; box-shadow:0 0 0 1px var(--line); opacity:0; }
+  .feat h3 { font-size:36px; font-weight:620; margin-bottom:10px; }
+  .feat p { font-size:24px; color:var(--muted); line-height:1.35; }
+  #featTitle { top:170px; font-size:58px; font-weight:650; letter-spacing:-.8px; opacity:0; }
+  #end { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; opacity:0; }
+  #end .mark { font-size:120px; font-weight:680; letter-spacing:-2px; }
+  #end .tag { font-size:42px; color:var(--muted); margin-top:10px; }
+  #end .cta { margin-top:56px; font-size:40px; font-weight:620; color:#0f1f28; background:var(--accent);
+              padding:18px 46px; border-radius:16px; }
+  #end .price { margin-top:22px; font-size:28px; color:var(--muted); }
+  #fine { position:absolute; left:0; right:0; bottom:46px; text-align:center; font-size:21px; color:#7d8288; opacity:0; }
+  #fade { position:absolute; inset:0; background:#000; opacity:1; pointer-events:none; }
+</style>
+</head>
+<body>
+<div id="bg"></div>
+<div id="world">
+  <div id="device"></div>
+  <div id="ripple"></div>
+  <svg id="cursor" viewBox="0 0 22 32"><path d="M2 2 L2 26 L8.2 20.3 L12.4 30 L16.4 28.3 L12.3 18.8 L20.5 18.8 Z" fill="#111" stroke="#fff" stroke-width="2" stroke-linejoin="round"/></svg>
+</div>
+<div id="title1" class="center">PlainClick</div>
+<div id="title2" class="center">Clear controls. Less clutter.</div>
+<div id="big" class="center">Your everyday Mac actions,<br><span class="accent">made clearer.</span></div>
+<div id="keys"><div class="key">⌃<small>control</small></div><div class="key">⌥<small>option</small></div><div class="key">P</div></div>
+<div id="featTitle" class="center">Built to be plain, on purpose.</div>
+<div id="features">
+  <div class="feat"><h3>Clearly labelled buttons</h3><p>Every action says what it does, in words, with solid edges.</p></div>
+  <div class="feat"><h3>Your actions, together</h3><p>Pin and reorder the few commands you use all day.</p></div>
+  <div class="feat"><h3>Compact or comfortable</h3><p>Light, dark, or follow your Mac. Icons optional.</p></div>
+  <div class="feat"><h3>Runs on your Mac</h3><p>No screen contents or documents ever leave it.</p></div>
+</div>
+<div id="caption"></div>
+<div id="end">
+  <div class="mark">PlainClick</div>
+  <div class="tag">Clear controls. Less clutter.</div>
+  <div class="cta">Join the beta</div>
+  <div class="price">US$5.99 one time at launch · 7-day free trial</div>
+</div>
+<div id="fine">Screens from the PlainClick pre-release build on macOS 26. Works with the apps and actions listed on our compatibility page. Not affiliated with Apple.</div>
+<div id="fade"></div>
+
+<script>
+// ---------- assets ----------
+const SCREENS = ['typed','open','save','find','safari','reload','newtab','unsupported'];
+const PANELS  = ['open','save','find','safari','reload','newtab','unsupported'];
+let LAYOUT = {};
+const S = 1.171875;               // 1024x768 screenshot -> 1200x900 device
+const DEV = { x:360, y:90, w:1200, h:900 };
+
+// ---------- easing ----------
+const clamp = (v,a=0,b=1) => Math.min(b, Math.max(a, v));
+const prog  = (t,a,b) => clamp((t-a)/(b-a));
+const ease  = p => p<.5 ? 4*p*p*p : 1-Math.pow(-2*p+2,3)/2;          // cubic in-out
+const out   = p => 1-Math.pow(1-p,3);                                  // cubic out
+const lerp  = (a,b,p) => a+(b-a)*p;
+const fade  = (t,a,b,fi=.5,fo=.5) => Math.min(ease(prog(t,a,a+fi)), 1-ease(prog(t,b-fo,b)));
+
+// world-space point of a screen-space (screenshot points) coordinate
+const wx = x => DEV.x + x*S, wy = y => DEV.y + y*S;
+const panelLayout = name => LAYOUT[name] || LAYOUT.open || {x:724,y:99,w:260,h:150};
+const btn = (state, label) => {
+  const L = panelLayout(state);
+  if (L['btn.'+label+'.x'] != null) return {x:wx(L['btn.'+label+'.x']), y:wy(L['btn.'+label+'.y'])};
+  const order = {Save:0, Find:1, Reload:0, 'New Tab':1}[label] || 0;     // fallback estimate
+  return {x:wx(L.x + L.w*0.55), y:wy(L.y + 56 + order*44)};
+};
+
+// ---------- timeline (seconds) ----------
+// Each screen state: [start, end] when visible (crossfaded 0.45 s). All screens are real stills of that exact state.
+const SHOTS = {
+  typed:[7.6,14.6], open:[14.2,22.6], save:[22.2,27.3], find:[26.9,33.1],
+  safari:[33.1,36.3], reload:[35.9,38.1], newtab:[37.7,40.9], unsupported:[40.9,45.3]
+};
+// The panel overlay switches right after the click (as on the real screen); the screen behind switches later,
+// when the camera is on the title, so the viewer sees "Edited" disappear.
+const PANEL_SHOTS = { open:[14.2,19.8], save:[19.4,27.3] };
+const CAPTIONS = [
+  [8.3, 12.9, 'You\'re writing in TextEdit.'],
+  [15.4, 19.8, 'A clear panel appears. <small>TextEdit itself doesn\'t change.</small>'],
+  [20.2, 22.0, 'Click <b>Save</b>.'],
+  [22.3, 25.2, 'Saved. <small>"Edited" is gone from the title.</small>'],
+  [27.5, 32.9, 'Click <b>Find</b>. Search starts right away.'],
+  [33.5, 40.7, 'Only actions we\'ve tested. <small>Safari: Reload and New Tab.</small>'],
+  [41.3, 45.1, 'Other apps? An honest <b>"not supported yet"</b>.'],
+];
+const TITLE = { x: 235, y: 76 };   // TextEdit title "Notes.txt — Edited" in screen points (measured on the still)
+// Camera keyframes: [t, zoom, focusX, focusY] in world coords; eased between.
+function camera(t) {
+  const P = panelLayout('open');
+  const pc = { x: wx(P.x + P.w/2), y: wy(P.y + 90) };
+  const tc = { x: wx(TITLE.x + 40), y: wy(TITLE.y + 26) };
+  const K = [
+    [7.0, 0.92, 960, 560], [13.5, 1.00, 960, 540],
+    [15.6, 1.00, 960, 540], [18.4, 2.05, pc.x-60, pc.y+20],
+    [20.4, 2.05, pc.x-60, pc.y+20], [21.7, 2.6, tc.x, tc.y],        // pan to the title: "Edited" is gone
+    [24.6, 2.6, tc.x, tc.y], [25.8, 2.05, pc.x-60, pc.y+20],
+    [26.5, 2.05, pc.x-60, pc.y+20], [28.9, 1.25, 900, 380],        // pull out to show the find bar
+    [32.7, 1.25, 900, 380], [33.7, 2.05, pc.x-60, pc.y+20],
+    [40.5, 2.05, pc.x-60, pc.y+20], [41.9, 1.55, pc.x-120, pc.y+120],
+    [45.1, 1.55, pc.x-120, pc.y+120], [46.1, 1.0, 960, 540],
+  ];
+  if (t <= K[0][0]) return K[0];
+  for (let i=0;i<K.length-1;i++) {
+    const [t0,z0,x0,y0] = K[i], [t1,z1,x1,y1] = K[i+1];
+    if (t <= t1) { const p = ease(prog(t,t0,t1)); return [t, lerp(z0,z1,p), lerp(x0,x1,p), lerp(y0,y1,p)]; }
+  }
+  return K[K.length-1];
+}
+// Cursor path: [t, x, y, click?] in world coords
+function cursorPath() {
+  const sv = btn('open','Save'), fd = btn('save','Find'), rl = btn('safari','Reload'), nt = btn('reload','New Tab');
+  const rest = { x: wx(560), y: wy(300) };
+  return [
+    [16.0, rest.x, rest.y], [19.0, sv.x, sv.y, true],                  // click Save at 19.0
+    [24.1, sv.x+20, sv.y+20], [26.1, fd.x, fd.y, true],                // click Find at 26.1 -> find state 26.9
+    [29.5, fd.x-40, fd.y+120], [34.3, rl.x, rl.y], [35.4, rl.x, rl.y, true],  // Reload 35.4
+    [36.5, nt.x, nt.y], [37.4, nt.x, nt.y, true],                      // New Tab 37.4
+    [40.0, nt.x+60, nt.y+150],
+  ];
+}
+
+// ---------- build DOM ----------
+const device = document.getElementById('device');
+Object.assign(device.style, { left:DEV.x+'px', top:DEV.y+'px', width:DEV.w+'px', height:DEV.h+'px' });
+const screenImgs = {}, panelImgs = {};
+function img(src, cls) { const i = new Image(); i.src = src; i.className = cls; i.decoding = 'sync'; return i; }
+
+async function load() {
+  try { LAYOUT = await (await fetch('assets/layout.json')).json(); } catch { LAYOUT = {}; }
+  for (const s of SCREENS) { screenImgs[s] = img(`assets/still-${s}.png`, 'screen'); device.appendChild(screenImgs[s]); }
+  for (const p of PANELS) { const i = img(`assets/panel-${p}.png`, 'panel'); panelImgs[p] = i; document.getElementById('world').insertBefore(i, document.getElementById('ripple')); }
+  await Promise.all([...Object.values(screenImgs), ...Object.values(panelImgs)].map(i => i.decode().catch(()=>{})));
+  for (const p of PANELS) {
+    const L = panelLayout(p), i = panelImgs[p];
+    // The render is the panel's real content at 3x; place it exactly over the panel content area in the screenshot.
+    const w = L.w * S, h = i.naturalHeight / i.naturalWidth * w;
+    Object.assign(i.style, { left:wx(L.x)+'px', top:wy(L.y)+'px', width:w+'px', height:h+'px' });
+  }
+  window.__ready = true;
+}
+
+// ---------- render one frame ----------
+const $ = id => document.getElementById(id);
+window.renderAt = function(t) {
+  $('fade').style.opacity = 1 - Math.min(ease(prog(t,0,0.8)), 1 - ease(prog(t,56.7,57.5)));
+
+  // Title + tagline (0-4)
+  const a1 = fade(t,0.4,4.0,.8,.6);
+  $('title1').style.opacity = a1; $('title1').style.transform = `translateY(${(1-out(prog(t,0.4,1.4)))*24}px)`;
+  const a2 = fade(t,1.0,4.0,.8,.6);
+  $('title2').style.opacity = a2; $('title2').style.transform = `translateY(${(1-out(prog(t,1.0,2.0)))*18}px)`;
+
+  // Big line (4.2-7.6)
+  const ab = fade(t,4.2,7.8,.7,.6);
+  $('big').style.opacity = ab; $('big').style.transform = `translateY(${(1-out(prog(t,4.2,5.2)))*28}px) scale(${lerp(1.02,1,out(prog(t,4.2,7.8)))})`;
+
+  // Device in/out (7.0-44)
+  const dv = fade(t,7.0,46.7,.8,.7);
+  device.style.opacity = dv;
+  // Later screens sit on top: each one fades in over the previous, which stays fully opaque until covered
+  // (no dip to black between states).
+  for (const s of SCREENS) {
+    const [a,b] = SHOTS[s];
+    const on = s==='typed' ? 1 : ease(prog(t,a,a+.45));
+    const until = s === SCREENS[SCREENS.length-1] ? Infinity : b + 0.5;   // last screen leaves with the device
+    screenImgs[s].style.opacity = (t >= (s==='typed' ? 0 : a) && t <= until) ? on : 0;
+  }
+  // Crisp panel overlays: quick switch (0.15 s) when the panel's state changes, like the real panel.
+  PANELS.forEach((p, idx) => {
+    const [a,b] = PANEL_SHOTS[p] || SHOTS[p];
+    const nxt = PANELS[idx+1], ns = nxt ? (PANEL_SHOTS[nxt] || SHOTS[nxt])[0] : Infinity;
+    // true crossfade with the next state, so a taller previous panel never shows below a shorter one
+    let o = t >= a ? ease(prog(t,a,a+.15)) * (1 - ease(prog(t,ns,ns+.15))) : 0;
+    if (p==='open') o = Math.min(o, ease(prog(t,14.6,15.2)));       // panel appears after the key press
+    panelImgs[p].style.opacity = o * dv;                               // the last state leaves with the device
+    if (p==='open') panelImgs[p].style.transform = `translateY(${(1-out(prog(t,14.6,15.3)))*-14}px)`;
+  });
+
+  // Camera
+  const [,z,fx,fy] = camera(t);
+  $('world').style.transform = `translate(${960 - fx*z}px, ${540 - fy*z}px) scale(${z})`;
+
+  // Keycaps (13.0-15.2) with press animation
+  const ak = fade(t,12.6,15.4,.4,.5);
+  $('keys').style.opacity = ak;
+  const press = Math.sin(Math.PI*prog(t,14.0,14.5));
+  [...$('keys').children].forEach((k,i) => k.style.transform = `translateY(${press*8}px)`);
+
+  // Cursor + click ripple
+  const path = cursorPath(), c = $('cursor'), r = $('ripple');
+  let cx = path[0][1], cy = path[0][2], rippleT = -1;
+  for (let i=0;i<path.length;i++) {
+    const [ti,xi,yi,click] = path[i];
+    if (click && t >= ti && t < ti+0.6) rippleT = t-ti;
+    if (i < path.length-1) {
+      const [tn,xn,yn] = path[i+1];
+      if (t >= ti && t <= tn) { const p = ease(prog(t,ti+ (click?0.25:0),tn)); cx = lerp(xi,xn,p); cy = lerp(yi,yn,p); }
+      else if (t > tn) { cx = xn; cy = yn; }
+    }
+  }
+  const curOn = fade(t,15.8,40.5,.4,.5);
+  c.style.opacity = curOn; c.style.left = cx+'px'; c.style.top = cy+'px';
+  const down = rippleT >= 0 && rippleT < 0.16 ? 0.88 : 1;
+  c.style.transform = `scale(${down}) translate(-2px,-2px)`;
+  if (rippleT >= 0) { const p = out(prog(rippleT,0,0.6)); r.style.opacity = (1-p)*curOn; r.style.left = cx+'px'; r.style.top = cy+'px'; r.style.transform = `scale(${0.4+p*1.1})`; }
+  else r.style.opacity = 0;
+
+  // Captions
+  let cap = null, ca = 0;
+  for (const [a,b,txt] of CAPTIONS) if (t >= a && t <= b) { cap = txt; ca = fade(t,a,b,.35,.35); }
+  const ce = $('caption');
+  if (cap !== null && ce.dataset.txt !== cap) { ce.innerHTML = cap; ce.dataset.txt = cap; }
+  ce.style.opacity = cap ? ca : 0;
+  ce.style.transform = `translateX(-50%) translateY(${(1-ca)*10}px)`;
+
+  // Features (44-49.4)
+  const af = fade(t,46.5,52.1,.6,.5);
+  $('featTitle').style.opacity = af; $('featTitle').style.transform = `translateY(${(1-out(prog(t,46.5,47.5)))*20}px)`;
+  [...document.querySelectorAll('.feat')].forEach((el,i) => {
+    const s = 46.9 + i*0.35, o = fade(t,s,52.1,.55,.5);
+    el.style.opacity = o; el.style.transform = `translateY(${(1-out(prog(t,s,s+.7)))*26}px)`;
+  });
+
+  // End card (49.6-51)
+  const ae = ease(prog(t,52.2,52.9));
+  $('end').style.opacity = ae; $('end').style.transform = `scale(${lerp(.985,1,ae)})`;
+  $('fine').style.opacity = ae;
+};
+window.DURATION = 57.5;
+load().then(() => window.renderAt(Number(new URLSearchParams(location.search).get('t') || 0)));
+</script>
+</body>
+</html>

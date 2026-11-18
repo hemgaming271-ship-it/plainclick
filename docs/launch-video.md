@@ -30,6 +30,17 @@ Re-run the workflow from the Actions tab to record fresh footage after any UI ch
 End card small print: "Requires macOS 14 or later. Works with listed apps only. Not affiliated with Apple."
 Before checkout opens, replace the price line with **"Join the beta"**.
 
+## Launch video v1 (motion graphics) — `docs/video/plainclick-launch.mp4`
+57.5 s, 1920×1080, 30 fps, H.264, no audio. Built by `tools/launch-video`:
+- Every frame is rendered deterministically from `timeline.html` (headless Chrome/Edge → ffmpeg), so motion is perfectly smooth.
+- Content is real. The screens are full-screen stills that the app's `--demo` mode captured on macOS 26 at each state.
+  The panel is the app's own SwiftUI view rendered at 3×, in that same real state, placed at its real position (`assets/layout.json`).
+- Presentation layer (clearly a presentation, not a recording): device frame, camera moves, an animated cursor/click,
+  keycaps, captions, a feature grid and an end card. The end card's small print says the screens come from the pre-release build.
+- Re-render: `cd tools/launch-video && npm install && node render.mjs` (needs ffmpeg + Chrome or Edge).
+  Preview stills: `node render.mjs --preview` (optionally `--times 10,20,30`). Refresh assets from the `ci-demo` branch
+  after running the "Demo footage" workflow.
+
 ## Production checklist
 - [x] Raw real footage recorded on macOS 26 (CI VM), 2026-11-17 — `docs/video/plainclick-demo-macos26-raw.mov`
 - [x] Rough cut with captions — `docs/video/plainclick-rough-cut.mp4` (1080p, about 100 s) + `.srt`, built by `docs/video/make-rough-cut.ps1`

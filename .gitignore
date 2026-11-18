@@ -4,6 +4,7 @@ apps/macos/build/
 *.xcuserstate
 node_modules/
 .next/
+tools/launch-video/preview/
 *.tsbuildinfo
 .env
 .env.local

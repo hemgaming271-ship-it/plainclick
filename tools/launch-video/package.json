@@ -1,0 +1,13 @@
+{
+  "name": "plainclick-launch-video",
+  "private": true,
+  "type": "module",
+  "description": "Renders the PlainClick launch video from real screenshots and real panel renders (deterministic HTML timeline -> ffmpeg).",
+  "scripts": {
+    "render": "node render.mjs",
+    "preview": "node render.mjs --preview"
+  },
+  "dependencies": {
+    "puppeteer-core": "25.18.1"
+  }
+}

@@ -1,0 +1,82 @@
+{
+  "find" : {
+    "btn.Find.x" : 854,
+    "btn.Find.y" : 200,
+    "btn.Save.x" : 854,
+    "btn.Save.y" : 155.5,
+    "h" : 189,
+    "screenH" : 768,
+    "screenW" : 1024,
+    "w" : 260,
+    "x" : 724,
+    "y" : 95
+  },
+  "newtab" : {
+    "btn.New Tab.x" : 854,
+    "btn.New Tab.y" : 199,
+    "btn.Reload.x" : 854,
+    "btn.Reload.y" : 155,
+    "h" : 188,
+    "screenH" : 768,
+    "screenW" : 1024,
+    "w" : 260,
+    "x" : 724,
+    "y" : 95
+  },
+  "open" : {
+    "btn.Find.x" : 854,
+    "btn.Find.y" : 200,
+    "btn.Save.x" : 854,
+    "btn.Save.y" : 155.5,
+    "h" : 162,
+    "screenH" : 768,
+    "screenW" : 1024,
+    "w" : 260,
+    "x" : 724,
+    "y" : 95
+  },
+  "reload" : {
+    "btn.New Tab.x" : 854,
+    "btn.New Tab.y" : 199,
+    "btn.Reload.x" : 854,
+    "btn.Reload.y" : 155,
+    "h" : 188,
+    "screenH" : 768,
+    "screenW" : 1024,
+    "w" : 260,
+    "x" : 724,
+    "y" : 95
+  },
+  "safari" : {
+    "btn.New Tab.x" : 854,
+    "btn.New Tab.y" : 199,
+    "btn.Reload.x" : 854,
+    "btn.Reload.y" : 155,
+    "h" : 161,
+    "screenH" : 768,
+    "screenW" : 1024,
+    "w" : 260,
+    "x" : 724,
+    "y" : 95
+  },
+  "save" : {
+    "btn.Find.x" : 854,
+    "btn.Find.y" : 200,
+    "btn.Save.x" : 854,
+    "btn.Save.y" : 155.5,
+    "h" : 189,
+    "screenH" : 768,
+    "screenW" : 1024,
+    "w" : 260,
+    "x" : 724,
+    "y" : 95
+  },
+  "unsupported" : {
+    "h" : 130,
+    "screenH" : 768,
+    "screenW" : 1024,
+    "w" : 260,
+    "x" : 724,
+    "y" : 95
+  }
+}
