@@ -20,6 +20,9 @@ on:
         default: "0.1.0"
   push:
     tags: ["v*"]
+    # Pushes to main that touch the build pipeline run a DRY RUN only (never signs), to keep the pipeline tested.
+    branches: [main]
+    paths: ["apps/macos/scripts/**", "apps/macos/Resources/**", ".github/workflows/release.yml"]
 
 permissions:
   contents: read
@@ -55,7 +58,11 @@ jobs:
         run: |
           VERSION="${VERSION#v}"
           echo "VERSION=$VERSION" >> "$GITHUB_ENV"
-          if [ "$HAS_CERT" = "true" ] && [ "$HAS_NOTARY" = "true" ]; then
+          if [ "$GITHUB_EVENT_NAME" = "push" ] && [ "$GITHUB_REF_TYPE" != "tag" ]; then
+            echo "signed=false" >> "$GITHUB_OUTPUT"
+            echo "VERSION=0.0.0-ci.$BUILD_NUMBER" >> "$GITHUB_ENV"
+            echo "Branch push: pipeline DRY RUN only (signing happens on manual runs and v* tags)."
+          elif [ "$HAS_CERT" = "true" ] && [ "$HAS_NOTARY" = "true" ]; then
             case "$BUNDLE_ID" in
               local.*) echo "::error::Set the repository variable BUNDLE_ID (e.g. com.yourname.plainclick) before a signed release."; exit 1 ;;
             esac
