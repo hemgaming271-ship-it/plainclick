@@ -40,13 +40,17 @@ fi
 [ -n "$BUNDLE_ID" ] && set_plist CFBundleIdentifier "$BUNDLE_ID"
 [ -n "$VERSION" ] && set_plist CFBundleShortVersionString "$VERSION"
 [ -n "$BUILD_NUMBER" ] && set_plist CFBundleVersion "$BUILD_NUMBER"
+# Licensing: Dodo "test" or "live", and the product whose keys unlock the app.
+[ -n "${DODO_ENV:-}" ] && set_plist PCDodoEnvironment "$DODO_ENV"
+[ -n "${DODO_PRODUCT_ID:-}" ] && set_plist PCDodoProductID "$DODO_PRODUCT_ID"
+echo "Licensing: Dodo $(/usr/libexec/PlistBuddy -c 'Print :PCDodoEnvironment' "$PLIST"), product '$(/usr/libexec/PlistBuddy -c 'Print :PCDodoProductID' "$PLIST")'"
 
 echo "Architectures: $(lipo -archs "$APP/Contents/MacOS/PlainClickPrototype")"
 
 IDENTITY="${CODESIGN_IDENTITY:--}"
 SIGN_ARGS=(--force --options runtime --sign "$IDENTITY")
-# A secure timestamp is required for notarization; ad-hoc signatures can't have one.
-[ "$IDENTITY" != "-" ] && SIGN_ARGS+=(--timestamp)
+# A secure timestamp is required for notarization; ad-hoc and self-signed signatures don't use Apple's timestamp server.
+[ "$IDENTITY" != "-" ] && [ -z "${NO_TIMESTAMP:-}" ] && SIGN_ARGS+=(--timestamp)
 [ -n "${KEYCHAIN:-}" ] && SIGN_ARGS+=(--keychain "$KEYCHAIN")
 codesign "${SIGN_ARGS[@]}" "$APP"
 codesign --verify --strict --verbose=2 "$APP"

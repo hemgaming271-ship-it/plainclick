@@ -2,17 +2,17 @@ import AppKit
 import Foundation
 import PlainClickLicensing
 
-/// Build-time licensing configuration.
+/// Build-time licensing configuration, read from Info.plist (set by scripts/build-app.sh from DODO_ENV / DODO_PRODUCT_ID).
 enum LicenceConfig {
-    /// Raw Ed25519 public key (base64) from `npm run keys:generate`. Safe to ship. EMPTY = licensing disabled (dev).
-    static let publicKeyRawBase64 = ""
-    /// Licensing API origin, e.g. https://your-domain.example. EMPTY = activation unavailable (dev).
-    static let apiBase = ""
-    static let appMajorVersion = 1
+    static let environment: DodoEnvironment =
+        DodoEnvironment(rawValue: (Bundle.main.object(forInfoDictionaryKey: "PCDodoEnvironment") as? String) ?? "") ?? .test
+    static let productID = (Bundle.main.object(forInfoDictionaryKey: "PCDodoProductID") as? String) ?? ""
+    static let api = DodoLicenceAPI(environment: environment, expectedProductID: productID)
 }
 
-/// Holds licence + trial state. Launch never blocks on the network: a cached, verified entitlement unlocks the panel
-/// offline; an online check runs in the background and only ever *removes* access on an explicit server answer.
+/// Holds licence + trial state. Licence keys are issued and limited (2 Macs) by Dodo Payments; see DodoLicence.swift.
+/// Launch never blocks on the network: once activated, the panel works offline. A background check runs when online
+/// and only removes the licence when Dodo explicitly answers `valid: false` (for example after a refund).
 final class LicenceManager: ObservableObject {
     enum State: Equatable {
         case licensed
@@ -24,27 +24,13 @@ final class LicenceManager: ObservableObject {
     @Published var busy = false
     @Published var message = ""
 
-    let installationID: String
-    private let verifier: EntitlementVerifier?
-
     private enum K {
-        static let installationID = "installation-id"
-        static let licenceKey = "licence-key"
-        static let entitlement = "entitlement"
+        static let licenceKey = "dodo-licence-key"
+        static let instanceID = "dodo-instance-id"
         static let trialStart = "trial-start"
     }
 
     init() {
-        if let id = Keychain.get(K.installationID) {
-            installationID = id
-        } else {
-            let id = UUID().uuidString // random; not derived from hardware
-            Keychain.set(id, for: K.installationID)
-            installationID = id
-        }
-        verifier = LicenceConfig.publicKeyRawBase64.isEmpty
-            ? nil
-            : try? EntitlementVerifier(publicKeyRawBase64: LicenceConfig.publicKeyRawBase64, appMajorVersion: LicenceConfig.appMajorVersion)
         recompute()
         validateInBackground()
     }
@@ -61,7 +47,7 @@ final class LicenceManager: ObservableObject {
     }
 
     func recompute() {
-        if let token = Keychain.get(K.entitlement), let verifier, (try? verifier.verify(token, installationID: installationID)) != nil {
+        if Keychain.get(K.licenceKey) != nil, Keychain.get(K.instanceID) != nil {
             state = .licensed
             return
         }
@@ -73,6 +59,7 @@ final class LicenceManager: ObservableObject {
         state = days > 0 ? .trial(daysLeft: days) : .trialEnded
     }
 
+    /// Hardware model only (e.g. "Mac14,2"). Never the computer name, which often contains a person's name.
     static func hardwareModel() -> String {
         var size = 0
         sysctlbyname("hw.model", nil, &size, nil, 0)
@@ -82,44 +69,36 @@ final class LicenceManager: ObservableObject {
         return String(cString: buf)
     }
 
-    // MARK: Network
-
-    private func post(_ path: String, _ body: [String: String]) async throws -> (Int, [String: Any]) {
-        guard !LicenceConfig.apiBase.isEmpty, let url = URL(string: LicenceConfig.apiBase + path) else {
-            throw URLError(.unsupportedURL)
-        }
-        var req = URLRequest(url: url, timeoutInterval: 15)
-        req.httpMethod = "POST"
-        req.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        req.httpBody = try JSONSerialization.data(withJSONObject: body)
+    private func send(_ req: URLRequest) async throws -> (Int, Data) {
         let (data, resp) = try await URLSession.shared.data(for: req)
-        let json = (try? JSONSerialization.jsonObject(with: data)) as? [String: Any] ?? [:]
-        return ((resp as? HTTPURLResponse)?.statusCode ?? 0, json)
+        return ((resp as? HTTPURLResponse)?.statusCode ?? 0, data)
     }
 
     @MainActor
     func activate(key raw: String) async {
-        guard LicenceKeyFormat.normalise(raw) != nil else {
-            message = "That doesn't look like a PlainClick key. It starts with PLCK- and has 6 groups of 4 characters."
+        guard let key = DodoKeyInput.clean(raw) else {
+            message = "That doesn't look like a licence key. Copy it from your purchase email and paste it here."
             return
         }
         busy = true
         defer { busy = false }
         do {
-            let (status, json) = try await post("/api/licences/activate", [
-                "licenceKey": raw,
-                "installationId": installationID,
-                "appVersion": Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "0",
-                // Hardware model only (e.g. "Mac14,2") — not the computer name, which often contains a person's name.
-                "deviceLabel": Self.hardwareModel(),
-            ])
-            if status == 200, let token = json["entitlement"] as? String, let verifier,
-               (try? verifier.verify(token, installationID: installationID)) != nil {
-                Keychain.set(raw, for: K.licenceKey)
-                Keychain.set(token, for: K.entitlement)
+            let (status, data) = try await send(LicenceConfig.api.activateRequest(key: key, instanceName: Self.hardwareModel()))
+            switch LicenceConfig.api.parseActivate(status: status, data: data) {
+            case .activated(let instanceID):
+                Keychain.set(key, for: K.licenceKey)
+                Keychain.set(instanceID, for: K.instanceID)
                 message = "Activated. Thank you for buying PlainClick."
-            } else {
-                message = json["message"] as? String ?? "Activation failed (HTTP \(status))."
+            case .limitReached:
+                message = "This key is already active on 2 Macs. Deactivate it on one of them first (PlainClick › Settings › Licence), or contact support if that Mac is lost."
+            case .notActive:
+                message = "This key isn't active (for example, the order was refunded). Contact support if you think this is wrong."
+            case .notFound:
+                message = "We couldn't find that key. Check you copied all of it from your purchase email."
+            case .wrongProduct:
+                message = "That key is for a different product, not PlainClick."
+            case .failed(let status):
+                message = "Activation failed (HTTP \(status)). Please try again in a minute."
             }
         } catch {
             message = "Couldn't reach the activation server. Check your connection and try again."
@@ -129,16 +108,16 @@ final class LicenceManager: ObservableObject {
 
     @MainActor
     func deactivateThisMac() async {
-        guard let key = Keychain.get(K.licenceKey) else { return }
+        guard let key = Keychain.get(K.licenceKey), let instance = Keychain.get(K.instanceID) else { return }
         busy = true
         defer { busy = false }
         do {
-            let (status, _) = try await post("/api/licences/deactivate", ["licenceKey": key, "installationId": installationID])
-            guard status == 200 else {
+            let (status, _) = try await send(LicenceConfig.api.deactivateRequest(key: key, instanceID: instance))
+            guard DodoLicenceAPI.isSuccess(status: status) else {
                 message = "Deactivation failed (HTTP \(status)). Your licence is still active here."
                 return
             }
-            Keychain.delete(K.entitlement)
+            Keychain.delete(K.instanceID)
             Keychain.delete(K.licenceKey)
             message = "This Mac is deactivated. You can activate another Mac now."
         } catch {
@@ -147,17 +126,15 @@ final class LicenceManager: ObservableObject {
         recompute()
     }
 
-    /// Opportunistic check. Network errors are ignored (offline use is promised). Only explicit
-    /// "revoked"/"deactivated" answers remove the cached entitlement.
+    /// Opportunistic check. Network errors and unclear answers are ignored (offline use is promised).
     func validateInBackground() {
-        guard let token = Keychain.get(K.entitlement), !LicenceConfig.apiBase.isEmpty else { return }
-        Task { [installationID] in
-            guard let result = try? await self.post("/api/licences/validate", ["entitlement": token, "installationId": installationID]),
-                  result.0 == 200, let answer = result.1["status"] as? String else { return }
-            if answer == "revoked" || answer == "deactivated" {
-                Keychain.delete(K.entitlement)
+        guard let key = Keychain.get(K.licenceKey), let instance = Keychain.get(K.instanceID) else { return }
+        Task {
+            guard let result = try? await self.send(LicenceConfig.api.validateRequest(key: key, instanceID: instance)) else { return }
+            if DodoLicenceAPI.parseValidate(status: result.0, data: result.1) == .invalid {
+                Keychain.delete(K.instanceID)
                 await MainActor.run {
-                    self.message = answer == "revoked" ? "This licence is no longer active (for example after a refund)." : "This Mac was deactivated from another place."
+                    self.message = "This licence is no longer active on this Mac (for example after a refund, or it was deactivated elsewhere)."
                     self.recompute()
                 }
             }

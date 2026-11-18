@@ -1,15 +1,19 @@
-# Builds the downloadable PlainClick.zip on a GitHub macOS runner (no Mac needed), and — once the Apple secrets exist —
-# signs it with the Developer ID certificate, notarizes it with Apple, staples the ticket and checks Gatekeeper on a
-# second, clean runner.
+# Builds the downloadable PlainClick zip on GitHub's free macOS runners (no Mac needed).
 #
-# Without the secrets it still runs as a DRY RUN: a universal, ad-hoc-signed build that is clearly reported as
-# "NOT signed / NOT notarized". Never publish a dry-run zip to buyers.
+# Signing modes, chosen automatically from the secrets that exist:
+#   notarized   Apple Developer ID + notarization (US$99/yr). Opens normally.           docs/signing-setup.md
+#   selfsigned  FREE self-signed certificate. Stable identity, so the Accessibility       docs/free-release.md
+#               permission survives updates; buyers click "Open Anyway" once (not notarized).
+#   adhoc       No secrets: dry run only. Never give this zip to anyone.
 #
-# Setup (one time): docs/signing-setup.md
-#   Secrets:   MACOS_CERT_P12_BASE64, MACOS_CERT_P12_PASSWORD,
-#              NOTARY_API_KEY_P8_BASE64, NOTARY_API_KEY_ID, NOTARY_API_ISSUER_ID
-#   Variable:  BUNDLE_ID   (e.g. com.yourname.plainclick — final, never change it after release)
-name: Release build (sign + notarize)
+# Manual run with "draft_release" creates a DRAFT GitHub Release (PlainClick.zip + .sha256). Drafts are private;
+# it becomes public only when you press Publish on GitHub.
+#
+# Secrets:   SELFSIGNED_P12_BASE64, SELFSIGNED_P12_PASSWORD                    (free mode)
+#            MACOS_CERT_P12_BASE64, MACOS_CERT_P12_PASSWORD,
+#            NOTARY_API_KEY_P8_BASE64, NOTARY_API_KEY_ID, NOTARY_API_ISSUER_ID  (Apple mode)
+# Variables: BUNDLE_ID (final, never change), DODO_ENV (test|live), DODO_PRODUCT_ID (pdt_…)
+name: Release build
 
 on:
   workflow_dispatch:
@@ -18,11 +22,15 @@ on:
         description: "Version shown to users, e.g. 0.1.0"
         required: true
         default: "0.1.0"
+      draft_release:
+        description: "Create a DRAFT GitHub Release with the zip (you publish it yourself)"
+        type: boolean
+        default: false
   push:
     tags: ["v*"]
-    # Pushes to main that touch the build pipeline run a DRY RUN only (never signs), to keep the pipeline tested.
+    # Pushes to main that touch the build pipeline: test build only (never notarizes, never releases).
     branches: [main]
-    paths: ["apps/macos/scripts/**", "apps/macos/Resources/**", ".github/workflows/release.yml"]
+    paths: ["apps/macos/scripts/**", "apps/macos/Resources/**", "apps/macos/Sources/PlainClickLicensing/**", ".github/workflows/release.yml"]
 
 permissions:
   contents: read
@@ -36,43 +44,50 @@ jobs:
     runs-on: macos-15
     timeout-minutes: 60
     outputs:
-      signed: ${{ steps.mode.outputs.signed }}
+      mode: ${{ steps.mode.outputs.mode }}
       zip: ${{ steps.package.outputs.zip }}
       sha256: ${{ steps.package.outputs.sha256 }}
+      version: ${{ steps.mode.outputs.version }}
     env:
       APP_NAME: PlainClick
-      VERSION: ${{ inputs.version || github.ref_name }}
       BUILD_NUMBER: ${{ github.run_number }}
       BUNDLE_ID: ${{ vars.BUNDLE_ID || 'local.plainclick.prototype' }}
+      DODO_ENV: ${{ vars.DODO_ENV || 'test' }}
+      DODO_PRODUCT_ID: ${{ vars.DODO_PRODUCT_ID }}
     defaults:
       run:
         working-directory: apps/macos
     steps:
       - uses: actions/checkout@v5
 
-      - name: Decide mode (signed or dry run)
+      - name: Decide signing mode
         id: mode
         env:
-          HAS_CERT: ${{ secrets.MACOS_CERT_P12_BASE64 != '' && secrets.MACOS_CERT_P12_PASSWORD != '' }}
-          HAS_NOTARY: ${{ secrets.NOTARY_API_KEY_P8_BASE64 != '' && secrets.NOTARY_API_KEY_ID != '' && secrets.NOTARY_API_ISSUER_ID != '' }}
+          INPUT_VERSION: ${{ inputs.version }}
+          WANT_DRAFT: ${{ inputs.draft_release }}
+          HAS_APPLE: ${{ secrets.MACOS_CERT_P12_BASE64 != '' && secrets.MACOS_CERT_P12_PASSWORD != '' && secrets.NOTARY_API_KEY_P8_BASE64 != '' && secrets.NOTARY_API_KEY_ID != '' && secrets.NOTARY_API_ISSUER_ID != '' }}
+          HAS_SELF: ${{ secrets.SELFSIGNED_P12_BASE64 != '' && secrets.SELFSIGNED_P12_PASSWORD != '' }}
         run: |
-          VERSION="${VERSION#v}"
-          echo "VERSION=$VERSION" >> "$GITHUB_ENV"
-          if [ "$GITHUB_EVENT_NAME" = "push" ] && [ "$GITHUB_REF_TYPE" != "tag" ]; then
-            echo "signed=false" >> "$GITHUB_OUTPUT"
-            echo "VERSION=0.0.0-ci.$BUILD_NUMBER" >> "$GITHUB_ENV"
-            echo "Branch push: pipeline DRY RUN only (signing happens on manual runs and v* tags)."
-          elif [ "$HAS_CERT" = "true" ] && [ "$HAS_NOTARY" = "true" ]; then
-            case "$BUNDLE_ID" in
-              local.*) echo "::error::Set the repository variable BUNDLE_ID (e.g. com.yourname.plainclick) before a signed release."; exit 1 ;;
-            esac
-            echo "signed=true" >> "$GITHUB_OUTPUT"
-            echo "Mode: SIGNED + NOTARIZED release, version $VERSION, bundle $BUNDLE_ID"
-          else
-            echo "signed=false" >> "$GITHUB_OUTPUT"
-            echo "::warning::Apple signing secrets are not set — DRY RUN (ad-hoc signed, not notarized). Do not give this zip to buyers."
-            echo "Missing: cert=$([ "$HAS_CERT" = true ] && echo ok || echo MISSING) notary=$([ "$HAS_NOTARY" = true ] && echo ok || echo MISSING)"
+          BRANCH_PUSH=false
+          if [ "$GITHUB_EVENT_NAME" = "push" ] && [ "$GITHUB_REF_TYPE" != "tag" ]; then BRANCH_PUSH=true; fi
+          if [ "$BRANCH_PUSH" = true ]; then VERSION="0.0.0-ci.$BUILD_NUMBER"
+          elif [ -n "$INPUT_VERSION" ]; then VERSION="$INPUT_VERSION"
+          else VERSION="${GITHUB_REF_NAME#v}"; fi
+          if [ "$HAS_APPLE" = true ] && [ "$BRANCH_PUSH" = false ]; then MODE=notarized
+          elif [ "$HAS_SELF" = true ]; then MODE=selfsigned
+          else MODE=adhoc; fi
+          if [ "$MODE" != adhoc ] && [ "$BRANCH_PUSH" = false ]; then
+            case "$BUNDLE_ID" in local.*) echo "::error::Set the repository variable BUNDLE_ID (e.g. io.github.yourname.plainclick) before a release."; exit 1 ;; esac
           fi
+          if [ "$WANT_DRAFT" = true ]; then
+            [ "$MODE" = adhoc ] && { echo "::error::No signing secrets: refusing to make a release from an unsigned dry run. See docs/free-release.md"; exit 1; }
+            [ "$DODO_ENV" = live ] && [ -n "$DODO_PRODUCT_ID" ] || { echo "::error::For a release set repository variables DODO_ENV=live and DODO_PRODUCT_ID (pdt_…)."; exit 1; }
+          fi
+          echo "mode=$MODE" >> "$GITHUB_OUTPUT"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "VERSION=$VERSION" >> "$GITHUB_ENV"
+          echo "Mode: $MODE · version $VERSION · bundle $BUNDLE_ID · Dodo $DODO_ENV ${DODO_PRODUCT_ID:-(no product id)}"
+          [ "$MODE" = adhoc ] && echo "::warning::No signing secrets — DRY RUN (ad-hoc). Do not give this zip to anyone." || true
 
       - name: Toolchain
         run: |
@@ -82,12 +97,16 @@ jobs:
       - name: Unit tests
         run: swift test
 
-      - name: Import Developer ID certificate into a temporary keychain
-        if: steps.mode.outputs.signed == 'true'
+      - name: Import signing certificate into a temporary keychain
+        if: steps.mode.outputs.mode != 'adhoc'
         env:
-          P12_B64: ${{ secrets.MACOS_CERT_P12_BASE64 }}
-          P12_PASSWORD: ${{ secrets.MACOS_CERT_P12_PASSWORD }}
+          MODE: ${{ steps.mode.outputs.mode }}
+          APPLE_P12: ${{ secrets.MACOS_CERT_P12_BASE64 }}
+          APPLE_PW: ${{ secrets.MACOS_CERT_P12_PASSWORD }}
+          SELF_P12: ${{ secrets.SELFSIGNED_P12_BASE64 }}
+          SELF_PW: ${{ secrets.SELFSIGNED_P12_PASSWORD }}
         run: |
+          if [ "$MODE" = notarized ]; then P12_B64="$APPLE_P12"; P12_PASSWORD="$APPLE_PW"; else P12_B64="$SELF_P12"; P12_PASSWORD="$SELF_PW"; fi
           KEYCHAIN="$RUNNER_TEMP/plainclick-signing.keychain-db"
           KC_PASS="$(uuidgen)"
           echo "$P12_B64" | base64 --decode > "$RUNNER_TEMP/cert.p12"
@@ -96,20 +115,28 @@ jobs:
           security unlock-keychain -p "$KC_PASS" "$KEYCHAIN"
           security import "$RUNNER_TEMP/cert.p12" -P "$P12_PASSWORD" -f pkcs12 -k "$KEYCHAIN" -T /usr/bin/codesign
           rm -f "$RUNNER_TEMP/cert.p12"
-          # Apple's Developer ID intermediate, so the chain is complete on the runner.
-          curl -fsSL https://www.apple.com/certificateauthority/DeveloperIDG2CA.cer -o "$RUNNER_TEMP/DeveloperIDG2CA.cer"
-          security import "$RUNNER_TEMP/DeveloperIDG2CA.cer" -k "$KEYCHAIN" || true
+          if [ "$MODE" = notarized ]; then
+            # Apple's Developer ID intermediate, so the chain is complete on the runner.
+            curl -fsSL https://www.apple.com/certificateauthority/DeveloperIDG2CA.cer -o "$RUNNER_TEMP/DeveloperIDG2CA.cer"
+            security import "$RUNNER_TEMP/DeveloperIDG2CA.cer" -k "$KEYCHAIN" || true
+          else
+            # codesign refuses untrusted certificates; trust the self-signed one on this throwaway runner only.
+            # (Buyers' Macs don't need to trust it: macOS ties the Accessibility grant to the certificate itself.)
+            security find-certificate -a -p "$KEYCHAIN" > "$RUNNER_TEMP/self.pem"
+            sudo security add-trusted-cert -d -r trustRoot -p codeSign -k /Library/Keychains/System.keychain "$RUNNER_TEMP/self.pem"
+          fi
           security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$KC_PASS" "$KEYCHAIN" > /dev/null
           security list-keychains -d user -s "$KEYCHAIN" $(security list-keychains -d user | tr -d '"')
-          IDENTITY_LINE="$(security find-identity -v -p codesigning "$KEYCHAIN" | grep 'Developer ID Application' | head -1 || true)"
+          if [ "$MODE" = notarized ]; then PATTERN='Developer ID Application'; else PATTERN='"'; fi
+          IDENTITY_LINE="$(security find-identity -v -p codesigning "$KEYCHAIN" | grep "$PATTERN" | head -1 || true)"
           if [ -z "$IDENTITY_LINE" ]; then
-            echo "::error::No valid 'Developer ID Application' identity in the .p12. Check docs/signing-setup.md (the .p12 must contain the private key)."
-            security find-identity -v "$KEYCHAIN" || true
+            echo "::error::No valid code-signing identity in the .p12 ($MODE). See docs/free-release.md / docs/signing-setup.md."
+            security find-identity -p codesigning "$KEYCHAIN" || true
             exit 1
           fi
-          # Sign by SHA-1 hash: unambiguous, and the name never needs to be typed anywhere.
           echo "CODESIGN_IDENTITY=$(echo "$IDENTITY_LINE" | awk '{print $2}')" >> "$GITHUB_ENV"
           echo "KEYCHAIN=$KEYCHAIN" >> "$GITHUB_ENV"
+          [ "$MODE" = selfsigned ] && echo "NO_TIMESTAMP=1" >> "$GITHUB_ENV" || true
           echo "Signing identity: $(echo "$IDENTITY_LINE" | sed -E 's/^[^"]*"(.*)"$/\1/')"
 
       - name: Build universal app
@@ -118,9 +145,10 @@ jobs:
           UNIVERSAL=1 ./scripts/build-app.sh
           ARCHS="$(lipo -archs "build/$APP_NAME.app/Contents/MacOS/PlainClickPrototype")"
           case "$ARCHS" in *arm64*x86_64*|*x86_64*arm64*) echo "Universal: $ARCHS" ;; *) echo "::error::Not universal: $ARCHS"; exit 1 ;; esac
+          echo "Designated requirement:"; codesign -d -r- "build/$APP_NAME.app" 2>&1 | tail -1
 
       - name: Notarize and staple
-        if: steps.mode.outputs.signed == 'true'
+        if: steps.mode.outputs.mode == 'notarized'
         env:
           P8_B64: ${{ secrets.NOTARY_API_KEY_P8_BASE64 }}
           KEY_ID: ${{ secrets.NOTARY_API_KEY_ID }}
@@ -150,10 +178,12 @@ jobs:
 
       - name: Package zip + checksum
         id: package
+        env:
+          MODE: ${{ steps.mode.outputs.mode }}
         run: |
           mkdir -p dist
           SUFFIX=""
-          [ "${{ steps.mode.outputs.signed }}" != "true" ] && SUFFIX="-UNSIGNED-DRY-RUN"
+          [ "$MODE" = adhoc ] && SUFFIX="-UNSIGNED-DRY-RUN"
           ZIP="PlainClick-$VERSION$SUFFIX.zip"
           ditto -c -k --keepParent "build/$APP_NAME.app" "dist/$ZIP"
           SHA="$(shasum -a 256 "dist/$ZIP" | awk '{print $1}')"
@@ -185,9 +215,9 @@ jobs:
         with:
           name: plainclick-release
           path: dl
-      - name: Gatekeeper check as a downloaded app
+      - name: Check as a downloaded app
         env:
-          SIGNED: ${{ needs.build.outputs.signed }}
+          MODE: ${{ needs.build.outputs.mode }}
           ZIP: ${{ needs.build.outputs.zip }}
           SHA: ${{ needs.build.outputs.sha256 }}
         run: |
@@ -196,34 +226,80 @@ jobs:
           xattr -w com.apple.quarantine "0081;$(printf '%x' $(date +%s));Safari;$(uuidgen)" "$ZIP"
           ditto -x -k "$ZIP" out
           APP="out/PlainClick.app"
-          echo "quarantine on app: $(xattr -p com.apple.quarantine "$APP" 2>/dev/null || echo none)"
-          lipo -archs "$APP/Contents/MacOS/PlainClickPrototype"
-          codesign -dv --verbose=2 "$APP" 2>&1 | grep -E 'Identifier|Authority|TeamIdentifier|Timestamp|Runtime|flags' || true
-          /usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' -c 'Print :CFBundleShortVersionString' "$APP/Contents/Info.plist"
+          ARCHS="$(lipo -archs "$APP/Contents/MacOS/PlainClickPrototype")"
           set +e
+          VERIFY="$(codesign --verify --strict --verbose=2 "$APP" 2>&1)"; VERIFY_RC=$?
+          DR="$(codesign -d -r- "$APP" 2>&1 | grep -E '^designated' )"
           SPCTL="$(spctl --assess --type execute --verbose=4 "$APP" 2>&1)"; SPCTL_RC=$?
           STAPLE="$(xcrun stapler validate "$APP" 2>&1)"; STAPLE_RC=$?
+          LIC="$(/usr/libexec/PlistBuddy -c 'Print :PCDodoEnvironment' "$APP/Contents/Info.plist" 2>/dev/null) $(/usr/libexec/PlistBuddy -c 'Print :PCDodoProductID' "$APP/Contents/Info.plist" 2>/dev/null)"
           set -e
+          echo "codesign verify ($VERIFY_RC): $VERIFY"
+          echo "$DR"
           echo "spctl ($SPCTL_RC): $SPCTL"
-          echo "stapler ($STAPLE_RC): $STAPLE"
           {
-            echo "## PlainClick release check"
+            echo "## PlainClick release check ($MODE)"
             echo "| | |"; echo "|---|---|"
             echo "| Zip | \`$ZIP\` |"
             echo "| SHA-256 | \`$SHA\` |"
-            echo "| Architectures | $(lipo -archs "$APP/Contents/MacOS/PlainClickPrototype") |"
-            echo "| Gatekeeper (spctl) | $( [ $SPCTL_RC = 0 ] && echo "accepted — $(echo "$SPCTL" | grep -o 'source=.*' )" || echo '**rejected**' ) |"
-            echo "| Notarization ticket stapled | $( [ $STAPLE_RC = 0 ] && echo yes || echo **no** ) |"
-            if [ "$SIGNED" = "true" ]; then
-              echo; echo "Signed + notarized build. Still to do by hand: open it on a real Mac (docs/release-checklist.md §D)."
-            else
-              echo; echo "**DRY RUN — not signed, not notarized.** Gatekeeper is expected to reject it. Do not distribute."
-            fi
+            echo "| Architectures | $ARCHS |"
+            echo "| Signature valid (codesign --strict) | $( [ $VERIFY_RC = 0 ] && echo yes || echo '**no**' ) |"
+            echo "| Designated requirement | \`$DR\` |"
+            echo "| Gatekeeper (spctl) | $( [ $SPCTL_RC = 0 ] && echo accepted || echo 'rejected (expected unless notarized)' ) |"
+            echo "| Licensing (Dodo env, product) | $LIC |"
           } >> "$GITHUB_STEP_SUMMARY"
-          if [ "$SIGNED" = "true" ]; then
-            [ $SPCTL_RC = 0 ] && echo "$SPCTL" | grep -q "Notarized Developer ID" || { echo "::error::Gatekeeper did not accept the signed build as Notarized Developer ID"; exit 1; }
-            [ $STAPLE_RC = 0 ] || { echo "::error::Notarization ticket not stapled"; exit 1; }
+          fail() { echo "::error::$1"; exit 1; }
+          case "$MODE" in
+            notarized)
+              [ $SPCTL_RC = 0 ] && echo "$SPCTL" | grep -q "Notarized Developer ID" || fail "Gatekeeper did not accept the build as Notarized Developer ID"
+              [ $STAPLE_RC = 0 ] || fail "Notarization ticket not stapled" ;;
+            selfsigned)
+              [ $VERIFY_RC = 0 ] || fail "Self-signed signature does not verify: $VERIFY"
+              echo "$DR" | grep -q 'certificate leaf' || fail "Designated requirement is not tied to the certificate: $DR"
+              [ $SPCTL_RC != 0 ] || fail "Unexpected: Gatekeeper accepted a non-notarized build"
+              echo "::notice::Self-signed build OK: valid signature, stable identity ($DR). Gatekeeper asks buyers to click Open Anyway once." ;;
+            *)
+              [ $SPCTL_RC != 0 ] || fail "Unexpected: unsigned dry run was accepted by Gatekeeper"
+              echo "::notice::Dry run behaved as expected (rejected by Gatekeeper)." ;;
+          esac
+
+  draft-release:
+    needs: [build, gatekeeper-check]
+    if: github.event_name == 'workflow_dispatch' && inputs.draft_release && needs.build.outputs.mode != 'adhoc'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: plainclick-release
+          path: dl
+      - name: Create DRAFT release (private until you press Publish)
+        env:
+          GH_TOKEN: ${{ github.token }}
+          MODE: ${{ needs.build.outputs.mode }}
+          ZIP: ${{ needs.build.outputs.zip }}
+          VERSION: ${{ needs.build.outputs.version }}
+        run: |
+          cd dl
+          cp "$ZIP" PlainClick.zip   # stable name: /releases/latest/download/PlainClick.zip
+          SHA="$(sha256sum PlainClick.zip | awk '{print $1}')"
+          echo "$SHA  PlainClick.zip" > PlainClick.zip.sha256
+          if [ "$MODE" = notarized ]; then
+            NOTE="Signed with an Apple Developer ID and notarized by Apple."
           else
-            [ $SPCTL_RC != 0 ] || { echo "::error::Unexpected: unsigned dry run was accepted by Gatekeeper"; exit 1; }
-            echo "Dry run behaved as expected (rejected by Gatekeeper)."
+            NOTE="This build is signed with PlainClick's own certificate but is **not notarized by Apple**. The first time you open it, macOS will say it can't verify the app: open System Settings → Privacy & Security, scroll down, and click **Open Anyway** next to PlainClick. You only need to do this once. Never turn off Gatekeeper."
           fi
+          cat > notes.md <<EOF
+          PlainClick $VERSION — requires macOS 14 or later (Apple silicon and Intel).
+
+          $NOTE
+
+          SHA-256 (PlainClick.zip): \`$SHA\`
+
+          Works with the actions listed on the compatibility page only.
+          EOF
+          gh release create "v$VERSION" PlainClick.zip PlainClick.zip.sha256 \
+            --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" --draft \
+            --title "PlainClick $VERSION" --notes-file notes.md
+          echo "Draft release v$VERSION created. Review it on GitHub → Releases, then press Publish." >> "$GITHUB_STEP_SUMMARY"

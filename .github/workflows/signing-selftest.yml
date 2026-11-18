@@ -7,7 +7,7 @@ name: Signing helpers self-test
 on:
   workflow_dispatch:
   push:
-    paths: ["tools/signing/**", ".github/workflows/signing-selftest.yml", ".github/workflows/release.yml"]
+    paths: ["tools/signing/**", ".github/workflows/signing-selftest.yml", ".github/workflows/release.yml", "apps/macos/Sources/PlainClickLicensing/**"]
 
 permissions:
   contents: read
@@ -23,6 +23,9 @@ jobs:
         run: |
           $PSVersionTable.PSVersion
           powershell -NoProfile -ExecutionPolicy Bypass -File tools\signing\Test-SigningHelpers.ps1 -KeepDir "$env:RUNNER_TEMP\p12out"
+          if ($LASTEXITCODE -ne 0) { exit 1 }
+          # FREE mode: throwaway self-signed certificate made by the same script the user runs.
+          powershell -NoProfile -ExecutionPolicy Bypass -File tools\signing\New-SelfSignedSigningCert.ps1 -Name "PlainClick Selftest" -OutDir "$env:RUNNER_TEMP\p12out\self"
           if ($LASTEXITCODE -ne 0) { exit 1 }
       - uses: actions/upload-artifact@v4
         with:
@@ -88,6 +91,47 @@ jobs:
             exit 1
           fi
           echo "(Gatekeeper rejection is expected here: the throwaway CA is not Apple.)"
+      - name: "FREE mode: self-signed cert, imported and trusted exactly like release.yml, signs with a stable identity"
+        working-directory: apps/macos
+        run: |
+          set -euo pipefail
+          KC="$RUNNER_TEMP/self.keychain-db"; KC_PASS="$(uuidgen)"
+          base64 --decode < ../../p12/self/SELFSIGNED_P12_BASE64.txt > "$RUNNER_TEMP/self.p12"
+          security create-keychain -p "$KC_PASS" "$KC"
+          security unlock-keychain -p "$KC_PASS" "$KC"
+          security import "$RUNNER_TEMP/self.p12" -P "$(cat ../../p12/self/SELFSIGNED_P12_PASSWORD.txt)" -f pkcs12 -k "$KC" -T /usr/bin/codesign
+          security find-certificate -a -p "$KC" > "$RUNNER_TEMP/self.pem"
+          sudo security add-trusted-cert -d -r trustRoot -p codeSign -k /Library/Keychains/System.keychain "$RUNNER_TEMP/self.pem"
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$KC_PASS" "$KC" > /dev/null
+          security list-keychains -d user -s "$KC" $(security list-keychains -d user | tr -d '"')
+          ID="$(security find-identity -v -p codesigning "$KC" | grep '"' | head -1 | awk '{print $2}')"
+          [ -n "$ID" ] || { echo "::error::self-signed identity not valid after import: $(security find-identity -p codesigning "$KC" | tr '\n' ' ')"; exit 1; }
+          # Two builds with DIFFERENT code: the designated requirement (what Accessibility permission is tied to)
+          # must stay identical with the self-signed cert, and changes with ad-hoc signing.
+          dr_of() { codesign -d -r- "$1" 2>&1 | grep -E '^designated'; }
+          # "Version 1" and "version 2" = two genuinely different executables under the same bundle id.
+          mkapp() {
+            rm -rf "$1"; mkdir -p "$1/Contents/MacOS"
+            cp "$(swift build -c release --show-bin-path)/$2" "$1/Contents/MacOS/PlainClickPrototype"
+            cp Resources/Info.plist "$1/Contents/Info.plist"
+          }
+          swift build -c release
+          set +e
+          mkapp build/A.app PlainClickPrototype; OUT1="$(codesign --force --options runtime --sign "$ID" --keychain "$KC" build/A.app 2>&1)"; RC1=$?
+          mkapp build/B.app plainclick-feasibility; OUT2="$(codesign --force --options runtime --sign "$ID" --keychain "$KC" build/B.app 2>&1)"; RC2=$?
+          set -e
+          [ $RC1 = 0 ] && [ $RC2 = 0 ] || { echo "::error::self-signed codesign failed: $OUT1 | $OUT2"; exit 1; }
+          codesign --verify --strict build/A.app
+          DRA="$(dr_of build/A.app)"; DRB="$(dr_of build/B.app)"
+          mkapp build/C.app PlainClickPrototype; codesign --force --sign - build/C.app
+          mkapp build/D.app plainclick-feasibility; codesign --force --sign - build/D.app
+          DRC="$(dr_of build/C.app)"; DRD="$(dr_of build/D.app)"
+          echo "self-signed A: $DRA"; echo "self-signed B: $DRB"; echo "ad-hoc C: $DRC"; echo "ad-hoc D: $DRD"
+          echo "$DRA" | grep -q 'certificate leaf' || { echo "::error::DR not tied to the certificate: $DRA"; exit 1; }
+          [ "$DRA" = "$DRB" ] || { echo "::error::self-signed DR changed between builds: $DRA vs $DRB"; exit 1; }
+          [ "$DRC" != "$DRD" ] || echo "::warning::ad-hoc DR did not change between builds (unexpected)"
+          echo "::notice::FREE mode OK: self-signed identity is stable across builds (DR unchanged); ad-hoc DR changes every build."
+          security delete-keychain "$KC"
       - name: Cleanup
         if: always()
         run: '[ -n "${KEYCHAIN:-}" ] && security delete-keychain "$KEYCHAIN" || true'

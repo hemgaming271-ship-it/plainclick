@@ -22,5 +22,10 @@
     <true/>
     <key>NSHighResolutionCapable</key>
     <true/>
+    <!-- Licensing via Dodo Payments' public licence endpoints. Release builds override these (build-app.sh). -->
+    <key>PCDodoEnvironment</key>
+    <string>test</string>
+    <key>PCDodoProductID</key>
+    <string></string>
 </dict>
 </plist>

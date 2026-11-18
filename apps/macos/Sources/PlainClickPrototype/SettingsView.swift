@@ -110,7 +110,7 @@ private struct LicenceTab: View {
                 Text(licence.message).fixedSize(horizontal: false, vertical: true)
             }
             Spacer()
-            Text("Activation sends your licence key, a random installation ID, the app version and your Mac's model identifier. Nothing about your apps or documents is sent.")
+            Text("Activation sends your licence key and your Mac's model identifier (like \"Mac14,2\") to Dodo Payments, which sells PlainClick and checks licences. Nothing about your apps or documents is sent.")
                 .font(.caption).foregroundStyle(.secondary)
         }
     }
@@ -119,7 +119,7 @@ private struct LicenceTab: View {
         VStack(alignment: .leading, spacing: 8) {
             Text("US$5.99 one time. A perpetual personal licence for PlainClick v1, including all v1 updates, on up to two Macs you own.")
                 .fixedSize(horizontal: false, vertical: true)
-            TextField("PLCK-XXXX-XXXX-XXXX-XXXX-XXXX-XXXX", text: $key)
+            TextField("Paste the licence key from your purchase email", text: $key)
                 .textFieldStyle(.roundedBorder)
                 .accessibilityLabel("Licence key")
             Button("Activate") { Task { await licence.activate(key: key.trimmingCharacters(in: .whitespacesAndNewlines)) } }
