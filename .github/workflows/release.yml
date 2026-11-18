@@ -109,7 +109,14 @@ jobs:
           if [ "$MODE" = notarized ]; then P12_B64="$APPLE_P12"; P12_PASSWORD="$APPLE_PW"; else P12_B64="$SELF_P12"; P12_PASSWORD="$SELF_PW"; fi
           KEYCHAIN="$RUNNER_TEMP/plainclick-signing.keychain-db"
           KC_PASS="$(uuidgen)"
-          echo "$P12_B64" | base64 --decode > "$RUNNER_TEMP/cert.p12"
+          # Tolerate spaces/newlines/CR picked up when pasting the secret; never print the value itself.
+          CLEAN="$(printf '%s' "$P12_B64" | tr -d ' \r\n\t')"
+          P12_PASSWORD="$(printf '%s' "$P12_PASSWORD" | tr -d '\r\n')"
+          if ! printf '%s' "$CLEAN" | grep -Eq '^[A-Za-z0-9+/]+={0,2}$' || ! printf '%s' "$CLEAN" | base64 --decode > "$RUNNER_TEMP/cert.p12" 2>/dev/null; then
+            echo "::error::The .p12 secret isn't valid base64 (length ${#CLEAN}; expected the whole content of the *_P12_BASE64.txt file, about 4400 characters for the free certificate, starting with MII). Paste it again."
+            exit 1
+          fi
+          echo "p12 secret: ${#CLEAN} base64 characters → $(wc -c < "$RUNNER_TEMP/cert.p12" | tr -d ' ') bytes"
           security create-keychain -p "$KC_PASS" "$KEYCHAIN"
           security set-keychain-settings -lut 21600 "$KEYCHAIN"
           security unlock-keychain -p "$KC_PASS" "$KEYCHAIN"
