@@ -53,12 +53,15 @@ jobs:
           security set-keychain-settings -lut 21600 "$KEYCHAIN"
           security unlock-keychain -p "$KC_PASS" "$KEYCHAIN"
           security import "$RUNNER_TEMP/cert.p12" -P "$P12_PASSWORD" -f pkcs12 -k "$KEYCHAIN" -T /usr/bin/codesign
+          # Stand-in for the Apple intermediate that release.yml downloads (completes the chain).
+          security import p12/throwaway-ca.cer -k "$KEYCHAIN"
           security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$KC_PASS" "$KEYCHAIN" > /dev/null
           security list-keychains -d user -s "$KEYCHAIN" $(security list-keychains -d user | tr -d '"')
           echo "--- identities (all, including untrusted test cert):"
           security find-identity -p codesigning "$KEYCHAIN" | tee "$RUNNER_TEMP/ids.txt"
           grep -qi "$EXPECTED" "$RUNNER_TEMP/ids.txt" || { echo "::error::Imported identity not found"; exit 1; }
           echo "PASS: Windows-made .p12 imported on macOS with its private key ($EXPECTED)"
+          echo "- PASS: Windows-made .p12 imported on macOS with its private key" >> "$GITHUB_STEP_SUMMARY"
           echo "KEYCHAIN=$KEYCHAIN" >> "$GITHUB_ENV"
           echo "TEST_IDENTITY=$EXPECTED" >> "$GITHUB_ENV"
       - name: "Code-sign the app with the imported key (no --timestamp, test cert)"
@@ -70,11 +73,16 @@ jobs:
           mkdir -p "$APP/Contents/MacOS"
           cp "$(swift build -c release --show-bin-path)/PlainClickPrototype" "$APP/Contents/MacOS/"
           cp Resources/Info.plist "$APP/Contents/Info.plist"
-          codesign --force --options runtime --sign "$TEST_IDENTITY" --keychain "$KEYCHAIN" "$APP"
-          codesign -dv --verbose=2 "$APP" 2>&1 | grep -E 'Authority|Runtime|flags'
-          codesign -dv --verbose=2 "$APP" 2>&1 | grep -q "Authority=Developer ID Application: PlainClick Selftest" \
-            && echo "PASS: app signed with the Windows-exported key" \
-            || { echo "::error::Signature does not carry the test identity"; exit 1; }
+          set +e
+          OUT="$(codesign --force --options runtime --sign "$TEST_IDENTITY" --keychain "$KEYCHAIN" "$APP" 2>&1)"; RC=$?
+          INFO="$(codesign -dv --verbose=2 "$APP" 2>&1)"
+          set -e
+          { echo '```'; echo "codesign exit $RC"; echo "$OUT"; echo "$INFO" | grep -E 'Authority|Runtime|flags|Signature'; echo '```'; } | tee -a "$GITHUB_STEP_SUMMARY"
+          if [ $RC = 0 ] && echo "$INFO" | grep -q "Authority=Developer ID Application: PlainClick Selftest"; then
+            echo "- PASS: app signed with the Windows-exported key" | tee -a "$GITHUB_STEP_SUMMARY"
+          else
+            echo "::error::codesign did not sign with the test identity"; exit 1
+          fi
           echo "(Gatekeeper rejection is expected here: the throwaway CA is not Apple.)"
       - name: Cleanup
         if: always()

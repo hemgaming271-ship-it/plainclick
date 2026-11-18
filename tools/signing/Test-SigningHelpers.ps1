@@ -25,7 +25,11 @@ try {
   # Throwaway CA (in memory) issues a code-signing cert for the CSR's public key, like Apple would.
   $caKey = [System.Security.Cryptography.RSA]::Create(2048)
   $gen = [System.Security.Cryptography.X509Certificates.X509SignatureGenerator]::CreateForRSA($caKey, [System.Security.Cryptography.RSASignaturePadding]::Pkcs1)
-  $issuer = New-Object "$X.X500DistinguishedName" ("CN=PlainClick Throwaway Test CA")
+  $caReq = New-Object "$X.CertificateRequest" ("CN=PlainClick Throwaway Test CA", $caKey, [System.Security.Cryptography.HashAlgorithmName]::SHA256, [System.Security.Cryptography.RSASignaturePadding]::Pkcs1)
+  $caReq.CertificateExtensions.Add((New-Object "$X.X509BasicConstraintsExtension" ($true, $false, 0, $true)))
+  $caReq.CertificateExtensions.Add((New-Object "$X.X509KeyUsageExtension" ([System.Security.Cryptography.X509Certificates.X509KeyUsageFlags]::KeyCertSign, $true)))
+  $caCert = $caReq.CreateSelfSigned([DateTimeOffset]::Now.AddDays(-2), [DateTimeOffset]::Now.AddDays(30))
+  $issuer = $caCert.SubjectName
   $leafReq = New-Object "$X.CertificateRequest" ((New-Object "$X.X500DistinguishedName" ("CN=Developer ID Application: $name (TEAM000000)")), $req.PublicKey, [System.Security.Cryptography.HashAlgorithmName]::SHA256)
   $eku = New-Object System.Security.Cryptography.OidCollection
   [void]$eku.Add((New-Object System.Security.Cryptography.Oid("1.3.6.1.5.5.7.3.3")))  # code signing
@@ -54,6 +58,8 @@ try {
     New-Item -ItemType Directory -Force -Path $KeepDir | Out-Null
     Copy-Item "$t\MACOS_CERT_P12_BASE64.txt", "$t\MACOS_CERT_P12_PASSWORD.txt" $KeepDir
     $leaf.Thumbprint | Set-Content "$KeepDir\expected-sha1.txt" -Encoding ascii -NoNewline
+    # The throwaway CA, playing the role of Apple's intermediate that release.yml downloads.
+    [IO.File]::WriteAllBytes("$KeepDir\throwaway-ca.cer", $caCert.Export([System.Security.Cryptography.X509Certificates.X509ContentType]::Cert))
   }
 }
 finally {
