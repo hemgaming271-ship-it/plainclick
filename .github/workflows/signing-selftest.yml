@@ -61,7 +61,7 @@ jobs:
           echo "PASS: Windows-made .p12 imported on macOS with its private key ($EXPECTED)"
           echo "KEYCHAIN=$KEYCHAIN" >> "$GITHUB_ENV"
           echo "TEST_IDENTITY=$EXPECTED" >> "$GITHUB_ENV"
-      - name: Code-sign the app with the imported key (no --timestamp: test cert)
+      - name: "Code-sign the app with the imported key (no --timestamp, test cert)"
         working-directory: apps/macos
         run: |
           set -euo pipefail
