@@ -8,3 +8,13 @@ tools/launch-video/preview/
 *.tsbuildinfo
 .env
 .env.local
+
+# Signing secrets must never be committed (they live in %USERPROFILE%\PlainClick-signing and GitHub secrets)
+*.p12
+*.pfx
+*.p8
+*.certSigningRequest
+SELFSIGNED_*.txt
+MACOS_CERT_*.txt
+NOTARY_*.txt
+
