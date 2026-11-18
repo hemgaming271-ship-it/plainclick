@@ -2,6 +2,7 @@
 # The app runs its --demo walkthrough (real hotkey, real clicks, real commands in TextEdit/Safari/Calculator)
 # while macOS's own `screencapture -v` records the screen with the cursor and clicks.
 # Output: the "demo-video" artifact and the ci-demo branch.
+# If a run is cancelled with "not acquired by Runner", GitHub had no free macOS machine: just run it again.
 name: Demo footage (macOS 26)
 
 on:
