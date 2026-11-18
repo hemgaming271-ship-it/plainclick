@@ -1,0 +1,20 @@
+PASS environment: macOS Version 26.7.2 (Build 25G332); AX trusted=true
+PASS typing reaches TextEdit before panel use: text arrived
+PASS hotkey registered: RegisterEventHotKey for Ctrl-Option-P
+PASS hotkey opens panel: Ctrl-Option-P via HID event
+PASS panel does not steal focus: front=com.apple.TextEdit, PlainClick active=false
+PASS panel shows target: target=TextEdit
+PASS panel shows tested actions: buttons=["Save", "Find"]
+PASS click Save button: file on disk updated; status="Save sent to TextEdit." mouse=["down@PlainClick clicks=1 active=true", "up@PlainClick clicks=1 active=true"]
+PASS typing continues in TextEdit after panel click: text arrived in the document; front=com.apple.TextEdit
+PASS click Find button: find field appeared=true; status="Find sent to TextEdit."
+PASS target app in front after click: front=com.apple.TextEdit PlainClick active=false panelKey=false
+PASS diagnostic: click: button frame=(740.0, 184.0, 228.0, 32.0) panel frame(AppKit)=(724.0, 484.0, 260.0, 213.0) mouse events seen=["down@PlainClick clicks=1 active=false", "up@PlainClick clicks=1 active=false"] nonactivating=true floating=true
+PASS diagnostic: last engine log rows: "2026-11-18T10:01:12Z","Version 26.7.2 (Build 25G332)","none","unknown","-","launched","0","trusted" / "2026-11-18T10:01:22Z","Version 26.7.2 (Build 25G332)","com.apple.TextEdit","1.20 (415)","textedit.save","pressed","208","" / "2026-11-18T10:01:24Z","Version 26.7.2 (Build 25G332)","com.apple.TextEdit","1.20 (415)","textedit.find","pressed","295",""
+PASS Calculator shows tested actions: buttons=["Basic", "Scientific", "Programmer", "Copy Result"]
+PASS click Scientific in Calculator: width 230 -> 674; status="Scientific sent to Calculator."
+PASS unsupported app message: target=Stickies supported=false
+PASS Safari actions exclude Back/Forward: buttons=["Reload", "New Tab"]
+PASS trial active on first use: state=trial(daysLeft: 7)
+PASS hotkey hides panel: visible=false
+UI TEST DONE 19/19
