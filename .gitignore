@@ -18,3 +18,7 @@ SELFSIGNED_*.txt
 MACOS_CERT_*.txt
 NOTARY_*.txt
 
+
+# Local deploy settings (seller name, support email, links). Not committed.
+.env*.local
+
