@@ -13,7 +13,10 @@ const here = path.dirname(fileURLToPath(import.meta.url));
 const args = process.argv.slice(2);
 const preview = args.includes('--preview');
 const fps = Number(args[args.indexOf('--fps') + 1]) || 30;
-const outFile = path.resolve(here, '..', '..', 'docs', 'video', 'plainclick-launch.mp4');
+const vertical = args.includes('--vertical');            // 1080x1920 for Reels / Shorts / TikTok
+const [W, H] = vertical ? [1080, 1920] : [1920, 1080];
+const outFile = path.resolve(here, '..', '..', 'docs', 'video', vertical ? 'plainclick-launch-vertical.mp4' : 'plainclick-launch.mp4');
+const music = path.join(here, 'assets', 'music.wav');     // original track from make-audio.mjs (optional)
 
 const browsers = [
   'C:/Program Files/Google/Chrome/Application/chrome.exe',
@@ -29,8 +32,8 @@ const browser = await puppeteer.launch({
   args: ['--allow-file-access-from-files', '--force-device-scale-factor=1', '--hide-scrollbars', '--font-render-hinting=none'],
 });
 const page = await browser.newPage();
-await page.setViewport({ width: 1920, height: 1080, deviceScaleFactor: 1 });
-await page.goto(pathToFileURL(path.join(here, 'timeline.html')).href);
+await page.setViewport({ width: W, height: H, deviceScaleFactor: 1 });
+await page.goto(pathToFileURL(path.join(here, 'timeline.html')).href + (vertical ? '?vertical' : ''));
 await page.waitForFunction('window.__ready === true', { timeout: 30000 });
 const duration = await page.evaluate('window.DURATION');
 
@@ -41,12 +44,14 @@ if (preview) {
   const times = custom || [2, 5.5, 10, 14.3, 16.5, 19.1, 23, 26.2, 30.5, 35.5, 39, 43, 49, 55];
   for (const t of times) {
     await page.evaluate((tt) => window.renderAt(tt), t);
-    await page.screenshot({ path: path.join(dir, `t${String(t).padStart(5, '0')}.jpg`), type: 'jpeg', quality: 85 });
+    await page.screenshot({ path: path.join(dir, `${vertical ? 'v' : 't'}${String(t).padStart(5, '0')}.jpg`), type: 'jpeg', quality: 85 });
   }
   console.log(`preview: ${times.length} stills in ${dir}`);
 } else {
-  const ff = spawn('ffmpeg', ['-y', '-v', 'error', '-f', 'image2pipe', '-framerate', String(fps), '-c:v', 'mjpeg', '-i', '-',
-    '-c:v', 'libx264', '-preset', 'slow', '-crf', '17', '-pix_fmt', 'yuv420p', '-movflags', '+faststart', outFile],
+  const audioIn = existsSync(music) ? ['-i', music] : [];
+  const audioOut = existsSync(music) ? ['-map', '0:v', '-map', '1:a', '-c:a', 'aac', '-b:a', '192k', '-shortest'] : [];
+  const ff = spawn('ffmpeg', ['-y', '-v', 'error', '-f', 'image2pipe', '-framerate', String(fps), '-c:v', 'mjpeg', '-i', '-', ...audioIn,
+    ...audioOut, '-c:v', 'libx264', '-preset', 'slow', '-crf', '17', '-pix_fmt', 'yuv420p', '-movflags', '+faststart', outFile],
     { stdio: ['pipe', 'inherit', 'inherit'] });
   const total = Math.round(duration * fps);
   const started = Date.now();

@@ -37,7 +37,11 @@ Before checkout opens, replace the price line with **"Join the beta"**.
   The panel is the app's own SwiftUI view rendered at 3×, in that same real state, placed at its real position (`assets/layout.json`).
 - Presentation layer (clearly a presentation, not a recording): device frame, camera moves, an animated cursor/click,
   keycaps, captions, a feature grid and an end card. The end card's small print says the screens come from the pre-release build.
-- Re-render: `cd tools/launch-video && npm install && node render.mjs` (needs ffmpeg + Chrome or Edge).
+- Vertical 9:16 version for Reels / Shorts / TikTok: `docs/video/plainclick-launch-vertical.mp4` (`node render.mjs --vertical`).
+- Music: an original track composed in code by `make-audio.mjs`: warm pad chords, a soft plucked pulse, and quiet UI clicks
+  synced to the on-screen clicks. No samples or third-party music, so there's nothing to license. -15.4 LUFS, true peak -1.9 dBTP.
+  To use a licensed track instead, save it as `assets/music.wav` (57.5 s) and re-render.
+- Re-render: `cd tools/launch-video && npm install && node make-audio.mjs && node render.mjs` (needs ffmpeg + Chrome or Edge).
   Preview stills: `node render.mjs --preview` (optionally `--times 10,20,30`). Refresh assets from the `ci-demo` branch
   after running the "Demo footage" workflow.
 

@@ -47,6 +47,21 @@
   #end .price { margin-top:22px; font-size:28px; color:var(--muted); }
   #fine { position:absolute; left:0; right:0; bottom:46px; text-align:center; font-size:21px; color:#7d8288; opacity:0; }
   #fade { position:absolute; inset:0; background:#000; opacity:1; pointer-events:none; }
+  /* ---- 9:16 vertical layout ---- */
+  html.vertical, html.vertical body { width:1080px; height:1920px; }
+  html.vertical #world { width:1080px; height:1920px; }
+  html.vertical #bg { background:radial-gradient(900px 1100px at 50% 45%, #1b2026 0%, #121417 55%, #0d0f11 100%); }
+  html.vertical #title1 { top:800px; font-size:104px; }
+  html.vertical #title2 { top:940px; font-size:42px; }
+  html.vertical #big { top:740px; font-size:76px; padding:0 40px; }
+  html.vertical #caption { white-space:normal; width:max-content; max-width:940px; text-align:center; bottom:300px; font-size:38px; line-height:1.3; }
+  html.vertical #caption small { display:block; margin-top:6px; }
+  html.vertical #keys { top:1480px; }
+  html.vertical #featTitle { top:430px; font-size:60px; padding:0 40px; }
+  html.vertical #features { top:600px; grid-template-columns:900px; gap:26px; }
+  html.vertical #end .mark { font-size:118px; }
+  html.vertical #end .price { font-size:30px; }
+  html.vertical #fine { bottom:110px; padding:0 70px; font-size:23px; line-height:1.4; }
 </style>
 </head>
 <body>
@@ -82,8 +97,13 @@
 const SCREENS = ['typed','open','save','find','safari','reload','newtab','unsupported'];
 const PANELS  = ['open','save','find','safari','reload','newtab','unsupported'];
 let LAYOUT = {};
-const S = 1.171875;               // 1024x768 screenshot -> 1200x900 device
-const DEV = { x:360, y:90, w:1200, h:900 };
+// Layout: 16:9 (default) or 9:16 (?vertical) for Reels / Shorts / TikTok.
+const VERT = location.search.includes('vertical');
+const W = VERT ? 1080 : 1920, H = VERT ? 1920 : 1080;
+if (VERT) document.documentElement.classList.add('vertical');
+const S = VERT ? 1000/1024 : 1.171875;                       // 1024x768 screenshot -> device size
+const DEV = VERT ? { x:40, y:585, w:1000, h:750 } : { x:360, y:90, w:1200, h:900 };
+const ZP = VERT ? 1.25 : 1;                                   // tighter close-ups on the narrow canvas
 
 // ---------- easing ----------
 const clamp = (v,a=0,b=1) => Math.min(b, Math.max(a, v));
@@ -127,15 +147,20 @@ function camera(t) {
   const P = panelLayout('open');
   const pc = { x: wx(P.x + P.w/2), y: wy(P.y + 90) };
   const tc = { x: wx(TITLE.x + 40), y: wy(TITLE.y + 26) };
+  // All focus points are defined in screenshot points, so both layouts frame the same content.
+  const full = { x: wx(512), y: wy(384) }, intro = { x: wx(512), y: wy(401) };
+  const pz = { x: pc.x - 51.2*S, y: pc.y + 17*S };            // panel close-up
+  const fb = { x: wx(461), y: wy(247) };                       // find bar + document
+  const un = { x: pc.x - 102.4*S, y: pc.y + 102.4*S };         // Calculator + panel
   const K = [
-    [7.0, 0.92, 960, 560], [13.5, 1.00, 960, 540],
-    [15.6, 1.00, 960, 540], [18.4, 2.05, pc.x-60, pc.y+20],
-    [20.4, 2.05, pc.x-60, pc.y+20], [21.7, 2.6, tc.x, tc.y],        // pan to the title: "Edited" is gone
-    [24.6, 2.6, tc.x, tc.y], [25.8, 2.05, pc.x-60, pc.y+20],
-    [26.5, 2.05, pc.x-60, pc.y+20], [28.9, 1.25, 900, 380],        // pull out to show the find bar
-    [32.7, 1.25, 900, 380], [33.7, 2.05, pc.x-60, pc.y+20],
-    [40.5, 2.05, pc.x-60, pc.y+20], [41.9, 1.55, pc.x-120, pc.y+120],
-    [45.1, 1.55, pc.x-120, pc.y+120], [46.1, 1.0, 960, 540],
+    [7.0, 0.92, intro.x, intro.y], [13.5, 1.00, full.x, full.y],
+    [15.6, 1.00, full.x, full.y], [18.4, 2.05*ZP, pz.x, pz.y],
+    [20.4, 2.05*ZP, pz.x, pz.y], [21.7, 2.6*ZP, tc.x, tc.y],        // pan to the title: "Edited" is gone
+    [24.6, 2.6*ZP, tc.x, tc.y], [25.8, 2.05*ZP, pz.x, pz.y],
+    [26.5, 2.05*ZP, pz.x, pz.y], [28.9, 1.25, fb.x, fb.y],          // pull out to show the find bar
+    [32.7, 1.25, fb.x, fb.y], [33.7, 2.05*ZP, pz.x, pz.y],
+    [40.5, 2.05*ZP, pz.x, pz.y], [41.9, 1.55, un.x, un.y],
+    [45.1, 1.55, un.x, un.y], [46.1, 1.0, full.x, full.y],
   ];
   if (t <= K[0][0]) return K[0];
   for (let i=0;i<K.length-1;i++) {
@@ -216,7 +241,7 @@ window.renderAt = function(t) {
 
   // Camera
   const [,z,fx,fy] = camera(t);
-  $('world').style.transform = `translate(${960 - fx*z}px, ${540 - fy*z}px) scale(${z})`;
+  $('world').style.transform = `translate(${W/2 - fx*z}px, ${H/2 - fy*z}px) scale(${z})`;
 
   // Keycaps (13.0-15.2) with press animation
   const ak = fade(t,12.6,15.4,.4,.5);
