@@ -81,7 +81,9 @@ jobs:
           if [ $RC = 0 ] && echo "$INFO" | grep -q "Authority=Developer ID Application: PlainClick Selftest"; then
             echo "- PASS: app signed with the Windows-exported key" | tee -a "$GITHUB_STEP_SUMMARY"
           else
-            echo "::error::codesign did not sign with the test identity"; exit 1
+            echo "::error::codesign rc=$RC | $(echo "$OUT" | tr '\n' ' ' | cut -c1-500) | $(echo "$INFO" | grep -E 'Authority|Signature' | tr '\n' ' ' | cut -c1-300)"
+            echo "::error::identities: $(security find-identity -p codesigning "$KEYCHAIN" | tr '\n' ' ' | cut -c1-400)"
+            exit 1
           fi
           echo "(Gatekeeper rejection is expected here: the throwaway CA is not Apple.)"
       - name: Cleanup
