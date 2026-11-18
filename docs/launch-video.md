@@ -37,7 +37,7 @@ Before checkout opens, replace the price line with **"Join the beta"**.
 - The PlainClick panel is the hero: the real 3× render, shown larger than the window, in its real state for each moment.
   The cursor and clicks land on the real button positions from `assets/layout.json`.
 - Five numbered chapters with bold headlines: 01 shortcut · 02 Save (the title highlight shows "Edited" disappearing) ·
-  03 Find · 04 only tested actions (Safari) · 05 honest "not supported". Then features and the end card.
+  03 Find · 04 Calculator: one click switches to Scientific mode (added 2026-11-18) · 05 honest "not supported" (Stickies). Then features and the end card.
 - Typography: Inter (SIL Open Font License, bundled via `@fontsource/inter`). The logo mark is drawn in CSS.
 - The 9:16 version stacks the window above a larger panel for phones.
 

@@ -88,7 +88,7 @@ for (let i = 0; i < N; i++) {
 // Clicks synced to timeline.html (keycap press + panel button clicks), added dry so they don't echo
 // keep in sync with CLICKS / keycap press in timeline.html
 click(12.6, 900, 0.18);
-for (const t of [17.4, 23.8, 30.75, 32.35]) click(t + 0.02);
+for (const t of [17.4, 23.8, 30.75]) click(t + 0.02);
 
 // ---- master: fade in/out, soft limit, normalise ----
 let peak = 0;

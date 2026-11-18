@@ -99,7 +99,7 @@
 
 <div id="comp" class="abs">
   <div id="w-typed" class="win"></div><div id="w-save" class="win"></div><div id="w-find" class="win"></div>
-  <div id="w-safari" class="win fadebottom"></div><div id="w-calc" class="win fadebottom"></div>
+  <div id="w-calc" class="win fadebottom"></div><div id="w-calcsci" class="win fadebottom"></div><div id="w-stickies" class="win"></div>
   <div id="card"><div class="chrome"><b></b><b></b><b></b><span>PlainClick</span></div><div class="body"></div></div>
   <div id="ring"></div>
   <div id="ripple"></div>
@@ -124,12 +124,12 @@
 const VERT = location.search.includes('vertical');
 if (VERT) document.documentElement.classList.add('vertical');
 const W = VERT ? 1080 : 1920, H = VERT ? 1920 : 1080;
-const CS = VERT ? 1.7 : 1.28;                                     // composition scale (pt -> px)
-const COMP = VERT ? { x:(1080 - 480*1.7)/2, y:740 } : { x:770, y:(1080 - 330*1.28)/2 + 6 };
+const CS = VERT ? 1.5 : 1.28;                                     // composition scale (pt -> px)
+const COMP = VERT ? { x:(1080 - 480*1.5)/2, y:690 } : { x:770, y:(1080 - 330*1.28)/2 + 6 };
 const PANEL_K = VERT ? 1.55 : 1.25;                               // the panel is the hero: shown larger than the window
 const CARD = VERT ? { x:38, y:322 } : { x:504, y:13 };           // card top-left in comp space (screen panel window top-left = 724,71); 9:16 stacks it below the window
 const ORIGIN = { x:80, y:58 };                                    // composition origin in screenshot points
-const KEYS = VERT ? { x:540, y:650 } : { x:140 + 160, y:740 };    // keycaps centre
+const KEYS = VERT ? { x:540, y:600 } : { x:140 + 160, y:740 };    // keycaps centre
 let LAYOUT = {};
 
 // ---------- easing ----------
@@ -150,21 +150,23 @@ const CHAPTERS = [
   { t:T.A, n:'01', eyebrow:'One shortcut', h:'Press ⌃⌥P.', p:'A plain panel appears beside the app you’re using. The app itself stays exactly as it is.' },
   { t:T.B, n:'02', eyebrow:'Clear buttons', h:'Click Save.<br>TextEdit saves.', p:'Every action is a real menu command in the app, sent only to the app in front.' },
   { t:T.C, n:'03', eyebrow:'Real commands', h:'Click Find.<br>Search is ready.', p:'One clearly labelled click instead of hunting for an icon.' },
-  { t:T.D, n:'04', eyebrow:'Tested per app', h:'Only actions<br>we’ve tested.', p:'In Safari: Reload and New Tab. More apps as each one passes testing.' },
-  { t:T.E, n:'05', eyebrow:'Honest', h:'Honest about<br>the rest.', p:'Apps we haven’t tested get a clear message, never a guess.' },
+  { t:T.D, n:'04', eyebrow:'Calculator · tested', h:'Scientific mode,<br>one click.', p:'Calculator: Basic, Scientific, Programmer, Copy Result. Safari: Reload, New Tab. Each one tested on macOS 15 and 26.' },
+  { t:T.E, n:'05', eyebrow:'Honest', h:'Honest about<br>the rest.', p:'Apps we haven’t tested yet, like Stickies, get a clear message, never a guess.' },
 ];
 // Window states (crop of the real screenshot) and panel states (real 3x render), with their visible spans.
 const WINS = {
   typed:  { still:'typed',  rect:[80,58,480,300],  at:[0,0],    span:[9.6,18.8] },
   save:   { still:'save',   rect:[80,58,480,300],  at:[0,0],    span:[18.4,24.6] },
   find:   { still:'find',   rect:[80,58,480,300],  at:[0,0],    span:[24.2,29.2] },
-  safari: { still:'safari', rect:[0,30,480,290],   at:[0,4],    span:[28.6,35.4] },
-  calc:   { still:'unsupported', rect:[62,352,230,330], at:VERT ? [125,-14] : [150,0], span:[35.0,40.6] },
+  // Calculator: Basic and Scientific windows share their right edge, shown at 0.72x so the wider Scientific window fits.
+  calc:     { still:'calculator',      rect:[62,352,230,353], at:[484-230,0], k:.72, span:[28.6,31.5] },
+  calcsci:  { still:'calc-scientific', rect:[62,352,662,353], at:[484-662,0], k:.72, span:[31.1,35.4] },
+  stickies: { still:'unsupported',     rect:[68,32,354,260],  at:VERT ? [63,24] : [110,24], span:[35.0,40.6] },
 };
 const PANELS = [  // [state, start]
-  ['open',12.9], ['save',17.6], ['find',24.0], ['safari',28.8], ['reload',30.95], ['newtab',32.55], ['unsupported',35.2],
+  ['open',12.9], ['save',17.6], ['find',24.0], ['calculator',28.8], ['calc-scientific',30.95], ['unsupported',35.2],
 ];
-const CLICKS = { save:17.4, find:23.8, reload:30.75, newtab:32.35 };  // keep in sync with make-audio.mjs
+const CLICKS = { save:17.4, find:23.8, scientific:30.75 };  // keep in sync with make-audio.mjs
 
 // ---------- build ----------
 const $ = id => document.getElementById(id);
@@ -174,7 +176,8 @@ function setupWin(id, w) {
   const el = $('w-' + id), [x,y,ww,hh] = w.rect;
   Object.assign(el.style, { left:w.at[0]+'px', top:w.at[1]+'px', width:ww+'px', height:hh+'px',
     backgroundImage:`url(assets/still-${w.still}.png)`, backgroundPosition:`${-x}px ${-y}px` });
-  if (id === 'calc') el.style.borderRadius = '22px';
+  if (id === 'calc' || id === 'calcsci') el.style.borderRadius = '22px';
+  if (w.k) el.style.transformOrigin = '100% 0';
 }
 async function load() {
   try { LAYOUT = await (await fetch('assets/layout.json')).json(); } catch { LAYOUT = {}; }
@@ -245,7 +248,8 @@ window.renderAt = function(t) {
   for (const [id, w] of Object.entries(WINS)) {
     const [a,b] = w.span, el = $('w-' + id);
     el.style.opacity = Math.min(out(prog(t, a, a+.5)), 1 - ease(prog(t, b-.5, b)));
-    if (id === 'safari' || id === 'calc') el.style.transform = `translateY(${(1-out(prog(t,a,a+.7)))*16}px)`;
+    const lift = (id === 'calc' || id === 'stickies') ? (1-out(prog(t,a,a+.7)))*16 : 0;
+    el.style.transform = `translateY(${lift}px) scale(${w.k || 1})`;
   }
 
   // Panel card: appears on the key press, then switches state like the real panel (quick 0.15 s cross-fade)
@@ -268,10 +272,10 @@ window.renderAt = function(t) {
     transform:`scale(${lerp(1.08,1,out(prog(t,18.3,18.8)))})` });
 
   // Cursor path in comp space
-  const sv = btn('open','Save'), fd = btn('save','Find'), rl = btn('safari','Reload'), nt = btn('reload','New Tab');
+  const sv = btn('open','Save'), fd = btn('save','Find'), sc = btn('calculator','Scientific');
   const P = [
     [15.9, 420, 280], [17.4, sv.x, sv.y, 'save'], [20.6, sv.x+30, sv.y+60], [23.8, fd.x, fd.y, 'find'],
-    [26.6, fd.x-60, fd.y+110], [30.75, rl.x, rl.y, 'reload'], [32.35, nt.x, nt.y, 'newtab'], [34.2, nt.x+40, nt.y+120],
+    [26.6, fd.x-60, fd.y+110], [30.75, sc.x, sc.y, 'scientific'], [33.6, sc.x+40, sc.y+130],
   ];
   let cx = P[0][1], cy = P[0][2], rip = -1;
   for (let i=0;i<P.length;i++) {

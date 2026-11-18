@@ -36,6 +36,19 @@ Latency (resolve + enabled check + press): median 40–105 ms, max 522 ms.
 - **Drop:** Back/Forward in Safari and Finder (risk R2 confirmed). macOS only revalidates these menu items when the menu is opened. Pressing them is unreliable, and showing them would mean either wrong greyed-out buttons or silent no-ops. They stay in the catalog with `supported: false`, so the harness keeps measuring them.
 - The wrong-app risk (R4, command landing in the wrong app) showed **zero** occurrences in 80 guarded or switching attempts across both OSes.
 
+## Calculator added, 2026-11-18
+
+Same suite on macOS 15.8.2 (Calculator 11.0) and 26.7.2 (Calculator 12.0). The menu dump confirmed View › Basic ⌘1 /
+Scientific ⌘2 / Programmer ⌘3 and Edit › Copy ⌘C (`copy:`), each matching exactly one item.
+
+| Action | macOS 15 | macOS 26 | Effect checked |
+|---|---|---|---|
+| Basic / Scientific / Programmer | 10/10 each | 10/10 each | window resized to that mode every time (26: 230×408 / 674×408 / 488×582) |
+| Copy Result | 20/20 | 20/20 | the typed number was on the clipboard every time |
+
+Real app UI test: 19/19 on both OSes, including a real click on **Scientific** (window 230 → 674 px wide).
+The unsupported-app example is now Stickies.
+
 ## Real app UI test (`--ui-test`), 2026-11-17
 
 The real PlainClick app was driven on the same GitHub macOS 15.8.2 and 26.7.2 machines. The test used real system input:

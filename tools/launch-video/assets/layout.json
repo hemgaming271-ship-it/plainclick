@@ -1,4 +1,36 @@
 {
+  "calc-scientific" : {
+    "btn.Basic.x" : 854,
+    "btn.Basic.y" : 155,
+    "btn.Copy Result.x" : 854,
+    "btn.Copy Result.y" : 288,
+    "btn.Programmer.x" : 854,
+    "btn.Programmer.y" : 243,
+    "btn.Scientific.x" : 854,
+    "btn.Scientific.y" : 199,
+    "h" : 278,
+    "screenH" : 768,
+    "screenW" : 1024,
+    "w" : 260,
+    "x" : 724,
+    "y" : 95
+  },
+  "calculator" : {
+    "btn.Basic.x" : 854,
+    "btn.Basic.y" : 155,
+    "btn.Copy Result.x" : 854,
+    "btn.Copy Result.y" : 288,
+    "btn.Programmer.x" : 854,
+    "btn.Programmer.y" : 243,
+    "btn.Scientific.x" : 854,
+    "btn.Scientific.y" : 199,
+    "h" : 251,
+    "screenH" : 768,
+    "screenW" : 1024,
+    "w" : 260,
+    "x" : 724,
+    "y" : 95
+  },
   "find" : {
     "btn.Find.x" : 854,
     "btn.Find.y" : 200,
