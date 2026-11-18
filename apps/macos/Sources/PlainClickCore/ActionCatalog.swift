@@ -69,6 +69,13 @@ public enum ActionCatalog {
             .init(id: "textedit.save", label: "Save", symbol: "square.and.arrow.down", matchers: [.init(cmdChar: "S")]),
             .init(id: "textedit.find", label: "Find", symbol: "magnifyingglass",       matchers: [.init(cmdChar: "F")]),
         ]),
+        // CANDIDATES under test (supported: false = hidden in the panel until the feasibility suite verifies them).
+        AppAdapter(bundleID: "com.apple.calculator", displayName: "Calculator", actions: [
+            .init(id: "calculator.basic",      label: "Basic",      symbol: "plus.forwardslash.minus", matchers: [.init(cmdChar: "1")], supported: false),
+            .init(id: "calculator.scientific", label: "Scientific", symbol: "function",                matchers: [.init(cmdChar: "2")], supported: false),
+            .init(id: "calculator.programmer", label: "Programmer", symbol: "chevron.left.forwardslash.chevron.right", matchers: [.init(cmdChar: "3")], supported: false),
+            .init(id: "calculator.copy",       label: "Copy Result", symbol: "doc.on.doc",             matchers: [.init(cmdChar: "C")], supported: false),
+        ]),
     ]
 
     public static func adapter(for bundleID: String?) -> AppAdapter? {

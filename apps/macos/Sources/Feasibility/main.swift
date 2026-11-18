@@ -527,6 +527,70 @@ if let saPID {
     }
 }
 
+// MARK: - Calculator candidates: discovery, mode switching (window size must change), Copy (clipboard gets the number)
+
+func windowSize(_ pid: pid_t) -> CGSize? {
+    guard let w = focusedWindow(pid) else { return nil }
+    let (err, value) = AX.copy(w, kAXSizeAttribute as String)
+    guard err == .success, let v = value, CFGetTypeID(v) == AXValueGetTypeID() else { return nil }
+    var s = CGSize.zero
+    AXValueGetValue(v as! AXValue, .cgSize, &s)
+    return s
+}
+func sizeText(_ s: CGSize?) -> String { s.map { "\(Int($0.width))x\(Int($0.height))" } ?? "?" }
+
+let ca = ActionCatalog.adapter(for: "com.apple.calculator")!
+if let caPID = bringToFront(ca.bundleID, open: ["-a", "Calculator"]) {
+    waitUntil(10) { focusedWindow(caPID) != nil }
+    pump(1)
+    dumpMenus("Calculator", pid: caPID)
+    notes.append("Calculator version: \(appVersion(ca.bundleID))")
+    for def in ca.actions {
+        let start = Date()
+        switch CommandRunner.resolve(def, pid: caPID) {
+        case .found: record("T0-discovery", "Calculator", def.label, 1, "resolved_exactly_one", true, ms(since: start))
+        case .notFound: record("T0-discovery", "Calculator", def.label, 1, "not_found", false, ms(since: start))
+        case .ambiguous(let n): record("T0-discovery", "Calculator", def.label, 1, "ambiguous_\(n)", false, ms(since: start))
+        case .axError(let e): record("T0-discovery", "Calculator", def.label, 1, AX.describe(e), false, ms(since: start))
+        }
+    }
+
+    // Modes x10 cycles: Scientific -> Programmer -> Basic. Each switch must visibly change the window size.
+    let modes = ["calculator.scientific", "calculator.programmer", "calculator.basic"].compactMap { ca.action($0) }
+    var sizesSeen: [String: String] = [:]
+    for i in 1...10 {
+        for def in modes {
+            bringToFront(ca.bundleID, open: ["-a", "Calculator"])
+            let before = windowSize(caPID)
+            let (o, t) = attempt(def, target: caPID)
+            let changed = waitUntil(3) { windowSize(caPID) != before }
+            pump(0.3)
+            sizesSeen[def.label] = sizeText(windowSize(caPID))
+            record("T1-repeat", "Calculator", def.label, i, o.label, o == .pressed && changed, t,
+                   "size \(sizeText(before)) -> \(sizeText(windowSize(caPID)))")
+        }
+    }
+    notes.append("Calculator window sizes per mode: \(sizesSeen)")
+
+    // Copy x20: clear, type a number into Calculator, press Copy; the clipboard must then hold that number.
+    if let copy = ca.action("calculator.copy") {
+        for i in 1...20 {
+            bringToFront(ca.bundleID, open: ["-a", "Calculator"])
+            pressKey(53, to: caPID)                       // Esc = clear
+            let number = "4\(i)7"
+            typeText(number, to: caPID)
+            pump(0.4)
+            NSPasteboard.general.clearContents()
+            let (o, t) = attempt(copy, target: caPID)
+            let got = { (NSPasteboard.general.string(forType: .string) ?? "").filter(\.isNumber) }
+            let ok = waitUntil(3) { got() == number }
+            record("T1-repeat", "Calculator", "Copy Result", i, o.label, o == .pressed && ok, t, "typed \(number), clipboard \"\(got())\"")
+        }
+    }
+} else {
+    notes.append("Calculator did not launch/activate; Calculator tests skipped.")
+}
+
 // MARK: - Done
 
 let passed = rows.filter(\.pass).count

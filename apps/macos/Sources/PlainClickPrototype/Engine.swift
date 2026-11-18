@@ -92,7 +92,8 @@ final class Engine {
         model.targetPID = app?.processIdentifier ?? 0
         model.targetName = app?.localizedName ?? "No app"
         let adapter = ActionCatalog.adapter(for: app?.bundleIdentifier)
-        model.supported = adapter != nil
+        // An app counts as supported only if at least one of its actions is verified (candidates stay hidden).
+        model.supported = adapter.map { !$0.supportedActions.isEmpty } ?? false
         model.disabledByUser = adapter.map { !settings.isEnabled($0.bundleID) } ?? false
         let visible = (adapter != nil && !model.disabledByUser) ? settings.visibleActions(for: adapter!) : []
         model.actions = visible.map { ActionState(def: $0, availability: .notFound) }
