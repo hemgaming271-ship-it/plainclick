@@ -195,6 +195,32 @@ export default function Home() {
             media={<PanelShot src="/images/panel-unsupported.png" alt="PlainClick panel saying Stickies isn't supported yet" />}
             caption="The real message for an app that isn't supported"
           />
+
+          <div className="reveal mt-8 max-w-3xl">
+            <h3 className="text-[28px] font-semibold tracking-[-0.015em] sm:text-[34px]">Made to fit how you work.</h3>
+            <p className="mt-2 text-[17px] text-muted sm:text-[19px]">All of this is in PlainClick&apos;s Settings today.</p>
+          </div>
+          <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {[
+              ["⌃⌥P", "One shortcut, every app", "Press Control-Option-P to show or hide the panel from whichever supported app is in front."],
+              ["📌", "Pin and reorder", "Choose which tested actions appear for each app, unpin the rest, and move them up or down."],
+              ["Aa", "Compact or comfortable", "Two panel sizes with big, readable buttons. Show icons next to the words, or hide them."],
+              ["⏸", "Lives in the menu bar", "No Dock icon. Open the panel, pause PlainClick, or reach Settings from the menu bar."],
+              ["✓", "Checks before every click", "PlainClick confirms the app in front is still the one it names. If you've switched apps, nothing is sent."],
+              ["⏻", "Turn it off per app", "Switch PlainClick off for any supported app in Settings → Apps, and back on whenever you like."],
+              ["☁︎", "Works offline", "After a one-time activation, the panel keeps working without an internet connection."],
+              ["◐", "Free appearance guide", "A built-in guide to Apple's own Reduce transparency and Increase contrast settings. Free for everyone."],
+              ["↻", "Updates included", "Every 1.x update is part of your licence, on up to two Macs you own."],
+            ].map(([icon, t, b]) => (
+              <div key={t} className="reveal rounded-3xl border border-line bg-white p-6 shadow-soft">
+                <span className="grid h-11 min-w-11 place-items-center justify-self-start rounded-xl bg-surface px-2 text-[17px] font-semibold text-ink" aria-hidden="true">
+                  {icon}
+                </span>
+                <h4 className="mt-4 text-[19px] font-semibold">{t}</h4>
+                <p className="mt-1.5 text-[15px] leading-relaxed text-muted">{b}</p>
+              </div>
+            ))}
+          </div>
         </Container>
       </section>
 
@@ -254,6 +280,39 @@ export default function Home() {
                 <p className="mt-2 text-[15px] leading-relaxed text-muted">{b}</p>
               </div>
             ))}
+          </div>
+          <div className="reveal mt-10 grid overflow-hidden rounded-[28px] border border-line md:grid-cols-2">
+            <div className="bg-white p-7 sm:p-9">
+              <h3 className="text-[21px] font-semibold">What leaves your Mac</h3>
+              <p className="mt-1 text-[15px] text-muted">Only when you activate or the app checks your licence.</p>
+              <ul className="mt-5 space-y-3 text-[15px]">
+                {[
+                  "Your licence key",
+                  "Your Mac's model identifier, like “Mac14,2” (not its name or serial number)",
+                  "Sent to Dodo Payments, which sells PlainClick and checks licences",
+                ].map((x) => (
+                  <li key={x} className="flex gap-3">
+                    <span className="mt-0.5 text-link" aria-hidden="true">→</span> {x}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="border-t border-line bg-surface p-7 sm:p-9 md:border-l md:border-t-0">
+              <h3 className="text-[21px] font-semibold">What never leaves your Mac</h3>
+              <p className="mt-1 text-[15px] text-muted">PlainClick has no way to upload these.</p>
+              <ul className="mt-5 space-y-3 text-[15px]">
+                {[
+                  "Your documents and what you type",
+                  "Screen contents, window and document names",
+                  "Browsing history and the pages you visit",
+                  "Which buttons you click, and when",
+                ].map((x) => (
+                  <li key={x} className="flex gap-3">
+                    <span className="mt-0.5 font-semibold text-muted" aria-hidden="true">✕</span> {x}
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
           <p className="reveal mt-8">
             <ButtonLink href="/privacy" variant="link">Read the privacy policy</ButtonLink>

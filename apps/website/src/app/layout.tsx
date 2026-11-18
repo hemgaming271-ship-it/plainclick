@@ -21,7 +21,7 @@ export const viewport: Viewport = { themeColor: "#1d1d1f", colorScheme: "light" 
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" data-scroll-behavior="smooth">
       <body className="min-h-screen">
         <SiteHeader />
         <PreReleaseBar />
