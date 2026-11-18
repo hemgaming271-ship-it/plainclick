@@ -1,0 +1,81 @@
+# Proves the Windows-only signing path works before any real Apple certificate exists:
+#   1. Windows runner: tools/signing scripts make a CSR, a THROWAWAY test CA issues a cert, the .p12 is exported.
+#   2. macOS runner: the .p12 is imported with EXACTLY the commands release.yml uses, and the app is code-signed with it.
+# The test certificate is not trusted by Gatekeeper and is useless outside this test.
+name: Signing helpers self-test
+
+on:
+  workflow_dispatch:
+  push:
+    paths: ["tools/signing/**", ".github/workflows/signing-selftest.yml", ".github/workflows/release.yml"]
+
+permissions:
+  contents: read
+
+jobs:
+  windows-export:
+    runs-on: windows-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+      - name: Run helper scripts with a throwaway CA (Windows PowerShell 5.1, like the user's PC)
+        shell: powershell
+        run: |
+          $PSVersionTable.PSVersion
+          powershell -NoProfile -ExecutionPolicy Bypass -File tools\signing\Test-SigningHelpers.ps1 -KeepDir "$env:RUNNER_TEMP\p12out"
+          if ($LASTEXITCODE -ne 0) { exit 1 }
+      - uses: actions/upload-artifact@v4
+        with:
+          name: throwaway-test-p12
+          path: ${{ runner.temp }}/p12out/
+          retention-days: 1
+
+  macos-import-and-sign:
+    needs: windows-export
+    runs-on: macos-15
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/download-artifact@v4
+        with:
+          name: throwaway-test-p12
+          path: p12
+      - name: Import exactly like release.yml
+        run: |
+          set -euo pipefail
+          P12_B64="$(cat p12/MACOS_CERT_P12_BASE64.txt)"
+          P12_PASSWORD="$(cat p12/MACOS_CERT_P12_PASSWORD.txt)"
+          EXPECTED="$(cat p12/expected-sha1.txt)"
+          KEYCHAIN="$RUNNER_TEMP/plainclick-signing.keychain-db"
+          KC_PASS="$(uuidgen)"
+          echo "$P12_B64" | base64 --decode > "$RUNNER_TEMP/cert.p12"
+          security create-keychain -p "$KC_PASS" "$KEYCHAIN"
+          security set-keychain-settings -lut 21600 "$KEYCHAIN"
+          security unlock-keychain -p "$KC_PASS" "$KEYCHAIN"
+          security import "$RUNNER_TEMP/cert.p12" -P "$P12_PASSWORD" -f pkcs12 -k "$KEYCHAIN" -T /usr/bin/codesign
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$KC_PASS" "$KEYCHAIN" > /dev/null
+          security list-keychains -d user -s "$KEYCHAIN" $(security list-keychains -d user | tr -d '"')
+          echo "--- identities (all, including untrusted test cert):"
+          security find-identity -p codesigning "$KEYCHAIN" | tee "$RUNNER_TEMP/ids.txt"
+          grep -qi "$EXPECTED" "$RUNNER_TEMP/ids.txt" || { echo "::error::Imported identity not found"; exit 1; }
+          echo "PASS: Windows-made .p12 imported on macOS with its private key ($EXPECTED)"
+          echo "KEYCHAIN=$KEYCHAIN" >> "$GITHUB_ENV"
+          echo "TEST_IDENTITY=$EXPECTED" >> "$GITHUB_ENV"
+      - name: Code-sign the app with the imported key (no --timestamp: test cert)
+        working-directory: apps/macos
+        run: |
+          set -euo pipefail
+          swift build -c release
+          APP=build/SigTest.app
+          mkdir -p "$APP/Contents/MacOS"
+          cp "$(swift build -c release --show-bin-path)/PlainClickPrototype" "$APP/Contents/MacOS/"
+          cp Resources/Info.plist "$APP/Contents/Info.plist"
+          codesign --force --options runtime --sign "$TEST_IDENTITY" --keychain "$KEYCHAIN" "$APP"
+          codesign -dv --verbose=2 "$APP" 2>&1 | grep -E 'Authority|Runtime|flags'
+          codesign -dv --verbose=2 "$APP" 2>&1 | grep -q "Authority=Developer ID Application: PlainClick Selftest" \
+            && echo "PASS: app signed with the Windows-exported key" \
+            || { echo "::error::Signature does not carry the test identity"; exit 1; }
+          echo "(Gatekeeper rejection is expected here: the throwaway CA is not Apple.)"
+      - name: Cleanup
+        if: always()
+        run: '[ -n "${KEYCHAIN:-}" ] && security delete-keychain "$KEYCHAIN" || true'

@@ -1,0 +1,220 @@
+# Builds the downloadable PlainClick.zip on a GitHub macOS runner (no Mac needed), and — once the Apple secrets exist —
+# signs it with the Developer ID certificate, notarizes it with Apple, staples the ticket and checks Gatekeeper on a
+# second, clean runner.
+#
+# Without the secrets it still runs as a DRY RUN: a universal, ad-hoc-signed build that is clearly reported as
+# "NOT signed / NOT notarized". Never publish a dry-run zip to buyers.
+#
+# Setup (one time): docs/signing-setup.md
+#   Secrets:   MACOS_CERT_P12_BASE64, MACOS_CERT_P12_PASSWORD,
+#              NOTARY_API_KEY_P8_BASE64, NOTARY_API_KEY_ID, NOTARY_API_ISSUER_ID
+#   Variable:  BUNDLE_ID   (e.g. com.yourname.plainclick — final, never change it after release)
+name: Release build (sign + notarize)
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version shown to users, e.g. 0.1.0"
+        required: true
+        default: "0.1.0"
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: macos-15
+    timeout-minutes: 60
+    outputs:
+      signed: ${{ steps.mode.outputs.signed }}
+      zip: ${{ steps.package.outputs.zip }}
+      sha256: ${{ steps.package.outputs.sha256 }}
+    env:
+      APP_NAME: PlainClick
+      VERSION: ${{ inputs.version || github.ref_name }}
+      BUILD_NUMBER: ${{ github.run_number }}
+      BUNDLE_ID: ${{ vars.BUNDLE_ID || 'local.plainclick.prototype' }}
+    defaults:
+      run:
+        working-directory: apps/macos
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Decide mode (signed or dry run)
+        id: mode
+        env:
+          HAS_CERT: ${{ secrets.MACOS_CERT_P12_BASE64 != '' && secrets.MACOS_CERT_P12_PASSWORD != '' }}
+          HAS_NOTARY: ${{ secrets.NOTARY_API_KEY_P8_BASE64 != '' && secrets.NOTARY_API_KEY_ID != '' && secrets.NOTARY_API_ISSUER_ID != '' }}
+        run: |
+          VERSION="${VERSION#v}"
+          echo "VERSION=$VERSION" >> "$GITHUB_ENV"
+          if [ "$HAS_CERT" = "true" ] && [ "$HAS_NOTARY" = "true" ]; then
+            case "$BUNDLE_ID" in
+              local.*) echo "::error::Set the repository variable BUNDLE_ID (e.g. com.yourname.plainclick) before a signed release."; exit 1 ;;
+            esac
+            echo "signed=true" >> "$GITHUB_OUTPUT"
+            echo "Mode: SIGNED + NOTARIZED release, version $VERSION, bundle $BUNDLE_ID"
+          else
+            echo "signed=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::Apple signing secrets are not set — DRY RUN (ad-hoc signed, not notarized). Do not give this zip to buyers."
+            echo "Missing: cert=$([ "$HAS_CERT" = true ] && echo ok || echo MISSING) notary=$([ "$HAS_NOTARY" = true ] && echo ok || echo MISSING)"
+          fi
+
+      - name: Toolchain
+        run: |
+          sw_vers
+          xcodebuild -version
+
+      - name: Unit tests
+        run: swift test
+
+      - name: Import Developer ID certificate into a temporary keychain
+        if: steps.mode.outputs.signed == 'true'
+        env:
+          P12_B64: ${{ secrets.MACOS_CERT_P12_BASE64 }}
+          P12_PASSWORD: ${{ secrets.MACOS_CERT_P12_PASSWORD }}
+        run: |
+          KEYCHAIN="$RUNNER_TEMP/plainclick-signing.keychain-db"
+          KC_PASS="$(uuidgen)"
+          echo "$P12_B64" | base64 --decode > "$RUNNER_TEMP/cert.p12"
+          security create-keychain -p "$KC_PASS" "$KEYCHAIN"
+          security set-keychain-settings -lut 21600 "$KEYCHAIN"
+          security unlock-keychain -p "$KC_PASS" "$KEYCHAIN"
+          security import "$RUNNER_TEMP/cert.p12" -P "$P12_PASSWORD" -f pkcs12 -k "$KEYCHAIN" -T /usr/bin/codesign
+          rm -f "$RUNNER_TEMP/cert.p12"
+          # Apple's Developer ID intermediate, so the chain is complete on the runner.
+          curl -fsSL https://www.apple.com/certificateauthority/DeveloperIDG2CA.cer -o "$RUNNER_TEMP/DeveloperIDG2CA.cer"
+          security import "$RUNNER_TEMP/DeveloperIDG2CA.cer" -k "$KEYCHAIN" || true
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$KC_PASS" "$KEYCHAIN" > /dev/null
+          security list-keychains -d user -s "$KEYCHAIN" $(security list-keychains -d user | tr -d '"')
+          IDENTITY_LINE="$(security find-identity -v -p codesigning "$KEYCHAIN" | grep 'Developer ID Application' | head -1 || true)"
+          if [ -z "$IDENTITY_LINE" ]; then
+            echo "::error::No valid 'Developer ID Application' identity in the .p12. Check docs/signing-setup.md (the .p12 must contain the private key)."
+            security find-identity -v "$KEYCHAIN" || true
+            exit 1
+          fi
+          # Sign by SHA-1 hash: unambiguous, and the name never needs to be typed anywhere.
+          echo "CODESIGN_IDENTITY=$(echo "$IDENTITY_LINE" | awk '{print $2}')" >> "$GITHUB_ENV"
+          echo "KEYCHAIN=$KEYCHAIN" >> "$GITHUB_ENV"
+          echo "Signing identity: $(echo "$IDENTITY_LINE" | sed -E 's/^[^"]*"(.*)"$/\1/')"
+
+      - name: Build universal app
+        run: |
+          chmod +x scripts/build-app.sh
+          UNIVERSAL=1 ./scripts/build-app.sh
+
+      - name: Notarize and staple
+        if: steps.mode.outputs.signed == 'true'
+        env:
+          P8_B64: ${{ secrets.NOTARY_API_KEY_P8_BASE64 }}
+          KEY_ID: ${{ secrets.NOTARY_API_KEY_ID }}
+          ISSUER: ${{ secrets.NOTARY_API_ISSUER_ID }}
+        run: |
+          APP="build/$APP_NAME.app"
+          echo "$P8_B64" | base64 --decode > "$RUNNER_TEMP/AuthKey.p8"
+          ditto -c -k --keepParent "$APP" "$RUNNER_TEMP/notarize.zip"
+          xcrun notarytool submit "$RUNNER_TEMP/notarize.zip" \
+            --key "$RUNNER_TEMP/AuthKey.p8" --key-id "$KEY_ID" --issuer "$ISSUER" \
+            --wait --timeout 45m --output-format json > "$RUNNER_TEMP/notary.json" || true
+          cat "$RUNNER_TEMP/notary.json"
+          STATUS="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1])).get("status",""))' "$RUNNER_TEMP/notary.json" 2>/dev/null || true)"
+          SUB_ID="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1])).get("id",""))' "$RUNNER_TEMP/notary.json" 2>/dev/null || true)"
+          if [ -n "$SUB_ID" ]; then
+            xcrun notarytool log "$SUB_ID" --key "$RUNNER_TEMP/AuthKey.p8" --key-id "$KEY_ID" --issuer "$ISSUER" "$RUNNER_TEMP/notary-log.json" || true
+            cat "$RUNNER_TEMP/notary-log.json" 2>/dev/null || true
+          fi
+          rm -f "$RUNNER_TEMP/AuthKey.p8"
+          if [ "$STATUS" != "Accepted" ]; then
+            echo "::error::Notarization status: '${STATUS:-none}'. See the log above."
+            exit 1
+          fi
+          xcrun stapler staple "$APP"
+          xcrun stapler validate "$APP"
+          spctl --assess --type execute --verbose=4 "$APP"
+
+      - name: Package zip + checksum
+        id: package
+        run: |
+          mkdir -p dist
+          SUFFIX=""
+          [ "${{ steps.mode.outputs.signed }}" != "true" ] && SUFFIX="-UNSIGNED-DRY-RUN"
+          ZIP="PlainClick-$VERSION$SUFFIX.zip"
+          ditto -c -k --keepParent "build/$APP_NAME.app" "dist/$ZIP"
+          SHA="$(shasum -a 256 "dist/$ZIP" | awk '{print $1}')"
+          echo "$SHA  $ZIP" > "dist/$ZIP.sha256"
+          echo "zip=$ZIP" >> "$GITHUB_OUTPUT"
+          echo "sha256=$SHA" >> "$GITHUB_OUTPUT"
+          ls -l dist
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: plainclick-release
+          path: apps/macos/dist/
+          retention-days: 30
+
+      - name: Remove temporary keychain
+        if: always()
+        run: |
+          [ -n "${KEYCHAIN:-}" ] && security delete-keychain "$KEYCHAIN" || true
+          rm -f "$RUNNER_TEMP/AuthKey.p8" "$RUNNER_TEMP/cert.p12"
+
+  # Simulates a buyer: a different, clean runner that never had the certificate, a zip marked as downloaded from the
+  # internet (quarantine flag), and the same Gatekeeper check macOS runs when the user opens the app.
+  gatekeeper-check:
+    needs: build
+    runs-on: macos-26
+    timeout-minutes: 15
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: plainclick-release
+          path: dl
+      - name: Gatekeeper check as a downloaded app
+        env:
+          SIGNED: ${{ needs.build.outputs.signed }}
+          ZIP: ${{ needs.build.outputs.zip }}
+          SHA: ${{ needs.build.outputs.sha256 }}
+        run: |
+          cd dl
+          echo "$SHA  $ZIP" | shasum -a 256 -c -
+          xattr -w com.apple.quarantine "0081;$(printf '%x' $(date +%s));Safari;$(uuidgen)" "$ZIP"
+          ditto -x -k "$ZIP" out
+          APP="out/PlainClick.app"
+          echo "quarantine on app: $(xattr -p com.apple.quarantine "$APP" 2>/dev/null || echo none)"
+          lipo -archs "$APP/Contents/MacOS/PlainClickPrototype"
+          codesign -dv --verbose=2 "$APP" 2>&1 | grep -E 'Identifier|Authority|TeamIdentifier|Timestamp|Runtime|flags' || true
+          /usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' -c 'Print :CFBundleShortVersionString' "$APP/Contents/Info.plist"
+          set +e
+          SPCTL="$(spctl --assess --type execute --verbose=4 "$APP" 2>&1)"; SPCTL_RC=$?
+          STAPLE="$(xcrun stapler validate "$APP" 2>&1)"; STAPLE_RC=$?
+          set -e
+          echo "spctl ($SPCTL_RC): $SPCTL"
+          echo "stapler ($STAPLE_RC): $STAPLE"
+          {
+            echo "## PlainClick release check"
+            echo "| | |"; echo "|---|---|"
+            echo "| Zip | \`$ZIP\` |"
+            echo "| SHA-256 | \`$SHA\` |"
+            echo "| Architectures | $(lipo -archs "$APP/Contents/MacOS/PlainClickPrototype") |"
+            echo "| Gatekeeper (spctl) | $( [ $SPCTL_RC = 0 ] && echo "accepted — $(echo "$SPCTL" | grep -o 'source=.*' )" || echo '**rejected**' ) |"
+            echo "| Notarization ticket stapled | $( [ $STAPLE_RC = 0 ] && echo yes || echo **no** ) |"
+            if [ "$SIGNED" = "true" ]; then
+              echo; echo "Signed + notarized build. Still to do by hand: open it on a real Mac (docs/release-checklist.md §D)."
+            else
+              echo; echo "**DRY RUN — not signed, not notarized.** Gatekeeper is expected to reject it. Do not distribute."
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+          if [ "$SIGNED" = "true" ]; then
+            [ $SPCTL_RC = 0 ] && echo "$SPCTL" | grep -q "Notarized Developer ID" || { echo "::error::Gatekeeper did not accept the signed build as Notarized Developer ID"; exit 1; }
+            [ $STAPLE_RC = 0 ] || { echo "::error::Notarization ticket not stapled"; exit 1; }
+          else
+            [ $SPCTL_RC != 0 ] || { echo "::error::Unexpected: unsigned dry run was accepted by Gatekeeper"; exit 1; }
+            echo "Dry run behaved as expected (rejected by Gatekeeper)."
+          fi

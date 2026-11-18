@@ -24,7 +24,13 @@ export const config = {
   },
   rateLimitSalt: () => b64("RATE_LIMIT_SALT_B64", 32),
   entitlementPrivateKeyPem: () => Buffer.from(required("ENTITLEMENT_PRIVATE_KEY_B64"), "base64").toString("utf8"),
-  paymentProvider: () => (process.env.PAYMENT_PROVIDER ?? "mock") as "paddle" | "mock",
+  paymentProvider: () => (process.env.PAYMENT_PROVIDER ?? "mock") as "dodo" | "paddle" | "mock",
+  dodo: () => ({
+    env: (process.env.DODO_ENV === "live" ? "live" : "test") as "test" | "live",
+    apiKey: process.env.DODO_API_KEY ?? "",
+    webhookSecret: required("DODO_WEBHOOK_SECRET"),
+    productId: required("DODO_PRODUCT_ID"),
+  }),
   paddle: () => ({
     env: (process.env.PADDLE_ENV ?? "sandbox") as "sandbox" | "production",
     apiKey: process.env.PADDLE_API_KEY ?? "",
@@ -32,7 +38,9 @@ export const config = {
   }),
   mockWebhookSecret: () => required("MOCK_WEBHOOK_SECRET"),
   expected: () => ({
-    priceId: required("PADDLE_PRICE_ID"),
+    // The one product/price a paid webhook may contain (Dodo product id, or Paddle price id).
+    priceId:
+      process.env.PAYMENT_PROVIDER === "dodo" ? required("DODO_PRODUCT_ID") : required("PADDLE_PRICE_ID"),
     currency: process.env.EXPECTED_CURRENCY ?? "USD",
     subtotalMinor: Number(process.env.EXPECTED_SUBTOTAL_MINOR ?? "599"),
   }),

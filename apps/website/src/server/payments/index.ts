@@ -1,5 +1,6 @@
 import "server-only";
 import { config, isProduction } from "../config";
+import { dodoProvider } from "./dodo";
 import { paddleProvider } from "./paddle";
 import type { PaymentProvider } from "./types";
 
@@ -19,10 +20,17 @@ function mockProvider(): PaymentProvider {
   };
 }
 
+export function getDodo() {
+  const d = config.dodo();
+  return dodoProvider({ webhookSecret: d.webhookSecret, apiKey: d.apiKey, env: d.env });
+}
+
 export function getPaymentProvider(): PaymentProvider {
-  if (config.paymentProvider() === "paddle") {
-    const p = config.paddle();
-    return paddleProvider({ webhookSecret: p.webhookSecret, apiKey: p.apiKey, env: p.env });
+  const p = config.paymentProvider();
+  if (p === "dodo") return getDodo();
+  if (p === "paddle") {
+    const c = config.paddle();
+    return paddleProvider({ webhookSecret: c.webhookSecret, apiKey: c.apiKey, env: c.env });
   }
   return mockProvider();
 }

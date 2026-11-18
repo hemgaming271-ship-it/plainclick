@@ -27,17 +27,16 @@ Tick only what has actually been done, and record who did it and when. "CI" mean
 
 ## C. Backend checks
 - [x] Automated: invalid/stale signature, duplicate and retried webhooks, refund before/after fulfilment, wrong product/price/currency/discount/quantity, concurrent activations, forged and transplanted entitlements, email failure and retry, recovery single-use and expiry, rate limiting (`npm test`, 19 passing on 2026-11-17, Windows, PGlite)
+- [x] Dodo Payments adapter: Standard Webhooks signature (v1, rotation, stale, tampered), payment.succeeded → licence, tax excluded from the price check, wrong product/currency (adaptive pricing)/amount/discount/quantity → review, refund.succeeded full/partial, refund-before-payment, checkout session call (`npm test`, 35 passing on 2026-11-18, Windows, PGlite). Payloads are built from Dodo's docs, not captured
 - [ ] Same scenarios against real PostgreSQL with concurrent connections
-- [ ] Sandbox Paddle webhooks captured and compared with the adapter's field mapping
+- [ ] Dodo **test-mode** purchase + refund end to end; real webhook bodies compared with `mapDodoEvent()`
 - [ ] Real email delivered from the verified domain; not marked as spam
 
-## D. Signing and notarization (needs Apple Developer Program, US$99/yr)
-- [ ] Developer ID Application certificate in the keychain
-- [ ] Bundle ID changed from `local.plainclick.prototype` to the final reverse-DNS ID you control
-- [ ] `CODESIGN_IDENTITY="Developer ID Application: <Name> (<TEAMID>)" ./scripts/build-app.sh` (hardened runtime is already on)
-- [ ] Package as a DMG or ZIP; `xcrun notarytool submit PlainClick.zip --keychain-profile <profile> --wait`
-- [ ] `xcrun stapler staple "PlainClick.app"` (or the DMG)
-- [ ] `spctl --assess --type execute --verbose "PlainClick.app"` shows "Notarized Developer ID"
+## D. Signing and notarization (needs Apple Developer Program, US$99/yr) — done from Windows, see `docs/signing-setup.md`
+- [x] Pipeline built: `release.yml` (universal build → Developer ID sign with timestamp + hardened runtime → notarytool → staple → zip + SHA-256 → Gatekeeper check on a clean runner with the quarantine flag), Windows CSR/.p12 helpers tested with a throwaway CA (2026-11-18)
+- [ ] Apple Developer Program membership active
+- [ ] Developer ID Application certificate created from the Windows CSR; secrets + `BUNDLE_ID` variable set in GitHub
+- [ ] `release.yml` signed run: summary shows Gatekeeper accepted "Notarized Developer ID" and ticket stapled
 - [ ] Download from the real URL on a **clean** Mac (new user account at minimum) and install without any Gatekeeper workaround
 - [ ] `shasum -a 256` recorded; version, checksum and release notes published on `/changelog` and `/download`
 
@@ -46,5 +45,5 @@ Tick only what has actually been done, and record who did it and when. "CI" mean
 - [ ] Mobile and desktop layouts; keyboard-only navigation; contrast checked
 - [ ] Compatibility page shows only verified rows
 - [ ] `NEXT_PUBLIC_RELEASE_AVAILABLE=true` with real download URL and checksum
-- [ ] Sandbox: checkout success, cancel and failure paths; fulfilment end-to-end
-- [ ] Only then: production Paddle keys + `NEXT_PUBLIC_CHECKOUT_ENABLED=true`
+- [ ] Dodo test mode: checkout success, cancel and failure paths; fulfilment end-to-end
+- [ ] Only then: Dodo live keys (`DODO_ENV=live`) + `NEXT_PUBLIC_CHECKOUT_ENABLED=true`

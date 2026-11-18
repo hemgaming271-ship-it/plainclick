@@ -91,7 +91,7 @@ async function apply(q: Queryable, providerName: string, event: PaymentEvent): P
   if (item && item.quantity !== 1) problems.push(`quantity=${item.quantity}`);
   if (event.currency !== exp.currency) problems.push(`currency=${event.currency}`);
   if (event.subtotalMinor !== exp.subtotalMinor) problems.push(`subtotal=${event.subtotalMinor}`);
-  if (event.discountMinor !== 0) problems.push(`discount=${event.discountMinor}`);
+  if (event.discountMinor !== 0) problems.push(Number.isNaN(event.discountMinor) ? "discount_applied" : `discount=${event.discountMinor}`);
   if (problems.length) {
     await q.query(`UPDATE purchases SET status = 'needs_review', review_reason = $2, updated_at = now() WHERE id = $1`, [
       purchase.id,

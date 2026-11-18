@@ -5,7 +5,15 @@ import { site } from "@/lib/site";
 
 export const metadata = { title: "Pricing" };
 
-export default function Page() {
+const checkoutMessages: Record<string, string> = {
+  error: "Checkout couldn't start. Nothing was charged. Please try again in a minute, or contact support.",
+  busy: "Too many checkout attempts from this connection. Please wait a little and try again.",
+  closed: "Checkout isn't open right now.",
+};
+
+export default async function Page({ searchParams }: { searchParams: Promise<{ checkout?: string }> }) {
+  const { checkout } = await searchParams;
+  const checkoutMessage = checkout ? checkoutMessages[checkout] : undefined;
   return (
     <>
       <PageHeader title="Pricing" intro="One price, one time. A 7-day free trial first." />
@@ -18,7 +26,23 @@ export default function Page() {
             Sales tax or VAT may be added at checkout depending on where you live. The total is shown before you pay.
           </p>
           <div className="mt-6">
-            {site.checkoutEnabled ? (
+            {checkoutMessage && (
+              <div className="mb-4" role="alert">
+                <Notice>{checkoutMessage}</Notice>
+              </div>
+            )}
+            {site.checkoutEnabled && site.checkoutProvider === "dodo" ? (
+              // Plain form POST: works without JavaScript. The server creates a single-use Dodo checkout session.
+              <form action="/api/checkout" method="post">
+                <button
+                  type="submit"
+                  className="min-h-11 rounded-md bg-accent px-6 py-2.5 text-base font-semibold text-accent-ink"
+                >
+                  Buy PlainClick — US$5.99
+                </button>
+                <p className="mt-2 text-sm text-muted">You&apos;ll pay on Dodo Payments&apos; secure checkout page.</p>
+              </form>
+            ) : site.checkoutEnabled ? (
               <CheckoutButton clientToken={site.paddle.clientToken} priceId={site.paddle.priceId} env={site.paddle.env} />
             ) : (
               <>

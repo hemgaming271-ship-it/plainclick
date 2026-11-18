@@ -14,6 +14,8 @@ export const site = {
   },
   // Live checkout needs BOTH flags: never sell before a working download exists.
   checkoutEnabled: process.env.NEXT_PUBLIC_CHECKOUT_ENABLED === "true" && process.env.NEXT_PUBLIC_RELEASE_AVAILABLE === "true",
+  // Server-side only (pricing page is a server component). "dodo" → hosted checkout via POST /api/checkout.
+  checkoutProvider: (process.env.PAYMENT_PROVIDER === "dodo" ? "dodo" : "paddle") as "dodo" | "paddle",
   paddle: {
     clientToken: process.env.NEXT_PUBLIC_PADDLE_CLIENT_TOKEN ?? "",
     priceId: process.env.NEXT_PUBLIC_PADDLE_PRICE_ID ?? "",

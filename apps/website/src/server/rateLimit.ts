@@ -34,4 +34,5 @@ export const LIMITS = {
   recoverEmail: [3, 3600],
   recoverConfirmIp: [10, 3600],
   waitlistIp: [5, 3600],
+  checkoutIp: [20, 3600],
 } as const satisfies Record<string, readonly [number, number]>;
