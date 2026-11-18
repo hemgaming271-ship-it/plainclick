@@ -157,6 +157,31 @@ final class UITestRunner {
     /// Prints a wall-clock timestamp per scene so captions can be aligned with the recording.
     private func scene(_ name: String) { print("SCENE \(name) \(Date().timeIntervalSince1970)") }
 
+    /// For the motion-graphics launch video: a full-screen still, a 3x render of the panel in its current real state,
+    /// and where the panel's content sits on screen (top-left origin, points), so a crisp overlay can be aligned.
+    private var layout: [String: [String: Double]] = [:]
+    private func still(_ name: String, panel: Bool = true) {
+        captureScreen("still-\(name)")
+        guard panel, app.panel.isVisible else { return }
+        renderPanel("panel-\(name)", dark: false, scale: 3)
+        let w = app.panel.window
+        if let content = w.contentView, let primary = NSScreen.screens.first {
+            let r = w.convertToScreen(content.convert(content.bounds, to: nil))
+            layout[name] = ["x": Double(r.minX), "y": Double(primary.frame.height - r.maxY),
+                            "w": Double(r.width), "h": Double(r.height),
+                            "screenW": Double(primary.frame.width), "screenH": Double(primary.frame.height)]
+            for label in ["Save", "Find", "Reload", "New Tab"] {
+                if let f = panelButtonFrameFromLayout(label) {
+                    layout[name]?["btn.\(label).x"] = Double(f.midX)
+                    layout[name]?["btn.\(label).y"] = Double(f.midY)
+                }
+            }
+        }
+        if let data = try? JSONSerialization.data(withJSONObject: layout, options: [.prettyPrinted, .sortedKeys]) {
+            try? data.write(to: out.appendingPathComponent("layout.json"))
+        }
+    }
+
     func runDemo() {
         scene("start")
         let te = "com.apple.TextEdit"
@@ -175,15 +200,19 @@ final class UITestRunner {
         wait(1.5)
 
         // Open PlainClick with the shortcut.
+        still("typed", panel: false)
         scene("hotkey")
         postHotKey()
         waitUntil(3) { app.panel.isVisible }
         wait(2.5)
+        still("open")
+        renderPanel("panel-open-dark", dark: true, scale: 3)
 
         // Save through the panel. TextEdit's title loses "Edited".
         scene("save")
         glideAndClickPanel("Save")
         wait(2.5)
+        still("save")
 
         // Keep writing: focus is still in the document.
         scene("keep-typing")
@@ -198,6 +227,8 @@ final class UITestRunner {
         glideAndClickPanel("Find")
         wait(1.2)
         typeSystemWide("milk", delay: 0.15)
+        wait(0.8)
+        still("find")
         wait(2.5)
         pressEscape(to: tePID)
         wait(1)
@@ -209,17 +240,22 @@ final class UITestRunner {
         open(["-a", "Safari", demoURL])
         waitUntil(15) { frontBundle() == "com.apple.Safari" }
         wait(2)
+        still("safari")
         glideAndClickPanel("Reload")
         wait(2)
+        still("reload")
         glideAndClickPanel("New Tab")
         wait(2.5)
+        still("newtab")
 
         // An app PlainClick doesn't support: it says so honestly.
         open(["-a", "Calculator"])
         waitUntil(10) { frontBundle() == "com.apple.calculator" }
         waitUntil(3) { !app.engine.model.supported } // panel has switched to the honest message
         scene("unsupported")
-        wait(4.5)
+        wait(1.5)
+        still("unsupported")
+        wait(3)
 
         // Back to TextEdit and close the panel with the same shortcut.
         scene("close")
@@ -317,13 +353,13 @@ final class UITestRunner {
     // MARK: Screenshots
 
     /// Renders the app's real PanelView (same model/state) to PNG. Needs no screen-recording permission.
-    private func renderPanel(_ name: String, dark: Bool) {
+    private func renderPanel(_ name: String, dark: Bool, scale: CGFloat = 2) {
         let view = PanelView(model: app.engine.model, settings: app.settings, licence: app.licence,
                              onPerform: { _ in }, onEnable: {}, onOpenSettings: {})
             .background(Color(nsColor: .windowBackgroundColor))
             .environment(\.colorScheme, dark ? .dark : .light)
         let renderer = ImageRenderer(content: view)
-        renderer.scale = 2
+        renderer.scale = scale
         guard let image = renderer.nsImage, let tiff = image.tiffRepresentation,
               let rep = NSBitmapImageRep(data: tiff), let png = rep.representation(using: .png, properties: [:]) else {
             record("screenshot-render \(name)", false, "render failed")

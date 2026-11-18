@@ -49,14 +49,14 @@ jobs:
           open -g -a Calculator
           sleep 10
           # -v video, -C show cursor, -k show clicks, -x no sounds, -V max seconds
-          screencapture -v -C -k -x -V 90 "$PWD/demo-out/plainclick-demo-macos26.mov" &
+          screencapture -v -C -k -x -V 120 "$PWD/demo-out/plainclick-demo-macos26.mov" &
           REC_PID=$!
           python3 -c 'import time; print(time.time())' > demo-out/recording-started-epoch.txt
           sleep 3
           DEMO_URL="http://localhost:8765/recipes.html" \
             "build/PlainClick Prototype.app/Contents/MacOS/PlainClickPrototype" --demo "$PWD/demo-out" > demo-out/stdout.txt 2>&1 &
           APP_PID=$!
-          for i in $(seq 1 100); do kill -0 $APP_PID 2>/dev/null || break; sleep 1; done
+          for i in $(seq 1 140); do kill -0 $APP_PID 2>/dev/null || break; sleep 1; done
           kill $APP_PID 2>/dev/null || true
           wait $REC_PID || true
           cat demo-out/stdout.txt
