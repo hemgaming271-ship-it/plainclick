@@ -72,7 +72,8 @@ export default function Home() {
           {!anyVerified && (
             <div className="mt-4">
               <Notice>
-                Five actions have passed our automated tests with the real Apple apps on macOS 15 and macOS 26 (Tahoe),
+                Nine actions in four apps (TextEdit, Finder, Safari and Calculator) have passed our automated tests with
+                the real Apple apps on macOS 15 and macOS 26 (Tahoe),
                 running on test machines. We haven&apos;t confirmed them by hand on a physical Mac yet. Back and Forward
                 didn&apos;t pass, so PlainClick doesn&apos;t offer them.
               </Notice>

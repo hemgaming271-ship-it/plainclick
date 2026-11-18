@@ -11,6 +11,10 @@ The environment is GitHub-hosted macOS VMs running the real Apple apps, unattend
 | Finder | New Folder | ⇧⌘N | same | 15.5 / 26.4 | 20/20 + 10/10 app-switching, on each OS; folder created on disk | **Automated pass** |
 | Safari | Reload | ⌘R | same | 27.2 | 20/20 on each OS; page reloaded (timestamped title changed) | **Automated pass** |
 | Safari | New Tab | ⌘T | same | 27.2 | 20/20 on each OS | **Automated pass** |
+| Calculator | Basic | ⌘1 (View) | same | 11.0 (224) / 12.0 (225) | 10/10 on each OS; window resized to Basic (macOS 26: 230×408) | **Automated pass** (2026-11-18) |
+| Calculator | Scientific | ⌘2 (View) | same | same | 10/10 on each OS; window resized to Scientific (674×408) | **Automated pass** |
+| Calculator | Programmer | ⌘3 (View) | same | same | 10/10 on each OS; window resized to Programmer (488×582) | **Automated pass** |
+| Calculator | Copy Result | ⌘C (Edit › Copy, `copy:`) | same | same | 20/20 on each OS; the typed number was on the clipboard every time | **Automated pass** |
 | Safari | Back | ⌘[ | same | 27.2 | Closed-menu AXEnabled was wrong 9/10; a forced press worked 10/10 | **Dropped** (R2) |
 | Safari | Forward | ⌘] | same | 27.2 | AXEnabled wrong 10/10; a menu-open refresh was still wrong 3/3; a forced press had no effect 10/10 | **Dropped** (R2) |
 | Finder | Back | ⌘[ | same | 15.5 / 26.4 | AXEnabled wrong after navigation; a menu-open refresh corrected it; a forced press worked | **Dropped** (R2) |

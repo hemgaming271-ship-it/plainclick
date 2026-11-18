@@ -170,7 +170,7 @@ final class UITestRunner {
             layout[name] = ["x": Double(r.minX), "y": Double(primary.frame.height - r.maxY),
                             "w": Double(r.width), "h": Double(r.height),
                             "screenW": Double(primary.frame.width), "screenH": Double(primary.frame.height)]
-            for label in ["Save", "Find", "Reload", "New Tab"] {
+            for label in ["Save", "Find", "Reload", "New Tab", "Basic", "Scientific", "Programmer", "Copy Result"] {
                 if let f = panelButtonFrameFromLayout(label) {
                     layout[name]?["btn.\(label).x"] = Double(f.midX)
                     layout[name]?["btn.\(label).y"] = Double(f.midY)
@@ -248,9 +248,22 @@ final class UITestRunner {
         wait(2.5)
         still("newtab")
 
-        // An app PlainClick doesn't support: it says so honestly.
+        // Calculator (verified 2026-11-18): click Scientific, the window grows into Scientific mode.
+        scene("calculator")
         open(["-a", "Calculator"])
         waitUntil(10) { frontBundle() == "com.apple.calculator" }
+        waitUntil(3) { app.engine.model.supported }
+        wait(1.5)
+        still("calculator")
+        glideAndClickPanel("Scientific")
+        wait(2)
+        still("calc-scientific")
+        glideAndClickPanel("Basic")
+        wait(1.5)
+
+        // An app PlainClick doesn't support: it says so honestly.
+        open(["-a", "Stickies"])
+        waitUntil(10) { frontBundle() == "com.apple.Stickies" }
         waitUntil(3) { !app.engine.model.supported } // panel has switched to the honest message
         scene("unsupported")
         wait(1.5)
@@ -341,6 +354,11 @@ final class UITestRunner {
         let app = AX.app(pid: pid)
         guard let w = AX.element(app, kAXFocusedWindowAttribute as String) else { return false }
         return Self.bfs(w) { AX.string($0, kAXSubroleAttribute as String) == (kAXSearchFieldSubrole as String) } != nil
+    }
+
+    private func calcWindowWidth() -> CGFloat? {
+        guard let p = pid("com.apple.calculator"), let w = AX.element(AX.app(pid: p), kAXFocusedWindowAttribute as String) else { return nil }
+        return Self.frame(w)?.width
     }
 
     private func textEditContent(_ pid: pid_t) -> String {
@@ -470,11 +488,27 @@ final class UITestRunner {
         record("diagnostic: last engine log rows", true, log)
         writeInterim()
 
-        // 6. Switching apps retargets the panel; unsupported apps get the honest message.
+        // 6a. Calculator is supported (verified 2026-11-18): the panel shows its four tested actions.
         open(["-a", "Calculator"])
         waitUntil(10) { frontBundle() == "com.apple.calculator" }
         wait(1)
-        let unsupported = !app.engine.model.supported && app.engine.model.targetName.localizedCaseInsensitiveContains("Calc")
+        let calcLabels = app.engine.model.actions.map(\.def.label)
+        record("Calculator shows tested actions", calcLabels == ["Basic", "Scientific", "Programmer", "Copy Result"], "buttons=\(calcLabels)")
+        if let f = panelButtonFrame("Scientific") {
+            let before = calcWindowWidth()
+            click(CGPoint(x: f.midX, y: f.midY))
+            let grew = waitUntil(4) { (calcWindowWidth() ?? 0) > (before ?? 0) + 50 }
+            record("click Scientific in Calculator", grew, "width \(Int(before ?? 0)) -> \(Int(calcWindowWidth() ?? 0)); status=\"\(app.engine.model.status)\"")
+            if let b = panelButtonFrame("Basic") { click(CGPoint(x: b.midX, y: b.midY)); wait(1) }
+        } else {
+            record("click Scientific in Calculator", false, "Scientific button not found")
+        }
+
+        // 6b. Switching apps retargets the panel; unsupported apps get the honest message.
+        open(["-a", "Stickies"])
+        waitUntil(10) { frontBundle() == "com.apple.Stickies" }
+        wait(1)
+        let unsupported = !app.engine.model.supported && app.engine.model.targetName.localizedCaseInsensitiveContains("Stick")
         record("unsupported app message", unsupported, "target=\(app.engine.model.targetName) supported=\(app.engine.model.supported)")
         captureScreen("03-screen-unsupported")
         renderPanel("panel-unsupported", dark: false)

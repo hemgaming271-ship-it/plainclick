@@ -69,12 +69,13 @@ public enum ActionCatalog {
             .init(id: "textedit.save", label: "Save", symbol: "square.and.arrow.down", matchers: [.init(cmdChar: "S")]),
             .init(id: "textedit.find", label: "Find", symbol: "magnifyingglass",       matchers: [.init(cmdChar: "F")]),
         ]),
-        // CANDIDATES under test (supported: false = hidden in the panel until the feasibility suite verifies them).
+        // Verified 2026-11-18 on macOS 15.8.2 (Calculator 11.0) and 26.7.2 (Calculator 12.0): modes 10/10 (window size changes),
+        // Copy 20/20 (clipboard holds the typed number). Menu: View > Basic/Scientific/Programmer, Edit > Copy (copy:).
         AppAdapter(bundleID: "com.apple.calculator", displayName: "Calculator", actions: [
-            .init(id: "calculator.basic",      label: "Basic",      symbol: "plus.forwardslash.minus", matchers: [.init(cmdChar: "1")], supported: false),
-            .init(id: "calculator.scientific", label: "Scientific", symbol: "function",                matchers: [.init(cmdChar: "2")], supported: false),
-            .init(id: "calculator.programmer", label: "Programmer", symbol: "chevron.left.forwardslash.chevron.right", matchers: [.init(cmdChar: "3")], supported: false),
-            .init(id: "calculator.copy",       label: "Copy Result", symbol: "doc.on.doc",             matchers: [.init(cmdChar: "C")], supported: false),
+            .init(id: "calculator.basic",      label: "Basic",      symbol: "plus.forwardslash.minus", matchers: [.init(cmdChar: "1")]),
+            .init(id: "calculator.scientific", label: "Scientific", symbol: "function",                matchers: [.init(cmdChar: "2")]),
+            .init(id: "calculator.programmer", label: "Programmer", symbol: "chevron.left.forwardslash.chevron.right", matchers: [.init(cmdChar: "3")]),
+            .init(id: "calculator.copy",       label: "Copy Result", symbol: "doc.on.doc",             matchers: [.init(cmdChar: "C")]),
         ]),
     ]
 

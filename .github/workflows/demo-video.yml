@@ -47,6 +47,7 @@ jobs:
           # Pre-load Safari so the Safari scene doesn't wait for a cold launch.
           open -a Safari "http://localhost:8765/recipes.html"
           open -g -a Calculator
+          open -g -a Stickies
           sleep 10
           # -v video, -C show cursor, -k show clicks, -x no sounds, -V max seconds
           screencapture -v -C -k -x -V 120 "$PWD/demo-out/plainclick-demo-macos26.mov" &
