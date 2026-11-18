@@ -33,7 +33,7 @@ Tick only what has actually been done, and record who did it and when. "CI" mean
 - [ ] Real email delivered from the verified domain; not marked as spam
 
 ## D. Signing and notarization (needs Apple Developer Program, US$99/yr) — done from Windows, see `docs/signing-setup.md`
-- [x] Pipeline built: `release.yml` (universal build → Developer ID sign with timestamp + hardened runtime → notarytool → staple → zip + SHA-256 → Gatekeeper check on a clean runner with the quarantine flag), Windows CSR/.p12 helpers tested with a throwaway CA (2026-11-18)
+- [x] Pipeline built: `release.yml` (universal build → Developer ID sign with timestamp + hardened runtime → notarytool → staple → zip + SHA-256 → Gatekeeper check on a clean runner with the quarantine flag), Windows CSR/.p12 helpers tested with a throwaway CA (2026-11-18). CI: signing self-test #7 (Windows .p12 → macOS import → codesign) and release dry run #2 (universal arm64+x86_64, Gatekeeper rejects unsigned) both passed
 - [ ] Apple Developer Program membership active
 - [ ] Developer ID Application certificate created from the Windows CSR; secrets + `BUNDLE_ID` variable set in GitHub
 - [ ] `release.yml` signed run: summary shows Gatekeeper accepted "Notarized Developer ID" and ticket stapled

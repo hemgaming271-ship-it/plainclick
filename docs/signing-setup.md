@@ -9,6 +9,11 @@ What's already built and tested:
 - `.github/workflows/signing-selftest.yml` checks that a `.p12` made on Windows imports on a GitHub macOS runner and signs the app.
 - `.github/workflows/release.yml` builds a universal app (Apple silicon + Intel). With the Apple secrets set, it then signs, notarizes, staples, zips and records the checksum. A second, clean runner then checks the app the way a buyer's Mac would.
 
+CI evidence, 2026-11-18:
+- "Signing helpers self-test" run #7 passed (commit `8d18a05`). A `.p12` made on Windows with these scripts imported on a macOS 15 runner, and `codesign` signed the app with it (hardened runtime).
+  The test CA had to be marked trusted on that throwaway runner, the same way Apple's root is trusted on every Mac. Without that, codesign reports `errSecInternalComponent`.
+- "Release build" run #2 passed as a dry run (commit `c1827e6`). The universal binary (arm64 + x86_64) was built, zipped and checksummed, and Gatekeeper on a clean macOS 26 runner rejected the unsigned zip, as expected.
+
 What still needs you (accounts and payments are yours to do):
 
 ## 1. Join the Apple Developer Program (US$99/year)
