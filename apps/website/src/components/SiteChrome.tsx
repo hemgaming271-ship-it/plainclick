@@ -10,7 +10,7 @@ export function SiteHeader() {
     <header className="sticky top-0 z-40 border-b border-white/5 bg-[var(--nav)] text-white backdrop-blur-md backdrop-saturate-150">
       <a
         href="#main"
-        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-3 focus:z-50 focus:rounded-md focus:bg-white focus:px-3 focus:py-2 focus:text-ink"
+        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-3 focus:z-50 focus:rounded-md focus:bg-white focus:px-3 focus:py-2 focus:text-[#1d1d1f]"
       >
         Skip to content
       </a>
