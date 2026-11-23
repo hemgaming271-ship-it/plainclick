@@ -14,7 +14,8 @@ export const contentSecurityPolicy = [
   `connect-src 'self'${dev ? " ws: wss:" : ""} https://*.paddle.com`,
   "frame-src https://*.paddle.com",
   "frame-ancestors 'none'",
-  "form-action 'self'",
+  // Chromium applies form-action to redirects: the server-mode checkout form 303s to Dodo's hosted checkout.
+  "form-action 'self' https://*.dodopayments.com",
   "base-uri 'self'",
   "object-src 'none'",
   ...(dev ? [] : ["upgrade-insecure-requests"]),
