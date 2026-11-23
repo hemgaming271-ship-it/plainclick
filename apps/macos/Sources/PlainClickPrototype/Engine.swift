@@ -172,10 +172,11 @@ final class Engine {
 
     /// ⌃⌥1 … ⌃⌥9: presses the Nth action shown for the front app. Same safety checks as a click.
     func performQuickAction(_ index: Int) {
-        let front = NSWorkspace.shared.frontmostApplication
-        if front?.processIdentifier != ProcessInfo.processInfo.processIdentifier, front?.processIdentifier != model.targetPID {
-            retarget(front)
-        }
+        // Only act on the app the user is in; with PlainClick's own Settings in front there is no target.
+        guard let front = NSWorkspace.shared.frontmostApplication,
+              front.processIdentifier != ProcessInfo.processInfo.processIdentifier
+        else { NSSound.beep(); return }
+        if front.processIdentifier != model.targetPID { retarget(front) }
         guard model.actions.indices.contains(index) else { NSSound.beep(); return }
         perform(model.actions[index].def)
     }
