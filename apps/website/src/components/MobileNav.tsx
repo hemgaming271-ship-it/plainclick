@@ -10,9 +10,12 @@ export function MobileNav() {
   const ref = useRef<HTMLDetailsElement>(null);
   const pathname = usePathname();
 
-  useEffect(() => {
+  const close = () => {
     if (ref.current) ref.current.open = false;
-  }, [pathname]);
+  };
+
+  // Links to a section on the current page (/#privacy) don't change the pathname, so clicks close the menu too.
+  useEffect(close, [pathname]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -40,7 +43,7 @@ export function MobileNav() {
         <ul className="mx-auto max-w-[1100px] px-4 py-2 sm:px-6">
           {nav.map((n) => (
             <li key={n.href} className="border-b border-white/10 last:border-0">
-              <Link href={n.href} className="block py-3 text-[17px] text-white/90 hover:text-white">
+              <Link href={n.href} onClick={close} className="block py-3 text-[17px] text-white/90 hover:text-white">
                 {n.label}
               </Link>
             </li>
