@@ -165,10 +165,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
 
 /// Wraps `SMAppService.mainApp` (macOS 13+). Only works from the installed .app bundle, not `swift run`.
 enum LaunchAtLogin {
+    /// Posted after every change attempt so open views (Settings → General) can re-read the real status.
+    static let didChange = Notification.Name("PlainClickLaunchAtLoginDidChange")
+
     static var isEnabled: Bool { SMAppService.mainApp.status == .enabled }
 
     @discardableResult
     static func set(_ on: Bool) -> Bool {
+        defer { NotificationCenter.default.post(name: didChange, object: nil) }
         do {
             if on { try SMAppService.mainApp.register() } else { try SMAppService.mainApp.unregister() }
             return true

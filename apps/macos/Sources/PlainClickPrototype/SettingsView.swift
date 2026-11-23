@@ -43,6 +43,12 @@ private struct GeneralTab: View {
                     }))
                 Text("Works when PlainClick runs from the Applications folder.").font(.caption).foregroundStyle(.secondary)
             }
+            .onReceive(NotificationCenter.default.publisher(for: LaunchAtLogin.didChange)) { _ in
+                launchAtLogin = LaunchAtLogin.isEnabled
+            }
+            .onReceive(NotificationCenter.default.publisher(for: NSWindow.didBecomeKeyNotification)) { _ in
+                launchAtLogin = LaunchAtLogin.isEnabled
+            }
             Section("Keyboard") {
                 LabeledContent("Show or hide the panel") { KeyCap("⌃⌥P") }
                 Toggle("Quick keys: ⌃⌥1 – ⌃⌥9 press the panel's actions", isOn: $settings.quickKeys)
