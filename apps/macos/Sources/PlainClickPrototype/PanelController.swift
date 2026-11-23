@@ -22,7 +22,7 @@ final class PanelController {
     private var refreshTimer: Timer?
     private var observers: [AnyCancellable] = []
 
-    init(engine: Engine, onOpenSettings: @escaping () -> Void) {
+    init(engine: Engine, onOpenSettings: @escaping () -> Void, onOpenPreferences: @escaping () -> Void = {}) {
         self.engine = engine
         panel = NonActivatingPanel(
             contentRect: NSRect(x: 0, y: 0, width: 260, height: 200),
@@ -34,6 +34,7 @@ final class PanelController {
         panel.isFloatingPanel = true
         panel.level = .floating
         panel.hidesOnDeactivate = false
+        panel.isMovableByWindowBackground = true
         panel.becomesKeyOnlyIfNeeded = true
         panel.isReleasedWhenClosed = false
         panel.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary]
@@ -44,7 +45,8 @@ final class PanelController {
             licence: engine.licence,
             onPerform: { [weak engine] def in engine?.perform(def) },
             onEnable: { [weak engine] in engine?.requestPermission() },
-            onOpenSettings: onOpenSettings
+            onOpenSettings: onOpenSettings,
+            onOpenPreferences: onOpenPreferences
         )
         host = FirstMouseHostingView(rootView: root)
         panel.contentView = host
@@ -65,7 +67,7 @@ final class PanelController {
             .sink { [weak self] _ in
                 guard let self else { return }
                 self.panel.appearance = self.engine.settings.appearance.nsAppearance
-                if self.panel.isVisible { self.engine.retarget(NSWorkspace.shared.frontmostApplication) }
+                if self.panel.isVisible { self.engine.reloadTarget() }
                 self.fitToContent()
             })
         // Content changes (different target, status text) can change the height.

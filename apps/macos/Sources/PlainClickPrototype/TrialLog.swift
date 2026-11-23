@@ -22,6 +22,13 @@ enum TrialLog {
         return "\(short) (\(build))"
     }
 
+    /// Quotes are swapped out, and a leading formula character is neutralised so a spreadsheet never evaluates a field.
+    static func sanitize(_ field: String) -> String {
+        let cleaned = field.replacingOccurrences(of: "\"", with: "'")
+        guard let first = cleaned.first, "=+-@\t\r".contains(first) else { return cleaned }
+        return "'" + cleaned
+    }
+
     static func record(app: NSRunningApplication?, actionID: String, outcome: String, latencyMs: Int, detail: String = "") {
         let fields = [
             iso.string(from: Date()),
@@ -32,7 +39,7 @@ enum TrialLog {
             outcome,
             String(latencyMs),
             detail,
-        ].map { "\"" + $0.replacingOccurrences(of: "\"", with: "'") + "\"" }
+        ].map { "\"" + sanitize($0) + "\"" }
         let line = fields.joined(separator: ",") + "\n"
         let fm = FileManager.default
         if !fm.fileExists(atPath: fileURL.path) {

@@ -1,16 +1,16 @@
 import { compatibility, type Status, statusLabel } from "@/lib/compatibility";
 
 const pill: Record<Status, string> = {
-  verified: "bg-green-100 text-green-900",
-  automated: "bg-blue-50 text-blue-900",
-  limited: "bg-amber-100 text-amber-900",
+  verified: "bg-[color-mix(in_srgb,var(--ok)_16%,transparent)] text-ink",
+  automated: "bg-[color-mix(in_srgb,var(--accent)_14%,transparent)] text-ink",
+  limited: "bg-[var(--warn-bg)] text-[var(--warn-ink)]",
   candidate: "bg-surface text-muted",
   dropped: "bg-surface text-muted",
 };
 
 export function CompatTable() {
   return (
-    <div className="overflow-x-auto rounded-3xl border border-line bg-white shadow-soft">
+    <div className="overflow-x-auto rounded-3xl border border-line bg-card shadow-soft">
       <table className="w-full min-w-[620px] border-collapse text-left text-[15px]">
         <caption className="sr-only">PlainClick app and action compatibility</caption>
         <thead>

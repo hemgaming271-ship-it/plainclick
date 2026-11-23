@@ -29,6 +29,7 @@ final class PanelModel: ObservableObject {
     @Published var trusted = false
     @Published var paused = false
     @Published var targetName = "No app"
+    @Published var targetIcon: NSImage?
     @Published var targetPID: pid_t = 0
     @Published var supported = false
     @Published var disabledByUser = false
@@ -46,6 +47,7 @@ final class Engine {
     private var cache: [String: AXUIElement] = [:]
     private var observers: [NSObjectProtocol] = []
     private var permissionTimer: Timer?
+    private var statusClearWork: DispatchWorkItem?
 
     init(settings: AppSettings, licence: LicenceManager) {
         self.settings = settings
@@ -91,6 +93,7 @@ final class Engine {
         targetApp = app
         model.targetPID = app?.processIdentifier ?? 0
         model.targetName = app?.localizedName ?? "No app"
+        model.targetIcon = app?.icon
         let adapter = ActionCatalog.adapter(for: app?.bundleIdentifier)
         // An app counts as supported only if at least one of its actions is verified (candidates stay hidden).
         model.supported = adapter.map { !$0.supportedActions.isEmpty } ?? false
@@ -99,6 +102,17 @@ final class Engine {
         model.actions = visible.map { ActionState(def: $0, availability: .notFound) }
         model.status = ""
         refresh()
+    }
+
+    /// Re-applies settings to the current target. (Retargeting to the front app would do nothing while the
+    /// Settings window is in front, because PlainClick never targets itself.)
+    func reloadTarget() {
+        let front = NSWorkspace.shared.frontmostApplication
+        if let front, front.processIdentifier != ProcessInfo.processInfo.processIdentifier {
+            retarget(front)
+        } else {
+            retarget(targetApp)
+        }
     }
 
     /// Test hook: pauses the periodic availability refresh (used by --ui-test while it inspects the panel).
@@ -144,12 +158,34 @@ final class Engine {
         return last
     }
 
+    /// Shows a transient status line; it clears itself so an old result is never mistaken for a new one.
+    func showStatus(_ message: String, for seconds: TimeInterval = 4) {
+        statusClearWork?.cancel()
+        model.status = message
+        let work = DispatchWorkItem { [weak self] in
+            guard let self, self.model.status == message else { return }
+            self.model.status = ""
+        }
+        statusClearWork = work
+        DispatchQueue.main.asyncAfter(deadline: .now() + seconds, execute: work)
+    }
+
+    /// ⌃⌥1 … ⌃⌥9: presses the Nth action shown for the front app. Same safety checks as a click.
+    func performQuickAction(_ index: Int) {
+        let front = NSWorkspace.shared.frontmostApplication
+        if front?.processIdentifier != ProcessInfo.processInfo.processIdentifier, front?.processIdentifier != model.targetPID {
+            retarget(front)
+        }
+        guard model.actions.indices.contains(index) else { NSSound.beep(); return }
+        perform(model.actions[index].def)
+    }
+
     /// The only code path that sends a command to another app.
     func perform(_ def: ActionDefinition) {
         let start = Date()
         func ms() -> Int { Int(Date().timeIntervalSince(start) * 1000) }
         func finish(_ outcome: String, _ message: String, detail: String = "") {
-            model.status = message
+            showStatus(message)
             TrialLog.record(app: targetApp, actionID: def.id, outcome: outcome, latencyMs: ms(), detail: detail)
         }
 

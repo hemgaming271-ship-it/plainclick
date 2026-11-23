@@ -1,6 +1,7 @@
 import AppKit
 import Foundation
 import PlainClickCore
+import SwiftUI
 
 /// Local preferences (UserDefaults). Nothing here leaves the Mac.
 final class AppSettings: ObservableObject {
@@ -22,6 +23,8 @@ final class AppSettings: ObservableObject {
     @Published var appearance: Appearance { didSet { d.set(appearance.rawValue, forKey: "appearance") } }
     @Published var comfortable: Bool { didSet { d.set(comfortable, forKey: "comfortable") } }
     @Published var showIcons: Bool { didSet { d.set(showIcons, forKey: "showIcons") } }
+    /// ⌃⌥1 … ⌃⌥9 press the panel's first nine actions.
+    @Published var quickKeys: Bool { didSet { d.set(quickKeys, forKey: "quickKeys") } }
     /// Bundle IDs the user has switched off.
     @Published var disabledApps: Set<String> { didSet { d.set(Array(disabledApps), forKey: "disabledApps") } }
     /// Per-app ordered list of pinned action IDs. Missing entry = all tested actions in catalog order.
@@ -31,6 +34,7 @@ final class AppSettings: ObservableObject {
         appearance = Appearance(rawValue: d.string(forKey: "appearance") ?? "") ?? .system
         comfortable = d.object(forKey: "comfortable") as? Bool ?? true
         showIcons = d.object(forKey: "showIcons") as? Bool ?? true
+        quickKeys = d.object(forKey: "quickKeys") as? Bool ?? true
         disabledApps = Set(d.stringArray(forKey: "disabledApps") ?? [])
         pinned = d.dictionary(forKey: "pinned") as? [String: [String]] ?? [:]
     }
@@ -57,6 +61,14 @@ final class AppSettings: ObservableObject {
         if let i = order.firstIndex(of: action.id) { order.remove(at: i) } else { order.append(action.id) }
         pinned[adapter.bundleID] = order
     }
+
+    func reorder(in adapter: AppAdapter, from source: IndexSet, to destination: Int) {
+        var order = visibleActions(for: adapter).map(\.id)
+        order.move(fromOffsets: source, toOffset: destination)
+        pinned[adapter.bundleID] = order
+    }
+
+    func resetOrder(for adapter: AppAdapter) { pinned[adapter.bundleID] = nil }
 
     func move(_ action: ActionDefinition, in adapter: AppAdapter, by delta: Int) {
         var order = visibleActions(for: adapter).map(\.id)

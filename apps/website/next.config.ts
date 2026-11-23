@@ -1,6 +1,29 @@
 import type { NextConfig } from "next";
 
+const dev = process.env.NODE_ENV === "development";
+
+// Next.js inlines its bootstrap scripts and styles, so 'unsafe-inline' is required for script/style; everything else
+// is locked to this origin plus Paddle's checkout (used only when PAYMENT_PROVIDER=paddle).
+export const contentSecurityPolicy = [
+  "default-src 'self'",
+  `script-src 'self' 'unsafe-inline'${dev ? " 'unsafe-eval'" : ""} https://cdn.paddle.com`,
+  "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' data: blob:",
+  "media-src 'self'",
+  "font-src 'self'",
+  `connect-src 'self'${dev ? " ws: wss:" : ""} https://*.paddle.com`,
+  "frame-src https://*.paddle.com",
+  "frame-ancestors 'none'",
+  "form-action 'self'",
+  "base-uri 'self'",
+  "object-src 'none'",
+  ...(dev ? [] : ["upgrade-insecure-requests"]),
+].join("; ");
+
 const securityHeaders = [
+  { key: "Content-Security-Policy", value: contentSecurityPolicy },
+  ...(dev ? [] : [{ key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains" }]),
+  { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
   { key: "X-Content-Type-Options", value: "nosniff" },
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
   { key: "X-Frame-Options", value: "DENY" },

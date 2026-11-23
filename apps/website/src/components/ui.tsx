@@ -18,7 +18,7 @@ export function ButtonLink({ href, children, variant = "primary", size = "md" }:
   const styles =
     variant === "primary"
       ? "bg-accent text-white hover:bg-[var(--accent-hover)]"
-      : "border border-line bg-white text-ink hover:bg-surface";
+      : "border border-line bg-card text-ink hover:bg-surface";
   return (
     <Link href={href} className={`inline-flex min-h-11 items-center justify-center rounded-full font-semibold transition ${pad} ${styles}`}>
       {children}
@@ -46,7 +46,7 @@ export function Notice({ children, tone = "info" }: { children: ReactNode; tone?
     <div
       role="note"
       className={`rounded-2xl border p-4 text-[15px] leading-relaxed sm:p-5 ${
-        tone === "warn" ? "border-amber-200 bg-amber-50 text-amber-950" : "border-line bg-surface text-ink"
+        tone === "warn" ? "border-[var(--warn-line)] bg-[var(--warn-bg)] text-[var(--warn-ink)]" : "border-line bg-surface text-ink"
       }`}
     >
       {children}

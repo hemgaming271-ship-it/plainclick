@@ -1,8 +1,15 @@
 @import "tailwindcss";
 
-/* Light, Apple-style product page. One theme on purpose: the product shots are light-mode renders. */
+/* Apple-style product page with light and dark themes. data-theme="light|dark" overrides the system setting. */
 :root {
   --paper: #ffffff;
+  --card: #ffffff;
+  --warn-bg: #fffbeb;
+  --warn-line: #fde68a;
+  --warn-ink: #451a03;
+  --ok: #1f8f3a;
+  --stage-a: #e8f1ff;
+  --stage-b: #f1e9ff;
   --surface: #f5f5f7;
   --ink: #1d1d1f;
   --muted: #6e6e73;
@@ -16,9 +23,54 @@
   color-scheme: light;
 }
 
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #000000;
+    --card: #161618;
+    --surface: #101012;
+    --ink: #f5f5f7;
+    --muted: #a1a1a6;
+    --line: #2c2c30;
+    --accent: #2997ff;
+    --accent-hover: #47a6ff;
+    --link: #2997ff;
+    --focus: #2997ff;
+    --nav: rgba(22, 22, 23, 0.85);
+    --warn-bg: #2a1f05;
+    --warn-line: #5c4310;
+    --warn-ink: #fde68a;
+    --ok: #30d158;
+    --stage-a: #0d2340;
+    --stage-b: #24133d;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #000000;
+  --card: #161618;
+  --surface: #101012;
+  --ink: #f5f5f7;
+  --muted: #a1a1a6;
+  --line: #2c2c30;
+  --accent: #2997ff;
+  --accent-hover: #47a6ff;
+  --link: #2997ff;
+  --focus: #2997ff;
+  --nav: rgba(22, 22, 23, 0.85);
+  --warn-bg: #2a1f05;
+  --warn-line: #5c4310;
+  --warn-ink: #fde68a;
+  --ok: #30d158;
+  --stage-a: #0d2340;
+  --stage-b: #24133d;
+  color-scheme: dark;
+}
+
 @theme inline {
   --color-paper: var(--paper);
   --color-surface: var(--surface);
+  --color-card: var(--card);
+  --color-ok: var(--ok);
   --color-ink: var(--ink);
   --color-muted: var(--muted);
   --color-line: var(--line);
@@ -39,6 +91,7 @@ html {
 
 body {
   background: var(--paper);
+  transition: background-color 200ms ease, color 200ms ease;
   font-family: var(--font-sans);
   line-height: 1.55;
   letter-spacing: -0.003em;
@@ -69,9 +122,9 @@ body {
 /* Soft backdrop behind product renders. */
 .stage {
   background:
-    radial-gradient(120% 90% at 15% 10%, #e8f1ff 0%, transparent 55%),
-    radial-gradient(110% 90% at 90% 100%, #f1e9ff 0%, transparent 55%),
-    #f5f5f7;
+    radial-gradient(120% 90% at 15% 10%, var(--stage-a) 0%, transparent 55%),
+    radial-gradient(110% 90% at 90% 100%, var(--stage-b) 0%, transparent 55%),
+    var(--surface);
 }
 
 /* Scroll reveal (see components/Reveal.tsx). Content is visible without JavaScript. */
@@ -106,3 +159,14 @@ details[open] > summary .chev { transform: rotate(45deg); }
 .prose-plain a:hover { text-decoration: underline; text-underline-offset: 3px; }
 .prose-plain code { font-size: 0.88em; background: var(--surface); border: 1px solid var(--line); padding: 0.05em 0.35em; border-radius: 6px; }
 .prose-plain strong { font-weight: 650; }
+
+/* Mobile menu (components/MobileNav.tsx): a native <details>, so it works without JavaScript. */
+.mobile-nav > summary { list-style: none; }
+.mobile-nav > summary::-webkit-details-marker { display: none; }
+.mobile-nav[open] .icon-open { display: none; }
+.mobile-nav:not([open]) .icon-close { display: none; }
+
+/* Subtle hero glow behind the logo. */
+.hero-glow {
+  background: radial-gradient(50% 60% at 50% 0%, color-mix(in srgb, var(--accent) 18%, transparent) 0%, transparent 70%);
+}

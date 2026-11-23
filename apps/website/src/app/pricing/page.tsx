@@ -15,7 +15,7 @@ export default function Page() {
     <>
       <PageHeader title="Pricing" intro="One price, one time. A 7-day free trial first." />
       <Container className="py-6">
-        <div className="max-w-2xl rounded-[28px] border border-line bg-white p-8 shadow-soft sm:p-10">
+        <div className="max-w-2xl rounded-[28px] border border-line bg-card p-8 shadow-soft sm:p-10">
           <p className="flex items-baseline gap-3">
             <span className="text-[64px] font-bold leading-none tracking-[-0.03em]">{site.price.replace("US", "")}</span>
             <span className="text-[17px] text-muted">one time · no subscription</span>
@@ -24,7 +24,7 @@ export default function Page() {
           <ul className="mt-5 grid gap-2 text-[15px] sm:grid-cols-2">
             {["Up to 2 Macs you own", "Every 1.x update", "7-day free trial first", "14 days to ask for a refund"].map((x) => (
               <li key={x} className="flex items-center gap-2">
-                <span className="text-[#28a745]" aria-hidden="true">✓</span> {x}
+                <span className="text-ok" aria-hidden="true">✓</span> {x}
               </li>
             ))}
           </ul>
