@@ -50,9 +50,10 @@ describe("clientIp", () => {
     expect(clientIp(h, { TRUSTED_PROXY_COUNT: "2" } as unknown as NodeJS.ProcessEnv)).toBe("198.51.100.7");
   });
 
-  it("prefers host-set headers", () => {
-    const h = new Headers({ "cf-connecting-ip": "192.0.2.1", "x-forwarded-for": "1.2.3.4" });
-    expect(clientIp(h, {} as unknown as NodeJS.ProcessEnv)).toBe("192.0.2.1");
+  it("uses CLIENT_IP_HEADER only when configured", () => {
+    const h = new Headers({ "cf-connecting-ip": "192.0.2.1", "x-real-ip": "6.6.6.6", "x-forwarded-for": "1.2.3.4" });
+    expect(clientIp(h, {} as unknown as NodeJS.ProcessEnv)).toBe("1.2.3.4");
+    expect(clientIp(h, { CLIENT_IP_HEADER: "cf-connecting-ip" } as unknown as NodeJS.ProcessEnv)).toBe("192.0.2.1");
   });
 
   it("falls back to unknown", () => {
