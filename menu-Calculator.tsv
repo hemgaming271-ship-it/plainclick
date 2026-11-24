@@ -1,0 +1,119 @@
+# Calculator - path	cmdChar	modifiers	identifier	enabled	title
+0.0.0		0	_aboutThisMacRequested:	yes	About This Mac
+0.0.1		10	_systemInformationRequested:	yes	System Information
+0.0.3		0	_systemSettingsRequested:	yes	System Settings…
+0.0.4		0	_appStoreRequested:	yes	App Store
+0.0.6		0	_recentsRequested:	yes	Recent Items
+0.0.6.0.1		8	_recentItemRequested:	yes	Calculator
+0.0.6.0.2		0	_recentItemRequested:	yes	Show “Calculator” in Finder
+0.0.6.0.3		8	_recentItemRequested:	yes	Finder
+0.0.6.0.4		0	_recentItemRequested:	yes	Show “Finder” in Finder
+0.0.6.0.5		8	_recentItemRequested:	yes	Installer
+0.0.6.0.6		0	_recentItemRequested:	yes	Show “Installer” in Finder
+0.0.6.0.7		8	_recentItemRequested:	yes	Safari
+0.0.6.0.8		0	_recentItemRequested:	yes	Show “Safari” in Finder
+0.0.6.0.9		8	_recentItemRequested:	yes	System Settings
+0.0.6.0.10		0	_recentItemRequested:	yes	Show “System Settings” in Finder
+0.0.6.0.11		8	_recentItemRequested:	yes	TextEdit
+0.0.6.0.12		0	_recentItemRequested:	yes	Show “TextEdit” in Finder
+0.0.6.0.15		8	_recentItemRequested:	yes	a.html
+0.0.6.0.16		0	_recentItemRequested:	yes	Show “a.html” in Finder
+0.0.6.0.17		8	_recentItemRequested:	yes	AnkaGuestAddons.pkg
+0.0.6.0.18		0	_recentItemRequested:	yes	Show “AnkaGuestAddons.pkg” in Finder
+0.0.6.0.19		8	_recentItemRequested:	yes	doc.txt
+0.0.6.0.20		0	_recentItemRequested:	yes	Show “doc.txt” in Finder
+0.0.6.0.23		0	_recentItemRequested:	yes	Macintosh HD
+0.0.6.0.25		0	_clearRecentItemsRequested:	yes	Clear Menu
+0.0.8	⎋	2	_forceQuitPanelRequested:	yes	Force Quit…
+0.0.9	⎋	3	_forceQuitRequested:	yes	Force Quit Calculator
+0.0.11		0	_sleepRequested:	yes	Sleep
+0.0.12		0	_restartRequested:	yes	Restart…
+0.0.13		10	_restartNowRequested:	yes	Restart
+0.0.14		0	_shutDownRequested:	yes	Shut Down…
+0.0.15		10	_shutDownNowRequested:	yes	Shut Down
+0.0.17	Q	4	_lockScreenRequested:	yes	Lock Screen
+0.0.18	Q	1	_logOutRequested:	yes	Log Out Anka…
+0.0.19	Q	3	_logOutNowRequested:	yes	Log Out Anka
+1.0.0		8	menuAction:	yes	About Calculator
+1.0.2.0.0		0	_processRequest:	yes	Activity Monitor
+1.0.2.0.1		0	_processRequest:	yes	Allocations & Leaks
+1.0.2.0.2		0	_processRequest:	yes	File Activity
+1.0.2.0.3		0	_processRequest:	yes	System Trace
+1.0.2.0.4		0	_processRequest:	yes	Time Profile Active Application
+1.0.2.0.5		0	_processRequest:	yes	Time Profile App Under Mouse
+1.0.2.0.6		0	_processRequest:	yes	Time Profile Entire System
+1.0.2.0.7		0	_processRequest:	yes	Toggle Instruments Recording
+1.0.2.0.8		0	_configureServicesMenu:	yes	Services Settings…
+1.0.4	H	0	hide:	yes	Hide Calculator
+1.0.5	H	2	hideOtherApplications:	yes	Hide Others
+1.0.6		8	unhideAllApplications:	no	Show All
+1.0.8	Q	0	terminate:	yes	Quit Calculator
+1.0.9	Q	2	NSAlternateQuitMenuItem	yes	Quit and Keep Windows
+2.0.0	Z	0	undo:	no	Undo
+2.0.1	Z	1	redo:	no	Redo
+2.0.3	X	0	cut:	no	Cut
+2.0.4	C	0	copy:	yes	Copy
+2.0.5	V	0	paste:	no	Paste
+2.0.6		8	delete:	no	Delete
+2.0.7	A	0	selectAll:	no	Select All
+2.0.9		0	_NSMenuItemAutoFillIdentifier	yes	AutoFill
+2.0.9.0.0		0	_handleInsertFromContactsCommand:	no	Contact…
+2.0.9.0.1		0	_handleInsertFromPasswordsCommand:	no	Passwords…
+2.0.9.0.2		0	_handleInsertFromCreditCardsCommand:	no	Credit Card…
+3.0.1	1	0	menuAction:	yes	Basic
+3.0.2	2	0	menuAction:	yes	Scientific
+3.0.3	3	0	menuAction:	yes	Programmer
+3.0.6	C	2	menuAction:	yes	Convert
+3.0.7	R	0	menuAction:	yes	RPN Mode
+3.0.9	M	2	menuAction:	yes	Math Notes…
+3.0.11		8	menuAction:	yes	Hide Thousands Separator
+3.0.12		8	ID(id: 10531)	yes	Decimal Places
+3.0.12.0.0		8	menuAction:	yes	0
+3.0.12.0.1		8	menuAction:	yes	1
+3.0.12.0.2		8	menuAction:	yes	2
+3.0.12.0.3		8	menuAction:	yes	3
+3.0.12.0.4		8	menuAction:	yes	4
+3.0.12.0.5		8	menuAction:	yes	5
+3.0.12.0.6		8	menuAction:	yes	6
+3.0.12.0.7		8	menuAction:	yes	7
+3.0.12.0.8		8	menuAction:	yes	8
+3.0.12.0.9		8	menuAction:	yes	9
+3.0.12.0.10		8	menuAction:	yes	10
+3.0.12.0.11		8	menuAction:	yes	11
+3.0.12.0.12		8	menuAction:	yes	12
+3.0.12.0.13		8	menuAction:	yes	13
+3.0.12.0.14		8	menuAction:	yes	14
+3.0.12.0.15		8	menuAction:	yes	15
+3.0.14	S	4	menuAction:	yes	Show History
+3.0.15	F	24	toggleFullScreen:	no	Enter Full Screen
+4.0.0	W	0	performClose:	yes	Close
+4.0.1	W	2	closeAll:	yes	Close All
+4.0.2	M	0	performMiniaturize:	yes	Minimize
+4.0.3		2	miniaturizeAll:	yes	Minimize All
+4.0.4		8	performZoom:	no	Zoom
+4.0.5		10	zoomAll:	yes	Zoom All
+4.0.6	F	28	_zoomFill:	no	Fill
+4.0.7	C	28	_zoomCenter:	yes	Center
+4.0.9.0.1		28	_zoomLeft:	yes	Left
+4.0.9.0.2		28	_zoomRight:	yes	Right
+4.0.9.0.3		28	_zoomTop:	yes	Top
+4.0.9.0.4		28	_zoomBottom:	yes	Bottom
+4.0.9.0.7		0	_zoomTopLeft:	yes	Top Left
+4.0.9.0.8		0	_zoomTopRight:	yes	Top Right
+4.0.9.0.9		0	_zoomBottomLeft:	yes	Bottom Left
+4.0.9.0.10		0	_zoomBottomRight:	yes	Bottom Right
+4.0.9.0.13		29	_zoomLeftAndRight:	yes	Left & Right
+4.0.9.0.14		31	_zoomLeftThreeUp:	yes	Left & Quarters
+4.0.9.0.15		29	_zoomRightAndLeft:	yes	Right & Left
+4.0.9.0.16		31	_zoomRightThreeUp:	yes	Right & Quarters
+4.0.9.0.17		29	_zoomTopAndBottom:	yes	Top & Bottom
+4.0.9.0.18		31	_zoomTopThreeUp:	yes	Top & Quarters
+4.0.9.0.19		29	_zoomBottomAndTop:	yes	Bottom & Top
+4.0.9.0.20		31	_zoomBottomThreeUp:	yes	Bottom & Quarters
+4.0.9.0.21		0	_zoomQuarters:	yes	Quarters
+4.0.9.0.23	R	28	_zoomUntile:	no	Return to Previous Size
+4.0.12		0	_removeWindowFromStageManagerSet:	no	Remove Window from Set
+4.0.14		8	menuAction:	yes	Always on Top
+4.0.16		8	arrangeInFront:	yes	Bring All to Front
+4.0.17		10	alternateArrangeInFront:	yes	Arrange in Front
+5.0.0	?	0	showHelp:	yes	Calculator Help

@@ -1,0 +1,292 @@
+# Safari - path	cmdChar	modifiers	identifier	enabled	title
+0.0.0		0	_aboutThisMacRequested:	yes	About This Mac
+0.0.1		10	_systemInformationRequested:	yes	System Information
+0.0.3		0	_systemSettingsRequested:	yes	System Settings…
+0.0.4		0	_appStoreRequested:	yes	App Store
+0.0.6		0	_recentsRequested:	yes	Recent Items
+0.0.6.0.1		8	_recentItemRequested:	yes	Finder
+0.0.6.0.2		0	_recentItemRequested:	yes	Show “Finder” in Finder
+0.0.6.0.3		8	_recentItemRequested:	yes	Installer
+0.0.6.0.4		0	_recentItemRequested:	yes	Show “Installer” in Finder
+0.0.6.0.5		8	_recentItemRequested:	yes	Safari
+0.0.6.0.6		0	_recentItemRequested:	yes	Show “Safari” in Finder
+0.0.6.0.7		8	_recentItemRequested:	yes	System Settings
+0.0.6.0.8		0	_recentItemRequested:	yes	Show “System Settings” in Finder
+0.0.6.0.9		8	_recentItemRequested:	yes	TextEdit
+0.0.6.0.10		0	_recentItemRequested:	yes	Show “TextEdit” in Finder
+0.0.6.0.13		8	_recentItemRequested:	yes	a.html
+0.0.6.0.14		0	_recentItemRequested:	yes	Show “a.html” in Finder
+0.0.6.0.15		8	_recentItemRequested:	yes	AnkaGuestAddons.pkg
+0.0.6.0.16		0	_recentItemRequested:	yes	Show “AnkaGuestAddons.pkg” in Finder
+0.0.6.0.17		8	_recentItemRequested:	yes	doc.txt
+0.0.6.0.18		0	_recentItemRequested:	yes	Show “doc.txt” in Finder
+0.0.6.0.21		0	_recentItemRequested:	yes	Macintosh HD
+0.0.6.0.23		0	_clearRecentItemsRequested:	yes	Clear Menu
+0.0.8	⎋	2	_forceQuitPanelRequested:	yes	Force Quit…
+0.0.9	⎋	3	_forceQuitRequested:	yes	Force Quit Safari
+0.0.11		0	_sleepRequested:	yes	Sleep
+0.0.12		0	_restartRequested:	yes	Restart…
+0.0.13		10	_restartNowRequested:	yes	Restart
+0.0.14		0	_shutDownRequested:	yes	Shut Down…
+0.0.15		10	_shutDownNowRequested:	yes	Shut Down
+0.0.17	Q	4	_lockScreenRequested:	yes	Lock Screen
+0.0.18	Q	1	_logOutRequested:	yes	Log Out Anka…
+0.0.19	Q	3	_logOutNowRequested:	yes	Log Out Anka
+1.0.0		8	AboutSafari	yes	About Safari
+1.0.1		0	SafariExtensionsLibrary	yes	Safari Extensions…
+1.0.2		0	_NS:1305	no	
+1.0.3	,	0	Preferences	yes	Settings…
+1.0.4		0	ShowPrivacyReport	yes	Privacy Report…
+1.0.6		0	ShowPerSitePreferencesMenuItem	no	Settings for This Website…
+1.0.7		0	ShowCertificate	no	Connection Security Details…
+1.0.8		0	_NS:1306	no	
+1.0.9		0	ClearHistory	yes	Clear History…
+1.0.10		10	ClearHistoryAndKeepWebsiteData	yes	Clear History and Keep Website Data…
+1.0.12		0	CreateProfileMenuItem	yes	Create Profile…
+1.0.13		0	_NS:1307	no	
+1.0.14		0	Services	yes	Services
+1.0.14.0.0		0	_processRequest:	yes	Activity Monitor
+1.0.14.0.1		0	_processRequest:	yes	Allocations & Leaks
+1.0.14.0.2		0	_processRequest:	yes	File Activity
+1.0.14.0.3		0	_processRequest:	yes	System Trace
+1.0.14.0.4		0	_processRequest:	yes	Time Profile Active Application
+1.0.14.0.5		0	_processRequest:	yes	Time Profile App Under Mouse
+1.0.14.0.6		0	_processRequest:	yes	Time Profile Entire System
+1.0.14.0.7		0	_processRequest:	yes	Toggle Instruments Recording
+1.0.14.0.8		0	_configureServicesMenu:	yes	Services Settings…
+1.0.15		0	_NS:1308	no	
+1.0.16	H	0	HideApplication	yes	Hide Safari
+1.0.17	H	2	HideOthers	yes	Hide Others
+1.0.18		0	ShowAll	no	Show All
+1.0.19		0	_NS:1309	no	
+1.0.20	Q	0	QuitApplication	yes	Quit Safari
+1.0.21	Q	2	NSAlternateQuitMenuItem	yes	Quit and Keep Windows
+2.0.0	N	0	NewWindow?isDefaultProfile=true	yes	New Window
+2.0.1	N	1	NewPrivateWindow	yes	New Private Window
+2.0.2	T	0	NewTab	yes	New Tab
+2.0.3	T	2	NewTab	yes	New Tab at End
+2.0.4	N	4	NewEmptyTabGroupMenuItem	yes	New Empty Tab Group
+2.0.5		0	NewTabGroupWithTabsMenuItem	yes	New Tab Group with This Tab
+2.0.6	O	0	OpenFile	yes	Open File…
+2.0.7	L	0	OpenLocation	yes	Open Location…
+2.0.8		0	_NS:579	no	
+2.0.9	W	0	CloseWindow	yes	Close Window
+2.0.10	W	1	_NS:247	yes	Close Window
+2.0.11	W	2	CloseAllWindows	yes	Close All Windows
+2.0.12	W	3	_NS:225	yes	Close All Windows
+2.0.13		0	CloseTab	no	Close Tab
+2.0.14		2	CloseOtherTabs	no	Close Other Tabs
+2.0.15	W	4	DeleteTabGroupMenuItem	no	Delete Tab Group
+2.0.16	S	0	SaveAs	yes	Save As…
+2.0.17	S	1	_NS:585	yes	Save As…
+2.0.18		0	_NS:589	no	
+2.0.19		8	Share	yes	Share…
+2.0.20		8	ExportAsPDF	yes	Export as PDF…
+2.0.21		0	AddToDock	no	Add to Dock…
+2.0.22		0	_NS:594	no	
+2.0.23		8	ImportBrowsingData	yes	Import Browsing Data from File or Folder…
+2.0.24		8	Export	yes	Export Browsing Data to File…
+2.0.25		0	_NS:609	no	
+2.0.26	P	0	Print	yes	Print…
+3.0.0	Z	0	Undo	no	Undo
+3.0.1	Z	1	Redo	no	Redo
+3.0.2		0	_NS:305	no	
+3.0.3	X	0	Cut	no	Cut
+3.0.4	C	0	Copy	no	Copy
+3.0.5	C	4	Copy Search Terms	yes	Copy Search Terms
+3.0.6	V	0	Paste	no	Paste
+3.0.7	V	3	PasteAndMatchStyle	no	Paste and Match Style
+3.0.8		0	Delete	no	Delete
+3.0.9	A	0	SelectAll	yes	Select All
+3.0.10		0	_NS:343	no	
+3.0.11	A	1	AutoFillForm	yes	AutoFill Form
+3.0.12		0	_NS:344	no	
+3.0.13		0	Find	yes	Distraction Control
+3.0.13.0.0		8	AutoFillForm	no	Hide Distracting Items...
+3.0.13.0.1		8	AutoFillForm	no	Show Hidden Items
+3.0.13.0.2		8	AutoFillForm	no	Report Issues...
+3.0.14		0	_NS:345	no	
+3.0.15		0	Find	yes	Find
+3.0.15.0.0	F	2	WebsiteSearch	yes	Google Search…
+3.0.15.0.1		0	_NS:359	no	
+3.0.15.0.2	F	0	Find	yes	Find…
+3.0.15.0.3	G	0	FindNext	no	Find Next
+3.0.15.0.4	G	1	FindPrevious	no	Find Previous
+3.0.15.0.5		0	_NS:374	no	
+3.0.15.0.6	F	1	HideFindBanner	no	Hide Find Banner
+3.0.15.0.7		0	_NS:380	no	
+3.0.15.0.8	E	0	UseSelectionForFind	no	Use Selection for Find
+3.0.15.0.9	J	0	JumpToSelection	no	Jump to Selection
+3.0.16		8	SpellingAndGrammar	yes	Spelling and Grammar
+3.0.16.0.0	:	0	Spelling	no	Show Spelling and Grammar
+3.0.16.0.1	;	0	CheckDocumentNow	no	Check Document Now
+3.0.16.0.2		8	_NS:410	no	
+3.0.16.0.3		8	CheckSpellingWhileTyping	yes	Check Spelling While Typing
+3.0.16.0.4		8	CheckGrammarWithSpelling	yes	Check Grammar With Spelling
+3.0.16.0.5		8	CorrectSpellingAutomatically	no	Correct Spelling Automatically
+3.0.17		8	Substitutions	yes	Substitutions
+3.0.17.0.0		8	ShowSubstitutions	no	Show Substitutions
+3.0.17.0.1		8	_NS:435	no	
+3.0.17.0.2		8	SmartCopyPaste	no	Smart Copy/Paste
+3.0.17.0.3		8	SmartQuotes	no	Smart Quotes
+3.0.17.0.4		8	SmartDashes	no	Smart Dashes
+3.0.17.0.5		8	SmartLinks	no	Smart Links
+3.0.17.0.6		8	TextReplacement	no	Text Replacement
+3.0.18		8	Transformations	yes	Transformations
+3.0.18.0.0		8	MakeUpperCase	no	Make Upper Case
+3.0.18.0.1		8	MakeLowerCase	no	Make Lower Case
+3.0.18.0.2		8	Capitalize	no	Capitalize
+3.0.19		8	Speech	yes	Speech
+3.0.19.0.0		8	StartSpeaking	yes	Start Speaking
+3.0.19.0.1		8	StopSpeaking	no	Stop Speaking
+3.0.21		0	_NSMenuItemAutoFillIdentifier	yes	AutoFill
+3.0.21.0.0		0	_handleInsertFromContactsCommand:	no	Contact…
+3.0.21.0.1		0	_handleInsertFromPasswordsCommand:	no	Passwords…
+3.0.21.0.2		0	_handleInsertFromCreditCardsCommand:	no	Credit Card…
+3.0.22	D	24	startDictation:	yes	Start Dictation…
+3.0.23	E	24	orderFrontCharacterPalette:	yes	Emoji & Symbols
+4.0.0		8	AlwaysShowToolbarInFullScreen	no	Always Show Toolbar in Full Screen
+4.0.1		8	CustomizeToolbar	yes	Customize Toolbar…
+4.0.2		0	_NS:899	no	
+4.0.3		8	AlwaysShowTabBar	yes	Always Show Tab Bar
+4.0.4	B	1	ShowFavoritesBar	yes	Show Favorites Bar
+4.0.5	/	0	ShowStatusBarDisabled	yes	Show Status Bar
+4.0.6		0	_NS:908	no	
+4.0.7	L	1	ShowSidebar	yes	Show Sidebar
+4.0.8	1	4	ShowBookmarksSidebar	yes	Show Bookmarks Sidebar
+4.0.9	2	4	ShowReadingListSidebar	yes	Show Reading List Sidebar
+4.0.10		4	toggleSharedWithYou:	yes	Show Shared with You
+4.0.11		0	_NS:922	no	
+4.0.12	R	1	ShowReader	yes	Show Reader
+4.0.13	\	1	ShowTabOverview	yes	Show Tab Overview
+4.0.14	L	2	ShowDownloads	no	Show Downloads
+4.0.15		0	_NS:930	no	
+4.0.16	.	0	Stop	yes	Stop
+4.0.17	R	0	ReloadPage	yes	Reload Page
+4.0.18	R	2	ReloadPageFromOrigin	yes	Reload Page From Origin
+4.0.20.0.0		0	Translate-en_US	no	Translate to English
+4.0.20.0.1		0	PreferredLanguages	yes	Preferred Languages…
+4.0.20.0.3		0	ViewOriginalTranslation	no	View Original
+4.0.20.0.4		0	ReportTranslationIssue	no	Report Translation Issue
+4.0.21		0	_NS:931	no	
+4.0.22	0	0	ActualSize	no	Actual Size
+4.0.23	+	0	ZoomIn	yes	Zoom In
+4.0.24	+	2	MakeTextBigger	yes	Make Text Bigger
+4.0.25	-	0	ZoomOut	yes	Zoom Out
+4.0.26	-	2	MakeTextSmaller	yes	Make Text Smaller
+4.0.27		0	_NS:958	no	
+4.0.28		0	TextEncoding	yes	Text Encoding
+4.0.28.0.0		0	_NS:871	yes	Default
+4.0.28.0.1		0	changeTextEncoding:	yes	Western (ISO Latin 1)
+4.0.28.0.2		0	changeTextEncoding:	yes	Western (Mac OS Roman)
+4.0.28.0.4		0	changeTextEncoding:	yes	Unicode (UTF-8)
+4.0.28.0.6		0	changeTextEncoding:	yes	Japanese (Shift JIS)
+4.0.28.0.7		0	changeTextEncoding:	yes	Japanese (ISO 2022-JP)
+4.0.28.0.8		0	changeTextEncoding:	yes	Japanese (EUC)
+4.0.28.0.9		0	changeTextEncoding:	yes	Japanese (Shift JIS X0213)
+4.0.28.0.11		0	changeTextEncoding:	yes	Traditional Chinese (Big 5)
+4.0.28.0.12		0	changeTextEncoding:	yes	Traditional Chinese (Big 5 HKSCS)
+4.0.28.0.13		0	changeTextEncoding:	yes	Traditional Chinese (Windows, DOS)
+4.0.28.0.15		0	changeTextEncoding:	yes	Korean (ISO 2022-KR)
+4.0.28.0.16		0	changeTextEncoding:	yes	Korean (Mac OS)
+4.0.28.0.17		0	changeTextEncoding:	yes	Korean (Windows, DOS)
+4.0.28.0.19		0	changeTextEncoding:	yes	Arabic (ISO 8859-6)
+4.0.28.0.20		0	changeTextEncoding:	yes	Arabic (Windows)
+4.0.28.0.22		0	changeTextEncoding:	yes	Hebrew (ISO 8859-8)
+4.0.28.0.23		0	changeTextEncoding:	yes	Hebrew (Windows)
+4.0.28.0.25		0	changeTextEncoding:	yes	Greek (ISO 8859-7)
+4.0.28.0.26		0	changeTextEncoding:	yes	Greek (Windows)
+4.0.28.0.28		0	changeTextEncoding:	yes	Cyrillic (ISO 8859-5)
+4.0.28.0.29		0	changeTextEncoding:	yes	Cyrillic (Mac OS)
+4.0.28.0.30		0	changeTextEncoding:	yes	Cyrillic (KOI8-R)
+4.0.28.0.31		0	changeTextEncoding:	yes	Cyrillic (Windows)
+4.0.28.0.32		0	changeTextEncoding:	yes	Ukrainian (KOI8-U)
+4.0.28.0.34		0	changeTextEncoding:	yes	Thai (Windows, DOS)
+4.0.28.0.36		0	changeTextEncoding:	yes	Simplified Chinese (GB 2312)
+4.0.28.0.37		0	changeTextEncoding:	yes	Simplified Chinese (HZ GB 2312)
+4.0.28.0.38		0	changeTextEncoding:	yes	Chinese (GB 18030)
+4.0.28.0.40		0	changeTextEncoding:	yes	Central European (ISO Latin 2)
+4.0.28.0.41		0	changeTextEncoding:	yes	Central European (Mac OS)
+4.0.28.0.42		0	changeTextEncoding:	yes	Central European (Windows Latin 2)
+4.0.28.0.44		0	changeTextEncoding:	yes	Vietnamese (Windows)
+4.0.28.0.46		0	changeTextEncoding:	yes	Turkish (ISO Latin 5)
+4.0.28.0.47		0	changeTextEncoding:	yes	Turkish (Windows Latin 5)
+4.0.28.0.49		0	changeTextEncoding:	yes	Central European (ISO Latin 4)
+4.0.28.0.50		0	changeTextEncoding:	yes	Baltic (Windows)
+4.0.29		8	_NS:959	no	
+4.0.30	F	24	EnterFullScreen	yes	Enter Full Screen
+5.0.0	Y	0	ShowHistory	yes	Show All History
+5.0.1		8	_NS:675	no	
+5.0.2	[	0	Back	yes	Back
+5.0.3	]	0	Forward	no	Forward
+5.0.4	H	1	Home	yes	Home
+5.0.5	S	2	SearchResultsSnapBack	no	Return to Search Results
+5.0.6		0	_NS:691	no	
+5.0.7		0	RecentlyClosed	no	Recently Closed
+5.0.8	T	1	ReopenLastClosedWindow	no	Reopen Last Closed Window or Tab
+5.0.9		0	ReopenAllWindowsFromLastSession	no	Reopen All Windows from Last Session
+5.0.11		0	_takeLocationFromHistoryEntry:	yes	PC-B 1795526219890
+5.0.13		0	ClearHistoryMenuItem	yes	Clear History…
+5.0.14		10	_clearHistoryAndKeepWebsiteDataFromMenu:	yes	Clear History and Keep Website Data…
+6.0.0		8	ShowTopSites	yes	Show Start Page
+6.0.1		8	_NS:159	no	
+6.0.2		8	ShowBookmarks	yes	Show Bookmarks
+6.0.3	B	2	EditBookmarks	yes	Edit Bookmarks
+6.0.4		8	_NS:175	no	
+6.0.5	D	0	AddBookmark	yes	Add Bookmark…
+6.0.6		0	AddBookmarkForTheseTabs	no	Add Bookmarks for Open Tabs…
+6.0.7		8	AddBookmarkFolder	yes	Add Bookmark Folder
+6.0.8		8	_NS:192	no	
+6.0.9	D	1	AddToReadingList	yes	Add to Reading List
+6.0.10		8	AddTheseTabsToReadingList	no	Add Open Tabs to Reading List
+6.0.11		8	SelectPreviousItemInReadingList	no	Select Previous Item in Reading List
+6.0.12		8	SelectNextItemInReadingList	no	Select Next Item in Reading List
+7.0.0	M	0	Minimize	yes	Minimize
+7.0.1	M	2	MinimizeAll	yes	Minimize All
+7.0.2		8	Zoom	yes	Zoom
+7.0.3		10	zoomAll:	yes	Zoom All
+7.0.4	F	28	_zoomFill:	yes	Fill
+7.0.5	C	28	_zoomCenter:	yes	Center
+7.0.7.0.1		28	_zoomLeft:	yes	Left
+7.0.7.0.2		28	_zoomRight:	yes	Right
+7.0.7.0.3		28	_zoomTop:	yes	Top
+7.0.7.0.4		28	_zoomBottom:	yes	Bottom
+7.0.7.0.7		0	_zoomTopLeft:	yes	Top Left
+7.0.7.0.8		0	_zoomTopRight:	yes	Top Right
+7.0.7.0.9		0	_zoomBottomLeft:	yes	Bottom Left
+7.0.7.0.10		0	_zoomBottomRight:	yes	Bottom Right
+7.0.7.0.13		29	_zoomLeftAndRight:	yes	Left & Right
+7.0.7.0.14		31	_zoomLeftThreeUp:	yes	Left & Quarters
+7.0.7.0.15		29	_zoomRightAndLeft:	yes	Right & Left
+7.0.7.0.16		31	_zoomRightThreeUp:	yes	Right & Quarters
+7.0.7.0.17		29	_zoomTopAndBottom:	yes	Top & Bottom
+7.0.7.0.18		31	_zoomTopThreeUp:	yes	Top & Quarters
+7.0.7.0.19		29	_zoomBottomAndTop:	yes	Bottom & Top
+7.0.7.0.20		31	_zoomBottomThreeUp:	yes	Bottom & Quarters
+7.0.7.0.21		0	_zoomQuarters:	yes	Quarters
+7.0.7.0.23	R	28	_zoomUntile:	no	Return to Previous Size
+7.0.8.0.0		0	_tileLeft:	yes	Left of Screen
+7.0.8.0.1		0	_tileRight:	yes	Right of Screen
+7.0.10		0	_removeWindowFromStageManagerSet:	no	Remove Window from Set
+7.0.11		0	_NS:974	no	
+7.0.12		8	_NS:103	yes	Arrange Tabs By
+7.0.12.0.0		8	ArrangeTabsByTitle	yes	Title
+7.0.12.0.1		8	ArrangeTabsByWebsite	yes	Website
+7.0.13			13	ShowPreviousTab	no	Show Previous Tab
+7.0.14			12	ShowNextTab	no	Show Next Tab
+7.0.15		1	GoToPreviousTabGroup	no	Go To Previous Tab Group
+7.0.16		1	GoToNextTabGroup	no	Go To Next Tab Group
+7.0.17		8	TogglePinTabFromMenu	yes	Pin Tab
+7.0.18		8	DuplicateTab	yes	Duplicate Tab
+7.0.19		0	MoveTabToNewWindow	no	Move Tab to New Window
+7.0.20		0	MergeAllWindows	no	Merge All Windows
+7.0.21		0	_NS:1025	no	
+7.0.23		8	MuteCurrentTab	yes	Mute This Tab
+7.0.24		8	MuteOtherTabs	no	Mute Other Tabs
+7.0.25		0	_NS:1026	no	
+7.0.26		0	BringAllToFront	yes	Bring All to Front
+7.0.27		10	alternateArrangeInFront:	yes	Arrange in Front
+7.0.29		0	makeKeyAndOrderFront:	yes	PC-B 1795526219890
+8.0.0	?	0	ApplicationHelp	yes	Safari Help
+8.0.1		0	_NS:652	no	
+8.0.2		0	Acknowledgments	yes	Acknowledgments
