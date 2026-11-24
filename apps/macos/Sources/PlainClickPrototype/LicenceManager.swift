@@ -101,8 +101,16 @@ final class LicenceManager: ObservableObject {
         return String(cString: buf)
     }
 
+    /// No disk or memory cache and no cookies: every licence answer comes from Dodo, never from an earlier response.
+    private static let session: URLSession = {
+        let config = URLSessionConfiguration.ephemeral
+        config.urlCache = nil
+        config.requestCachePolicy = .reloadIgnoringLocalAndRemoteCacheData
+        return URLSession(configuration: config)
+    }()
+
     private func send(_ req: URLRequest) async throws -> (Int, Data) {
-        let (data, resp) = try await URLSession.shared.data(for: req)
+        let (data, resp) = try await Self.session.data(for: req)
         return ((resp as? HTTPURLResponse)?.statusCode ?? 0, data)
     }
 

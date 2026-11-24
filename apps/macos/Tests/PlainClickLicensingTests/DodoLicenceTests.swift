@@ -19,6 +19,10 @@ final class DodoLicenceTests: XCTestCase {
         XCTAssertEqual(v.url?.absoluteString, "https://test.dodopayments.com/licenses/validate")
         XCTAssertEqual(body(v), ["license_key": "K-12345678", "license_key_instance_id": "lki_1"])
 
+        for req in [a, v] {
+            XCTAssertEqual(req.cachePolicy, .reloadIgnoringLocalAndRemoteCacheData, "licence answers must never come from a cache")
+        }
+
         let d = api.deactivateRequest(key: "K-12345678", instanceID: "lki_1")
         XCTAssertEqual(d.url?.absoluteString, "https://live.dodopayments.com/licenses/deactivate")
         XCTAssertEqual(body(d), ["license_key": "K-12345678", "license_key_instance_id": "lki_1"])

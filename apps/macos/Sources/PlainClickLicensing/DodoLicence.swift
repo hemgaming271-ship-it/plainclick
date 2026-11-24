@@ -44,7 +44,9 @@ public struct DodoLicenceAPI: Sendable {
     }
 
     private func request(_ path: String, _ body: [String: String]) -> URLRequest {
-        var req = URLRequest(url: environment.baseURL.appendingPathComponent(String(path.dropFirst())), timeoutInterval: 15)
+        // Never answer a licence check from a cache: a stale "valid" must not restart the offline grace period.
+        var req = URLRequest(url: environment.baseURL.appendingPathComponent(String(path.dropFirst())),
+                             cachePolicy: .reloadIgnoringLocalAndRemoteCacheData, timeoutInterval: 15)
         req.httpMethod = "POST"
         req.setValue("application/json", forHTTPHeaderField: "Content-Type")
         req.setValue("application/json", forHTTPHeaderField: "Accept")
