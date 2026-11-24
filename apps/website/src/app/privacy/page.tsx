@@ -14,6 +14,7 @@ export default function Page() {
           <li>PlainClick reads the menu commands of supported apps through macOS Accessibility, so it can press them.</li>
           <li>It does <strong>not</strong> upload screen contents, accessibility trees, window or document names, document text, or browsing history.</li>
           <li>Your settings and pinned actions are stored locally. Your licence is stored in a file on your Mac that only your user account can read.</li>
+          <li>PlainClick checks for updates by downloading a small list of versions from GitHub (where releases are hosted). It asks before checking automatically, and you can check by hand from its menu. The request includes the app version and macOS version, nothing else about you or your Mac.</li>
           <li>There are no analytics and no automatic crash uploads. If you choose to send a diagnostic report, you&apos;ll see what it contains first, with personal details removed.</li>
         </ul>
         <h2>When you buy</h2>

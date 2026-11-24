@@ -60,7 +60,7 @@ export default function Page() {
                 <li>Click <strong>Open Anyway</strong>, confirm with your password or Touch ID, then click <strong>Open Anyway</strong> again.</li>
               </ol>
               <p>
-                You do this the first time, and again after you install an update. It allows <strong>only PlainClick</strong>. Keep Gatekeeper and every other
+                You do this once, when you first install it. Later versions install from PlainClick&apos;s menu → <strong>Check for Updates…</strong> without this step (if you download a new version from this page, you&apos;ll need to do it again). It allows <strong>only PlainClick</strong>. Keep Gatekeeper and every other
                 security setting switched on. You never need to turn them off for PlainClick. If you&apos;d rather not
                 do this, don&apos;t install it.
               </p>

@@ -13,7 +13,7 @@ Everything here costs **nothing up front**. Dodo Payments takes its fee per sale
 | Builds and tests | GitHub Actions, free for public repos | `.github/workflows/` |
 
 **What you give up by not paying Apple:** the app isn't notarized. The first time a buyer opens it, they click
-**System Settings → Privacy & Security → Open Anyway**, and again after each update. The download page, Help and Terms say this plainly.
+**System Settings → Privacy & Security → Open Anyway** once. Updates installed with the in-app **Check for Updates…** (Sparkle) don't need it again. The download page, Help and Terms say this plainly.
 Never tell buyers to turn Gatekeeper off, and never call the app "notarized" or "Apple verified".
 If you pay Apple later, follow `docs/signing-setup.md`. `release.yml` switches to notarized mode on its own once those secrets exist.
 
@@ -40,6 +40,7 @@ certificate gives the app a new identity, and every user would have to grant Acc
 |---|---|---|
 | `SELFSIGNED_P12_BASE64` | Secret | contents of `SELFSIGNED_P12_BASE64.txt` |
 | `SELFSIGNED_P12_PASSWORD` | Secret | contents of `SELFSIGNED_P12_PASSWORD.txt` |
+| `SPARKLE_ED_PRIVATE_KEY` | Secret | contents of `SPARKLE_ED_PRIVATE_KEY.txt` (signs in-app updates; keep a backup — without it, existing buyers can't be offered updates in the app) |
 | `BUNDLE_ID` | Variable | e.g. `io.github.<your-github-name>.plainclick`, chosen once |
 | `DODO_ENV` | Variable | `test` while testing, `live` for real sales |
 | `DODO_PRODUCT_ID` | Variable | `pdt_…` (test and live products have different IDs) |
