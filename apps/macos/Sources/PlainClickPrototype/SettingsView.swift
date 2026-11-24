@@ -29,6 +29,13 @@ struct SettingsView: View {
 }
 
 private struct GeneralTab: View {
+    static let appVersion: String = {
+        let info = Bundle.main.infoDictionary
+        let short = info?["CFBundleShortVersionString"] as? String ?? "?"
+        let build = info?["CFBundleVersion"] as? String ?? "?"
+        return "\(short) (\(build))"
+    }()
+
     @ObservedObject var settings: AppSettings
     @State private var launchAtLogin = LaunchAtLogin.isEnabled
 
@@ -54,6 +61,9 @@ private struct GeneralTab: View {
                 Toggle("Quick keys: ⌃⌥1 – ⌃⌥9 press the panel's actions", isOn: $settings.quickKeys)
                 Text("Quick keys use the same safety checks as clicking: they only press tested commands in the front app. Turn them off if they clash with another app's shortcuts.")
                     .font(.caption).foregroundStyle(.secondary)
+            }
+            Section("About") {
+                LabeledContent("Version", value: Self.appVersion)
             }
         }
         .formStyle(.grouped)

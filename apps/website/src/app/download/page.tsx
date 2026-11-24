@@ -35,7 +35,7 @@ export default function Page() {
               <li>
                 Signed with PlainClick&apos;s own certificate, but <strong>not notarized by Apple</strong>. Apple charges
                 developers a yearly fee for notarization, and we haven&apos;t paid it yet. That&apos;s why macOS asks you to
-                confirm once, below. It doesn&apos;t mean Apple checked and rejected the app.
+                confirm it, below. It doesn&apos;t mean Apple checked and rejected the app.
               </li>
             )}
           </ul>
@@ -60,7 +60,7 @@ export default function Page() {
                 <li>Click <strong>Open Anyway</strong>, confirm with your password or Touch ID, then click <strong>Open Anyway</strong> again.</li>
               </ol>
               <p>
-                You only do this once. It allows <strong>only PlainClick</strong>. Keep Gatekeeper and every other
+                You do this the first time, and again after you install an update. It allows <strong>only PlainClick</strong>. Keep Gatekeeper and every other
                 security setting switched on. You never need to turn them off for PlainClick. If you&apos;d rather not
                 do this, don&apos;t install it.
               </p>

@@ -84,7 +84,7 @@ const faqs: { q: string; a: ReactNode }[] = [
       "PlainClick is signed and notarized by Apple, so it opens like any other downloaded app."
     ) : (
       <>
-        Builds are signed with PlainClick&apos;s own certificate but not yet notarized by Apple, so macOS asks you to allow it once in
+        Builds are signed with PlainClick&apos;s own certificate but not yet notarized by Apple, so macOS asks you to allow it, when you first install it and after each update, in
         System Settings → Privacy &amp; Security → Open Anyway. The <Link href="/download#open-anyway" className="text-link hover:underline">download page</Link> shows how.
         You never need to turn off Gatekeeper.
       </>

@@ -15,6 +15,8 @@ export default function Page() {
           <li>Launch at login, from the menu-bar menu or Settings → General.</li>
           <li>A redesigned panel showing the target app&apos;s icon, a ready indicator, and shortcut hints. Status messages now clear after a few seconds, and you can drag the panel by its background.</li>
           <li>Reordering actions in Settings → Apps now updates the open panel straight away.</li>
+          <li>Installing an update no longer makes macOS ask for your login password before PlainClick can read its licence.</li>
+          <li>Settings → General now shows the app version.</li>
           <li>The local trial log can no longer be read as spreadsheet formulas.</li>
         </ul>
       </Prose>

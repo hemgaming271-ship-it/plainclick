@@ -13,7 +13,7 @@ Everything here costs **nothing up front**. Dodo Payments takes its fee per sale
 | Builds and tests | GitHub Actions, free for public repos | `.github/workflows/` |
 
 **What you give up by not paying Apple:** the app isn't notarized. The first time a buyer opens it, they click
-**System Settings → Privacy & Security → Open Anyway** once. The download page, Help and Terms say this plainly.
+**System Settings → Privacy & Security → Open Anyway**, and again after each update. The download page, Help and Terms say this plainly.
 Never tell buyers to turn Gatekeeper off, and never call the app "notarized" or "Apple verified".
 If you pay Apple later, follow `docs/signing-setup.md`. `release.yml` switches to notarized mode on its own once those secrets exist.
 

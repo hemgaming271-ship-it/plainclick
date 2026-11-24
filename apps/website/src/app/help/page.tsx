@@ -61,8 +61,8 @@ export default function Page() {
           <>
             <h3>macOS says it can&apos;t verify PlainClick.</h3>
             <p>
-              Current builds aren&apos;t notarized by Apple yet. Allow PlainClick once in System Settings → Privacy &amp;
-              Security → Open Anyway. The <a href="/download#open-anyway">download page</a> has the steps. Never turn off
+              Current builds aren&apos;t notarized by Apple yet. Allow PlainClick in System Settings → Privacy &amp;
+              Security → Open Anyway, the first time and after each update. The <a href="/download#open-anyway">download page</a> has the steps. Never turn off
               Gatekeeper.
             </p>
           </>

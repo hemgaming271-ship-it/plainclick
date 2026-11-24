@@ -11,5 +11,5 @@ Never ask a customer to email their licence key. Never paste keys, webhook bodie
 | Refund request within 14 days | Refund it in Dodo Payments. The webhook revokes the licence automatically. |
 | App says "not supported" | Expected for apps not in the compatibility table. Log the request; don't promise a date. |
 | Accessibility problems | Have them remove and re-add PlainClick in System Settings → Privacy & Security → Accessibility, then relaunch. |
-| Uninstall | Quit → delete the app → remove it from the Accessibility list → optionally delete its preferences. The Keychain items are under service `local.plainclick.licence`. |
+| Uninstall | Quit → delete the app → remove it from the Accessibility list → optionally delete its preferences. Licence data is in `~/Library/Application Support/<bundle id>/licence.plist`. |
 | Business closure | Activated copies keep working offline (non-expiring entitlement). Publish a final note, and either a licence-free final build or keep `/validate` returning `valid`. |

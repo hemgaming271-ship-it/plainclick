@@ -26,7 +26,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         settings = AppSettings()
-        licence = LicenceManager() // reads the Keychain only; never blocks on the network
+        licence = LicenceManager() // reads local licence data only; never blocks on the network
         engine = Engine(settings: settings, licence: licence)
         panel = PanelController(engine: engine,
                                 onOpenSettings: { [weak self] in self?.showSettings(.licence) },
