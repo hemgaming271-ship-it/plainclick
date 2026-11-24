@@ -44,6 +44,10 @@ final class DodoLicenceTests: XCTestCase {
         let inactive = Data(#"{"code":"INACTIVE_LICENSE_KEY","message":"License key is not active"}"#.utf8)
         XCTAssertEqual(DodoLicenceAPI.parseValidate(status: 403, data: inactive), .invalid)
         XCTAssertEqual(DodoLicenceAPI.parseValidate(status: 404, data: Data(#"{"code":"NOT_FOUND","message":"x"}"#.utf8)), .invalid)
+        XCTAssertEqual(DodoLicenceAPI.parseValidate(status: 404, data: Data(#"{"code":"LICENSE_KEY_INSTANCE_NOT_FOUND"}"#.utf8)), .invalid)
+        // Unrelated JSON errors with a code are not licence answers.
+        XCTAssertEqual(DodoLicenceAPI.parseValidate(status: 403, data: Data(#"{"code":"FORBIDDEN","message":"blocked"}"#.utf8)), .unknown)
+        XCTAssertEqual(DodoLicenceAPI.parseValidate(status: 404, data: Data(#"{"code":"ROUTE_MISSING"}"#.utf8)), .unknown)
         // Outages, captive portals, HTML error pages, odd shapes: never treated as a revocation.
         XCTAssertEqual(DodoLicenceAPI.parseValidate(status: 500, data: Data(#"{"valid":false}"#.utf8)), .unknown)
         XCTAssertEqual(DodoLicenceAPI.parseValidate(status: 503, data: inactive), .unknown)

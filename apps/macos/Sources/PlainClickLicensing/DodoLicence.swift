@@ -95,9 +95,10 @@ public struct DodoLicenceAPI: Sendable {
             guard let valid = json?["valid"] as? Bool else { return .unknown }
             return valid ? .valid : .invalid
         case 403, 404:
-            // Only Dodo's own JSON error ({"code": …}) counts; a captive portal's 403/404 page must not revoke.
-            guard let code = json?["code"] as? String, !code.isEmpty else { return .unknown }
-            return .invalid
+            // Only Dodo's own licence errors count; a captive portal, proxy or unrelated API error must not revoke.
+            guard let code = json?["code"] as? String else { return .unknown }
+            let revokes = status == 403 ? code == "INACTIVE_LICENSE_KEY" : code.hasSuffix("NOT_FOUND")
+            return revokes ? .invalid : .unknown
         default:
             return .unknown
         }
