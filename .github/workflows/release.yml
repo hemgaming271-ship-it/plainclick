@@ -147,6 +147,10 @@ jobs:
           echo "Signing identity: $(echo "$IDENTITY_LINE" | sed -E 's/^[^"]*"(.*)"$/\1/')"
 
       - name: Build universal app
+        env:
+          # In-app updates (Sparkle). The public key is not secret; its private half is the SPARKLE_ED_PRIVATE_KEY secret.
+          SPARKLE_FEED_URL: https://github.com/${{ github.repository }}/releases/latest/download/appcast.xml
+          SPARKLE_PUBLIC_KEY: I/5t6VaPIW3MEQnZTrxWQbFr+TKF/lYjfj76p3WxNnM=
         run: |
           chmod +x scripts/build-app.sh
           UNIVERSAL=1 ./scripts/build-app.sh
@@ -187,6 +191,7 @@ jobs:
         id: package
         env:
           MODE: ${{ steps.mode.outputs.mode }}
+          SPARKLE_KEY: ${{ secrets.SPARKLE_ED_PRIVATE_KEY }}
         run: |
           mkdir -p dist
           SUFFIX=""
@@ -195,6 +200,33 @@ jobs:
           ditto -c -k --keepParent "build/$APP_NAME.app" "dist/$ZIP"
           SHA="$(shasum -a 256 "dist/$ZIP" | awk '{print $1}')"
           echo "$SHA  $ZIP" > "dist/$ZIP.sha256"
+          # Sparkle feed for in-app updates; it goes live when the release is published (feed URL = latest release).
+          if [ -n "$SPARKLE_KEY" ] && [ "$MODE" != adhoc ]; then
+            printf '%s' "$SPARKLE_KEY" | tr -d ' \r\n\t' > "$RUNNER_TEMP/sparkle.key"
+            ED="$(.build/artifacts/sparkle/Sparkle/bin/sign_update --ed-key-file "$RUNNER_TEMP/sparkle.key" "dist/$ZIP")"
+            rm -f "$RUNNER_TEMP/sparkle.key"
+            case "$ED" in *sparkle:edSignature=*) ;; *) echo "::error::sign_update failed"; exit 1 ;; esac
+            cat > dist/appcast.xml <<EOF
+          <?xml version="1.0" encoding="utf-8"?>
+          <rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle">
+            <channel>
+              <title>PlainClick</title>
+              <item>
+                <title>PlainClick $VERSION</title>
+                <pubDate>$(LC_ALL=C date -u "+%a, %d %b %Y %H:%M:%S +0000")</pubDate>
+                <link>https://github.com/$GITHUB_REPOSITORY/releases/tag/v$VERSION</link>
+                <sparkle:version>$BUILD_NUMBER</sparkle:version>
+                <sparkle:shortVersionString>$VERSION</sparkle:shortVersionString>
+                <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+                <enclosure url="https://github.com/$GITHUB_REPOSITORY/releases/download/v$VERSION/PlainClick.zip" type="application/octet-stream" $ED/>
+              </item>
+            </channel>
+          </rss>
+          EOF
+            echo "Appcast written for $VERSION (build $BUILD_NUMBER)."
+          else
+            echo "::warning::No SPARKLE_ED_PRIVATE_KEY secret (or ad-hoc build): no appcast.xml, so buyers won't be offered this version in the app."
+          fi
           echo "zip=$ZIP" >> "$GITHUB_OUTPUT"
           echo "sha256=$SHA" >> "$GITHUB_OUTPUT"
           ls -l dist
@@ -295,7 +327,7 @@ jobs:
           if [ "$MODE" = notarized ]; then
             NOTE="Signed with an Apple Developer ID and notarized by Apple."
           else
-            NOTE="This build is signed with PlainClick's own certificate but is **not notarized by Apple**. The first time you open it, macOS will say it can't verify the app: open System Settings → Privacy & Security, scroll down, and click **Open Anyway** next to PlainClick. You only need to do this once. Never turn off Gatekeeper."
+            NOTE="This build is signed with PlainClick's own certificate but is **not notarized by Apple**. The first time you open it, macOS will say it can't verify the app: open System Settings → Privacy & Security, scroll down, and click **Open Anyway** next to PlainClick. Later versions install from PlainClick › Check for Updates… without this step. Never turn off Gatekeeper."
           fi
           cat > notes.md <<EOF
           PlainClick $VERSION — requires macOS 14 or later (Apple silicon and Intel).
@@ -306,7 +338,9 @@ jobs:
 
           Works with the actions listed on the compatibility page only.
           EOF
-          gh release create "v$VERSION" PlainClick.zip PlainClick.zip.sha256 \
+          ASSETS="PlainClick.zip PlainClick.zip.sha256"
+          [ -f appcast.xml ] && ASSETS="$ASSETS appcast.xml"
+          gh release create "v$VERSION" $ASSETS \
             --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" --draft \
             --title "PlainClick $VERSION" --notes-file notes.md
           echo "Draft release v$VERSION created. Review it on GitHub → Releases, then press Publish." >> "$GITHUB_STEP_SUMMARY"

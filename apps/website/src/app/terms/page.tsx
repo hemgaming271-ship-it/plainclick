@@ -49,7 +49,7 @@ export default function Page() {
             <h2>Not notarized</h2>
             <p>
               Current builds are signed with our own certificate but not notarized by Apple, so macOS asks you to allow
-              PlainClick when you first install it and after each update (see the <a href="/download#open-anyway">download page</a>). This is not an Apple
+              PlainClick when you first install it (see the <a href="/download#open-anyway">download page</a>). This is not an Apple
               review or endorsement.
             </p>
           </>

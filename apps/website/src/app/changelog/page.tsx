@@ -17,6 +17,7 @@ export default function Page() {
           <li>Reordering actions in Settings → Apps now updates the open panel straight away.</li>
           <li>Installing an update no longer makes macOS ask for your login password before PlainClick can read its licence.</li>
           <li>Settings → General now shows the app version.</li>
+          <li>New: PlainClick › Check for Updates… installs new versions in place. Each update is signature-checked, and macOS doesn&apos;t ask you to approve it again with Open Anyway.</li>
           <li>The local trial log can no longer be read as spreadsheet formulas.</li>
         </ul>
       </Prose>

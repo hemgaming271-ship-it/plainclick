@@ -6,6 +6,10 @@ import PackageDescription
 let package = Package(
     name: "PlainClick",
     platforms: [.macOS(.v14)],
+    dependencies: [
+        // In-app updates: EdDSA-signed, installed in place, so macOS doesn't block each new version again.
+        .package(url: "https://github.com/sparkle-project/Sparkle", exact: "2.10.1"),
+    ],
     targets: [
         // Pure, testable licensing logic (no AppKit). Verified against the server's signer via a shared test vector.
         .target(
@@ -27,7 +31,7 @@ let package = Package(
         ),
         .executableTarget(
             name: "PlainClickPrototype",
-            dependencies: ["PlainClickLicensing", "PlainClickCore"],
+            dependencies: ["PlainClickLicensing", "PlainClickCore", .product(name: "Sparkle", package: "Sparkle")],
             path: "Sources/PlainClickPrototype",
             linkerSettings: [
                 .linkedFramework("AppKit"),

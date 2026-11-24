@@ -3,6 +3,7 @@ import ApplicationServices
 import Carbon
 import Combine
 import ServiceManagement
+import Sparkle
 import SwiftUI
 
 final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
@@ -23,6 +24,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     private var developerItems: [NSMenuItem] = []
     private var quickKeys: [HotKey] = []
     private var settingsObserver: AnyCancellable?
+    /// nil unless the build has an update feed and signing key (release builds; see scripts/build-app.sh).
+    private var updater: SPUStandardUpdaterController?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         settings = AppSettings()
@@ -31,6 +34,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         panel = PanelController(engine: engine,
                                 onOpenSettings: { [weak self] in self?.showSettings(.licence) },
                                 onOpenPreferences: { [weak self] in self?.showSettings(.general) })
+
+        let info = Bundle.main.infoDictionary
+        if let feed = info?["SUFeedURL"] as? String, !feed.isEmpty,
+           let key = info?["SUPublicEDKey"] as? String, !key.isEmpty,
+           !ProcessInfo.processInfo.arguments.contains(where: { $0 == "--ui-test" || $0 == "--demo" }) {
+            updater = SPUStandardUpdaterController(startingUpdater: true, updaterDelegate: nil, userDriverDelegate: nil)
+        }
 
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         if let button = statusItem.button {
@@ -45,6 +55,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         menu.addItem(NSMenuItem(title: "Settings…", action: #selector(openSettings), keyEquivalent: ","))
         menu.addItem(NSMenuItem(title: "Manage Licence…", action: #selector(openLicence), keyEquivalent: ""))
         menu.addItem(NSMenuItem(title: "Appearance Guide (free)…", action: #selector(openGuide), keyEquivalent: ""))
+        if let updater {
+            let item = NSMenuItem(title: "Check for Updates…", action: #selector(SPUStandardUpdaterController.checkForUpdates(_:)), keyEquivalent: "")
+            item.target = updater
+            menu.addItem(item)
+        }
         menu.addItem(.separator())
         menu.addItem(pauseItem)
         menu.addItem(loginItem)

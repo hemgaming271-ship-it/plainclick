@@ -30,6 +30,10 @@ rm -rf "$APP"
 mkdir -p "$APP/Contents/MacOS"
 cp "$BIN_DIR/PlainClickPrototype" "$APP/Contents/MacOS/PlainClickPrototype"
 cp Resources/Info.plist "$APP/Contents/Info.plist"
+# Sparkle (in-app updates) is a dynamic framework: embed it and let the binary find it in Contents/Frameworks.
+mkdir -p "$APP/Contents/Frameworks"
+ditto "$BIN_DIR/Sparkle.framework" "$APP/Contents/Frameworks/Sparkle.framework"
+install_name_tool -add_rpath "@executable_path/../Frameworks" "$APP/Contents/MacOS/PlainClickPrototype"
 
 PLIST="$APP/Contents/Info.plist"
 set_plist() { /usr/libexec/PlistBuddy -c "Set :$1 $2" "$PLIST"; }
@@ -43,6 +47,15 @@ fi
 # Licensing: Dodo "test" or "live", and the product whose keys unlock the app.
 [ -n "${DODO_ENV:-}" ] && set_plist PCDodoEnvironment "$DODO_ENV"
 [ -n "${DODO_PRODUCT_ID:-}" ] && set_plist PCDodoProductID "$DODO_PRODUCT_ID"
+# In-app updates are on only when both are set (release builds); otherwise "Check for Updates…" is hidden.
+if [ -n "${SPARKLE_FEED_URL:-}" ] && [ -n "${SPARKLE_PUBLIC_KEY:-}" ]; then
+  /usr/libexec/PlistBuddy -c "Add :SUFeedURL string $SPARKLE_FEED_URL" "$PLIST"
+  /usr/libexec/PlistBuddy -c "Add :SUPublicEDKey string $SPARKLE_PUBLIC_KEY" "$PLIST"
+  /usr/libexec/PlistBuddy -c "Add :SUVerifyUpdateBeforeExtraction bool true" "$PLIST"
+  echo "Updates: $SPARKLE_FEED_URL"
+else
+  echo "Updates: off (SPARKLE_FEED_URL / SPARKLE_PUBLIC_KEY not set)"
+fi
 echo "Licensing: Dodo $(/usr/libexec/PlistBuddy -c 'Print :PCDodoEnvironment' "$PLIST"), product '$(/usr/libexec/PlistBuddy -c 'Print :PCDodoProductID' "$PLIST")'"
 
 echo "Architectures: $(lipo -archs "$APP/Contents/MacOS/PlainClickPrototype")"
@@ -52,7 +65,18 @@ SIGN_ARGS=(--force --options runtime --sign "$IDENTITY")
 # A secure timestamp is required for notarization; ad-hoc and self-signed signatures don't use Apple's timestamp server.
 [ "$IDENTITY" != "-" ] && [ -z "${NO_TIMESTAMP:-}" ] && SIGN_ARGS+=(--timestamp)
 [ -n "${KEYCHAIN:-}" ] && SIGN_ARGS+=(--keychain "$KEYCHAIN")
+# Sign nested code inside-out (Sparkle's documented order), then the app itself. No --deep.
+SPARKLE="$APP/Contents/Frameworks/Sparkle.framework/Versions/B"
+codesign "${SIGN_ARGS[@]}" "$SPARKLE/XPCServices/Installer.xpc"
+codesign "${SIGN_ARGS[@]}" --preserve-metadata=entitlements "$SPARKLE/XPCServices/Downloader.xpc"
+codesign "${SIGN_ARGS[@]}" "$SPARKLE/Autoupdate"
+codesign "${SIGN_ARGS[@]}" "$SPARKLE/Updater.app"
+codesign "${SIGN_ARGS[@]}" "$APP/Contents/Frameworks/Sparkle.framework"
 codesign "${SIGN_ARGS[@]}" "$APP"
+if codesign -dv "$APP" 2>&1 | grep -q '^TeamIdentifier=not set'; then
+  codesign "${SIGN_ARGS[@]}" --entitlements Resources/NoTeamID.entitlements "$APP"
+  echo "No Team ID (ad-hoc/self-signed): library validation off so Sparkle.framework can load."
+fi
 codesign --verify --strict --verbose=2 "$APP"
 
 echo
