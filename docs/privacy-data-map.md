@@ -16,7 +16,7 @@ The prototype makes no network requests.
 | Data | Purpose | Stored |
 |---|---|---|
 | Email, order ID, country/tax data handled by the payment provider | Purchase, licence delivery, refunds | Payment provider + our `purchases` table |
-| Licence key (stored as a hash for lookup) | Activation | Our DB; plaintext only in the customer's email + their Keychain |
+| Licence key (stored as a hash for lookup) | Activation | Our DB; plaintext only in the customer's email + their Mac (`~/Library/Application Support/<bundle id>/licence.plist`, readable only by their user account) |
 | Random installation ID (app-generated, not a hardware serial), app version, activation time | 2-Mac limit, deactivation | Our DB |
 | Preferences, pinned actions | Personalisation | Locally on the Mac |
 

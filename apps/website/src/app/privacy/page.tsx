@@ -13,7 +13,7 @@ export default function Page() {
         <ul>
           <li>PlainClick reads the menu commands of supported apps through macOS Accessibility, so it can press them.</li>
           <li>It does <strong>not</strong> upload screen contents, accessibility trees, window or document names, document text, or browsing history.</li>
-          <li>Your settings and pinned actions are stored locally. Your licence is stored in your Mac&apos;s Keychain.</li>
+          <li>Your settings and pinned actions are stored locally. Your licence is stored in a file on your Mac that only your user account can read.</li>
           <li>There are no analytics and no automatic crash uploads. If you choose to send a diagnostic report, you&apos;ll see what it contains first, with personal details removed.</li>
         </ul>
         <h2>When you buy</h2>

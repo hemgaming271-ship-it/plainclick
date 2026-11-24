@@ -40,18 +40,18 @@ final class LicenceManager: ObservableObject {
 
     /// Trial starts the first time the paid panel is used, not at install.
     func noteTrialUse() {
-        if Keychain.get(K.trialStart) == nil {
-            Keychain.set(String(Date().timeIntervalSince1970), for: K.trialStart)
+        if LicenceStore.get(K.trialStart) == nil {
+            LicenceStore.set(String(Date().timeIntervalSince1970), for: K.trialStart)
             recompute()
         }
     }
 
     func recompute() {
-        if Keychain.get(K.licenceKey) != nil, Keychain.get(K.instanceID) != nil {
+        if LicenceStore.get(K.licenceKey) != nil, LicenceStore.get(K.instanceID) != nil {
             state = .licensed
             return
         }
-        guard let startString = Keychain.get(K.trialStart), let ts = Double(startString) else {
+        guard let startString = LicenceStore.get(K.trialStart), let ts = Double(startString) else {
             state = .trial(daysLeft: 7)
             return
         }
@@ -86,9 +86,15 @@ final class LicenceManager: ObservableObject {
             let (status, data) = try await send(LicenceConfig.api.activateRequest(key: key, instanceName: Self.hardwareModel()))
             switch LicenceConfig.api.parseActivate(status: status, data: data) {
             case .activated(let instanceID):
-                Keychain.set(key, for: K.licenceKey)
-                Keychain.set(instanceID, for: K.instanceID)
-                message = "Activated. Thank you for buying PlainClick."
+                if LicenceStore.set(key, for: K.licenceKey), LicenceStore.set(instanceID, for: K.instanceID) {
+                    message = "Activated. Thank you for buying PlainClick."
+                } else {
+                    // Without saved credentials this Mac stays locked and can't free its slot later, so give the slot back now.
+                    _ = try? await send(LicenceConfig.api.deactivateRequest(key: key, instanceID: instanceID))
+                    LicenceStore.delete(K.licenceKey)
+                    LicenceStore.delete(K.instanceID)
+                    message = "PlainClick couldn't save your licence on this Mac, so it wasn't activated. Check your disk has free space and try again."
+                }
             case .limitReached:
                 message = "This key is already active on 2 Macs. Deactivate it on one of them first (PlainClick › Settings › Licence), or contact support if that Mac is lost."
             case .notActive:
@@ -108,7 +114,7 @@ final class LicenceManager: ObservableObject {
 
     @MainActor
     func deactivateThisMac() async {
-        guard let key = Keychain.get(K.licenceKey), let instance = Keychain.get(K.instanceID) else { return }
+        guard let key = LicenceStore.get(K.licenceKey), let instance = LicenceStore.get(K.instanceID) else { return }
         busy = true
         defer { busy = false }
         do {
@@ -117,8 +123,8 @@ final class LicenceManager: ObservableObject {
                 message = "Deactivation failed (HTTP \(status)). Your licence is still active here."
                 return
             }
-            Keychain.delete(K.instanceID)
-            Keychain.delete(K.licenceKey)
+            LicenceStore.delete(K.instanceID)
+            LicenceStore.delete(K.licenceKey)
             message = "This Mac is deactivated. You can activate another Mac now."
         } catch {
             message = "Couldn't reach the server, so nothing changed. Try again when you're online."
@@ -128,11 +134,11 @@ final class LicenceManager: ObservableObject {
 
     /// Opportunistic check. Network errors and unclear answers are ignored (offline use is promised).
     func validateInBackground() {
-        guard let key = Keychain.get(K.licenceKey), let instance = Keychain.get(K.instanceID) else { return }
+        guard let key = LicenceStore.get(K.licenceKey), let instance = LicenceStore.get(K.instanceID) else { return }
         Task {
             guard let result = try? await self.send(LicenceConfig.api.validateRequest(key: key, instanceID: instance)) else { return }
             if DodoLicenceAPI.parseValidate(status: result.0, data: result.1) == .invalid {
-                Keychain.delete(K.instanceID)
+                LicenceStore.delete(K.instanceID)
                 await MainActor.run {
                     self.message = "This licence is no longer active on this Mac (for example after a refund, or it was deactivated elsewhere)."
                     self.recompute()
