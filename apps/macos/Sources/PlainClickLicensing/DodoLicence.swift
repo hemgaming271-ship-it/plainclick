@@ -44,7 +44,9 @@ public struct DodoLicenceAPI: Sendable {
     }
 
     private func request(_ path: String, _ body: [String: String]) -> URLRequest {
-        var req = URLRequest(url: environment.baseURL.appendingPathComponent(String(path.dropFirst())), timeoutInterval: 15)
+        // Never answer a licence check from a cache: a stale "valid" must not restart the offline grace period.
+        var req = URLRequest(url: environment.baseURL.appendingPathComponent(String(path.dropFirst())),
+                             cachePolicy: .reloadIgnoringLocalAndRemoteCacheData, timeoutInterval: 15)
         req.httpMethod = "POST"
         req.setValue("application/json", forHTTPHeaderField: "Content-Type")
         req.setValue("application/json", forHTTPHeaderField: "Accept")
@@ -82,16 +84,26 @@ public struct DodoLicenceAPI: Sendable {
 
     public enum ValidateResult: Equatable, Sendable {
         case valid
-        /// Dodo explicitly answered `valid: false`. Only this removes a licence; network trouble never does.
+        /// Dodo explicitly answered that this key/instance is not valid: `valid: false`, or a JSON 403/404 error such as
+        /// `INACTIVE_LICENSE_KEY`. Only this removes a licence; outages, proxies and network trouble never do.
         case invalid
         case unknown
     }
 
     public static func parseValidate(status: Int, data: Data) -> ValidateResult {
-        guard status == 200,
-              let json = (try? JSONSerialization.jsonObject(with: data)) as? [String: Any],
-              let valid = json["valid"] as? Bool else { return .unknown }
-        return valid ? .valid : .invalid
+        let json = (try? JSONSerialization.jsonObject(with: data)) as? [String: Any]
+        switch status {
+        case 200:
+            guard let valid = json?["valid"] as? Bool else { return .unknown }
+            return valid ? .valid : .invalid
+        case 403, 404:
+            // Only Dodo's own licence errors count; a captive portal, proxy or unrelated API error must not revoke.
+            guard let code = json?["code"] as? String else { return .unknown }
+            let revokes = status == 403 ? code == "INACTIVE_LICENSE_KEY" : code.hasSuffix("NOT_FOUND")
+            return revokes ? .invalid : .unknown
+        default:
+            return .unknown
+        }
     }
 
     public static func isSuccess(status: Int) -> Bool { (200..<300).contains(status) }

@@ -200,9 +200,20 @@ private struct LicenceTab: View {
             switch licence.state {
             case .licensed:
                 Text("Licensed — PlainClick v1, perpetual personal licence.").font(.headline)
-                Text("Works offline. To move it to another Mac, deactivate it here first.").foregroundStyle(.secondary)
+                Text("Works offline for up to \(LicenceManager.offlineDays) days at a time; PlainClick confirms the licence when you're online. To move it to another Mac, deactivate it here first.")
+                    .foregroundStyle(.secondary).fixedSize(horizontal: false, vertical: true)
                 Button("Deactivate this Mac") { Task { await licence.deactivateThisMac() } }
                     .disabled(licence.busy)
+            case .needsCheck:
+                Text("Connect to the internet to confirm your licence.").font(.headline)
+                Text("PlainClick works offline for up to \(LicenceManager.offlineDays) days at a time. Your licence is still saved on this Mac; once PlainClick can reach Dodo Payments, the panel works again.")
+                    .foregroundStyle(.secondary).fixedSize(horizontal: false, vertical: true)
+                HStack {
+                    Button("Check Now") { Task { await licence.checkNow() } }
+                        .disabled(licence.busy)
+                    Button("Deactivate this Mac") { Task { await licence.deactivateThisMac() } }
+                        .disabled(licence.busy)
+                }
             case .trial(let days):
                 Text("Trial — \(days) day\(days == 1 ? "" : "s") left.").font(.headline)
                 activationForm

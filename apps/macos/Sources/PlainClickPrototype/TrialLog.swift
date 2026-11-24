@@ -1,9 +1,15 @@
 import AppKit
 
-/// Local-only CSV log used to record Phase 0 test runs. Never uploaded.
+/// Local-only CSV log used to record Phase 0 test runs. Never uploaded. OFF unless running the UI tests/demo or the
+/// user opts in with `defaults write <bundle id> DiagnosticLogging -bool YES` (for support).
 /// Deliberately records NO window titles, document names, menu titles, URLs or text — only IDs, versions and outcomes.
 /// Location: ~/Library/Logs/PlainClickPrototype/trials.csv
 enum TrialLog {
+    static let isEnabled: Bool = {
+        let args = ProcessInfo.processInfo.arguments
+        return args.contains("--ui-test") || args.contains("--demo") || UserDefaults.standard.bool(forKey: "DiagnosticLogging")
+    }()
+
     static let directory: URL = {
         let dir = FileManager.default.homeDirectoryForCurrentUser
             .appendingPathComponent("Library/Logs/PlainClickPrototype", isDirectory: true)
@@ -30,6 +36,7 @@ enum TrialLog {
     }
 
     static func record(app: NSRunningApplication?, actionID: String, outcome: String, latencyMs: Int, detail: String = "") {
+        guard isEnabled else { return }
         let fields = [
             iso.string(from: Date()),
             ProcessInfo.processInfo.operatingSystemVersionString,

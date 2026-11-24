@@ -191,6 +191,9 @@ final class Engine {
         }
 
         guard !model.paused else { return finish("refused_paused", "PlainClick is paused.") }
+        guard licence.state != .needsCheck else {
+            return finish("refused_needs_check", "Connect to the internet so PlainClick can confirm your licence (Settings › Licence › Check Now).")
+        }
         guard licence.isPanelAllowed else {
             return finish("refused_trial_ended", "Your 7-day trial has ended. Buy a licence to keep using the panel.")
         }

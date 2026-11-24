@@ -19,6 +19,10 @@ final class DodoLicenceTests: XCTestCase {
         XCTAssertEqual(v.url?.absoluteString, "https://test.dodopayments.com/licenses/validate")
         XCTAssertEqual(body(v), ["license_key": "K-12345678", "license_key_instance_id": "lki_1"])
 
+        for req in [a, v] {
+            XCTAssertEqual(req.cachePolicy, .reloadIgnoringLocalAndRemoteCacheData, "licence answers must never come from a cache")
+        }
+
         let d = api.deactivateRequest(key: "K-12345678", instanceID: "lki_1")
         XCTAssertEqual(d.url?.absoluteString, "https://live.dodopayments.com/licenses/deactivate")
         XCTAssertEqual(body(d), ["license_key": "K-12345678", "license_key_instance_id": "lki_1"])
@@ -37,13 +41,37 @@ final class DodoLicenceTests: XCTestCase {
         XCTAssertEqual(api.parseActivate(status: 500, data: Data()), .failed(status: 500))
     }
 
-    func testValidateOnlyAnExplicitFalseRevokes() {
+    func testValidateOnlyAnExplicitDodoAnswerRevokes() {
         XCTAssertEqual(DodoLicenceAPI.parseValidate(status: 200, data: Data(#"{"valid":true}"#.utf8)), .valid)
         XCTAssertEqual(DodoLicenceAPI.parseValidate(status: 200, data: Data(#"{"valid":false}"#.utf8)), .invalid)
-        // Outages, HTML error pages, odd shapes: never treated as a revocation.
+        // Dodo's JSON errors for a disabled/refunded or unknown key/instance.
+        let inactive = Data(#"{"code":"INACTIVE_LICENSE_KEY","message":"License key is not active"}"#.utf8)
+        XCTAssertEqual(DodoLicenceAPI.parseValidate(status: 403, data: inactive), .invalid)
+        XCTAssertEqual(DodoLicenceAPI.parseValidate(status: 404, data: Data(#"{"code":"NOT_FOUND","message":"x"}"#.utf8)), .invalid)
+        XCTAssertEqual(DodoLicenceAPI.parseValidate(status: 404, data: Data(#"{"code":"LICENSE_KEY_INSTANCE_NOT_FOUND"}"#.utf8)), .invalid)
+        // Unrelated JSON errors with a code are not licence answers.
+        XCTAssertEqual(DodoLicenceAPI.parseValidate(status: 403, data: Data(#"{"code":"FORBIDDEN","message":"blocked"}"#.utf8)), .unknown)
+        XCTAssertEqual(DodoLicenceAPI.parseValidate(status: 404, data: Data(#"{"code":"ROUTE_MISSING"}"#.utf8)), .unknown)
+        // Outages, captive portals, HTML error pages, odd shapes: never treated as a revocation.
         XCTAssertEqual(DodoLicenceAPI.parseValidate(status: 500, data: Data(#"{"valid":false}"#.utf8)), .unknown)
+        XCTAssertEqual(DodoLicenceAPI.parseValidate(status: 503, data: inactive), .unknown)
+        XCTAssertEqual(DodoLicenceAPI.parseValidate(status: 403, data: Data("<html>Forbidden</html>".utf8)), .unknown)
+        XCTAssertEqual(DodoLicenceAPI.parseValidate(status: 404, data: Data(#"{"message":"no code"}"#.utf8)), .unknown)
+        XCTAssertEqual(DodoLicenceAPI.parseValidate(status: 429, data: inactive), .unknown)
         XCTAssertEqual(DodoLicenceAPI.parseValidate(status: 200, data: Data("<html>".utf8)), .unknown)
         XCTAssertEqual(DodoLicenceAPI.parseValidate(status: 200, data: Data(#"{"valid":"no"}"#.utf8)), .unknown)
+    }
+
+    func testOfflineGraceIsBoundedAndDistrustsFutureDates() {
+        let now = Date(timeIntervalSince1970: 1_800_000_000)
+        XCTAssertTrue(LicenceGrace.isWithinGrace(lastConfirmed: now, now: now))
+        XCTAssertTrue(LicenceGrace.isWithinGrace(lastConfirmed: now.addingTimeInterval(-29 * 86_400), now: now))
+        XCTAssertTrue(LicenceGrace.isWithinGrace(lastConfirmed: now.addingTimeInterval(-LicenceGrace.length), now: now))
+        XCTAssertFalse(LicenceGrace.isWithinGrace(lastConfirmed: now.addingTimeInterval(-LicenceGrace.length - 1), now: now))
+        // Small clock drift is fine; a date far in the future (clock moved back / edited file) needs an online check.
+        XCTAssertTrue(LicenceGrace.isWithinGrace(lastConfirmed: now.addingTimeInterval(3600), now: now))
+        XCTAssertFalse(LicenceGrace.isWithinGrace(lastConfirmed: now.addingTimeInterval(3 * 86_400), now: now))
+        XCTAssertFalse(LicenceGrace.isWithinGrace(lastConfirmed: .distantFuture, now: now))
     }
 
     func testKeyInputCleaning() {

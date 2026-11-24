@@ -87,13 +87,14 @@ export default function Page() {
               <>email <a href={`mailto:${site.supportEmail}`}>support</a> and we&apos;ll free its slot.</>
             )}
           </li>
-          <li>The first activation needs an internet connection. After that the panel works offline.</li>
+          <li>The first activation needs an internet connection. After that the panel works offline for up to 30 days at a time; PlainClick confirms the licence whenever you&apos;re online.</li>
           <li>It is not a promise that v1 will keep working with every future macOS release, and it doesn&apos;t include unlimited custom development or support forever.</li>
         </ul>
         <h2>Offline use and refunds</h2>
         <p>
           Because an activated copy works offline, a refunded copy can&apos;t be switched off straight away while that Mac
-          stays offline. The licence is revoked on our side, and the app stops being licensed the next time it checks in.
+          stays offline. The licence is revoked on our side, and the app stops being licensed the next time it checks in,
+          or after at most 30 days offline.
         </p>
         <h2>If PlainClick ever closes</h2>
         <p>

@@ -214,7 +214,7 @@ export default function Home() {
               ["⏸", "Lives in the menu bar", "No Dock icon. Open the panel, pause PlainClick, or reach Settings from the menu bar."],
               ["✓", "Checks before every click", "PlainClick confirms the app in front is still the one it names. If you've switched apps, nothing is sent."],
               ["⏻", "Turn it off per app", "Switch PlainClick off for any supported app in Settings → Apps, and back on whenever you like."],
-              ["☁︎", "Works offline", "After a one-time activation, the panel keeps working without an internet connection."],
+              ["☁︎", "Works offline", "After a one-time activation, the panel keeps working without an internet connection for up to 30 days at a time."],
               ["◐", "Free appearance guide", "A built-in guide to Apple's own Reduce transparency and Increase contrast settings. Free for everyone."],
               ["↻", "Updates included", "Every 1.x update is part of your licence, on up to two Macs you own."],
             ].map(([icon, t, b]) => (

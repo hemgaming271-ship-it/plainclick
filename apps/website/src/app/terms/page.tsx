@@ -16,7 +16,7 @@ export default function Page() {
           <li>A personal, non-transferable-to-others, perpetual licence to use PlainClick version 1.x.</li>
           <li>Use on up to two Macs you own or personally control, at the same time.</li>
           <li>All 1.x updates we publish. A later major version, if there is one, may be sold separately, and buying it is optional.</li>
-          <li>The first activation needs an internet connection. After that, the paid panel works offline.</li>
+          <li>The first activation needs an internet connection. After that, the paid panel works offline for up to 30 days at a time; it confirms the licence again whenever the Mac is online.</li>
         </ul>
         <h2>Moving or resetting activations</h2>
         <p>

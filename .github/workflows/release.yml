@@ -235,7 +235,9 @@ jobs:
         with:
           name: plainclick-release
           path: apps/macos/dist/
-          retention-days: 30
+          # Builds that become a draft release keep their artifact 30 days; test builds (which may carry Test Mode
+          # licensing) expire after 7 so they don't linger as free downloads.
+          retention-days: ${{ (github.event_name == 'workflow_dispatch' && inputs.draft_release) && 30 || 7 }}
 
       - name: Remove temporary keychain
         if: always()
