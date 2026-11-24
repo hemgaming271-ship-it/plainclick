@@ -21,8 +21,18 @@ export async function allow(db: Db, bucket: string, limit: number, windowSeconds
 }
 
 /** Best-effort client IP. Behind a proxy/CDN, configure the host so x-forwarded-for is set by the proxy itself. */
-export function clientIp(headers: Headers): string {
-  return headers.get("x-forwarded-for")?.split(",")[0]?.trim() || headers.get("x-real-ip") || "unknown";
+/**
+ * The client address for rate limiting. Any header can be sent by the caller, so none is trusted by default: the
+ * left-most X-Forwarded-For entry is ignored and we count TRUSTED_PROXY_COUNT hops from the right. If your host
+ * overwrites a single-address header (e.g. cf-connecting-ip on Cloudflare), name it in CLIENT_IP_HEADER.
+ */
+export function clientIp(headers: Headers, env: NodeJS.ProcessEnv = process.env): string {
+  const named = env.CLIENT_IP_HEADER?.trim();
+  const platform = named ? headers.get(named)?.trim() : undefined;
+  if (platform) return platform;
+  const hops = headers.get("x-forwarded-for")?.split(",").map((h) => h.trim()).filter(Boolean) ?? [];
+  const trusted = Math.max(1, Number.parseInt(env.TRUSTED_PROXY_COUNT ?? "1", 10) || 1);
+  return hops[Math.max(0, hops.length - trusted)] || "unknown";
 }
 
 export const LIMITS = {

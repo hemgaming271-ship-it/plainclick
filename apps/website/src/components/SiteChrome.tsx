@@ -1,14 +1,16 @@
 import Link from "next/link";
 import { footerGroups, nav, site } from "@/lib/site";
 import { LogoMark } from "./Logo";
+import { MobileNav } from "./MobileNav";
+import { ThemeToggle } from "./ThemeToggle";
 import { Container } from "./ui";
 
 export function SiteHeader() {
   return (
-    <header className="sticky top-0 z-40 bg-[var(--nav)] text-white backdrop-blur-md">
+    <header className="sticky top-0 z-40 border-b border-white/5 bg-[var(--nav)] text-white backdrop-blur-md backdrop-saturate-150">
       <a
         href="#main"
-        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-3 focus:z-50 focus:rounded-md focus:bg-white focus:px-3 focus:py-2 focus:text-ink"
+        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-3 focus:z-50 focus:rounded-md focus:bg-white focus:px-3 focus:py-2 focus:text-[#1d1d1f]"
       >
         Skip to content
       </a>
@@ -18,7 +20,7 @@ export function SiteHeader() {
           {site.name}
         </Link>
         <nav aria-label="Main" className="flex min-w-0 items-center gap-1 sm:gap-2">
-          <ul className="hidden items-center gap-6 text-[13px] text-white/85 md:flex">
+          <ul className="mr-3 hidden items-center gap-6 text-[13px] text-white/85 md:flex">
             {nav.map((n) => (
               <li key={n.href}>
                 <Link href={n.href} className="transition hover:text-white">
@@ -27,23 +29,13 @@ export function SiteHeader() {
               </li>
             ))}
           </ul>
-          <Link href="/pricing" className="ml-4 rounded-full bg-accent px-3.5 py-1.5 text-[13px] font-semibold text-white transition hover:bg-[var(--accent-hover)]">
+          <ThemeToggle />
+          <Link href="/pricing" className="ml-1 rounded-full bg-accent px-3.5 py-1.5 text-[13px] font-semibold text-white transition hover:bg-[var(--accent-hover)]">
             {site.checkoutEnabled ? `Buy · ${site.price.replace("US", "")}` : `${site.price.replace("US", "")} · Pricing`}
           </Link>
+          <MobileNav />
         </nav>
       </Container>
-      {/* Small screens: same links, scrollable row. */}
-      <div className="border-t border-white/10 md:hidden">
-        <Container>
-          <ul className="flex gap-5 overflow-x-auto py-2 text-[13px] text-white/85">
-            {nav.map((n) => (
-              <li key={n.href} className="shrink-0">
-                <Link href={n.href}>{n.label}</Link>
-              </li>
-            ))}
-          </ul>
-        </Container>
-      </div>
     </header>
   );
 }

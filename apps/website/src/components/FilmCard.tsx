@@ -28,7 +28,7 @@ export function FilmCard({ src, poster, duration }: { src: string; poster: strin
             setPlaying(true);
             ref.current?.play().catch(() => setPlaying(false));
           }}
-          className="absolute bottom-6 left-1/2 inline-flex -translate-x-1/2 items-center gap-3 rounded-full bg-white/95 py-2 pl-2 pr-5 text-[15px] font-semibold text-ink shadow-lg backdrop-blur transition hover:bg-white"
+          className="absolute bottom-6 left-1/2 inline-flex -translate-x-1/2 items-center gap-3 rounded-full bg-white/95 py-2 pl-2 pr-5 text-[15px] font-semibold text-[#1d1d1f] shadow-lg backdrop-blur transition hover:bg-white"
         >
           <span className="grid h-9 w-9 place-items-center rounded-full bg-accent text-white">
             <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">

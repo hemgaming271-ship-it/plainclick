@@ -7,18 +7,67 @@ struct SettingsView: View {
     var initialTab: Tab = .apps
     @State private var tab: Tab = .apps
 
-    enum Tab: Hashable { case apps, appearance, licence, guide }
+    enum Tab: Hashable { case general, apps, appearance, licence, guide }
 
     var body: some View {
         TabView(selection: $tab) {
-            AppsTab(settings: settings).tabItem { Text("Apps") }.tag(Tab.apps)
-            AppearanceTab(settings: settings).tabItem { Text("Panel") }.tag(Tab.appearance)
-            LicenceTab(licence: licence).tabItem { Text("Licence") }.tag(Tab.licence)
-            GuideTab().tabItem { Text("Free guide") }.tag(Tab.guide)
+            GeneralTab(settings: settings)
+                .tabItem { Label("General", systemImage: "gearshape") }.tag(Tab.general)
+            AppsTab(settings: settings)
+                .tabItem { Label("Apps", systemImage: "square.grid.2x2") }.tag(Tab.apps)
+            AppearanceTab(settings: settings)
+                .tabItem { Label("Panel", systemImage: "rectangle.on.rectangle") }.tag(Tab.appearance)
+            LicenceTab(licence: licence)
+                .tabItem { Label("Licence", systemImage: "key") }.tag(Tab.licence)
+            GuideTab()
+                .tabItem { Label("Free guide", systemImage: "book") }.tag(Tab.guide)
         }
         .padding(20)
-        .frame(width: 520, height: 440)
+        .frame(width: 600, height: 500)
         .onAppear { tab = initialTab }
+    }
+}
+
+private struct GeneralTab: View {
+    @ObservedObject var settings: AppSettings
+    @State private var launchAtLogin = LaunchAtLogin.isEnabled
+
+    var body: some View {
+        Form {
+            Section("Startup") {
+                Toggle("Launch PlainClick at login", isOn: Binding(
+                    get: { launchAtLogin },
+                    set: { on in
+                        LaunchAtLogin.set(on)
+                        launchAtLogin = LaunchAtLogin.isEnabled
+                    }))
+                Text("Works when PlainClick runs from the Applications folder.").font(.caption).foregroundStyle(.secondary)
+            }
+            .onReceive(NotificationCenter.default.publisher(for: LaunchAtLogin.didChange)) { _ in
+                launchAtLogin = LaunchAtLogin.isEnabled
+            }
+            .onReceive(NotificationCenter.default.publisher(for: NSWindow.didBecomeKeyNotification)) { _ in
+                launchAtLogin = LaunchAtLogin.isEnabled
+            }
+            Section("Keyboard") {
+                LabeledContent("Show or hide the panel") { KeyCap("⌃⌥P") }
+                Toggle("Quick keys: ⌃⌥1 – ⌃⌥9 press the panel's actions", isOn: $settings.quickKeys)
+                Text("Quick keys use the same safety checks as clicking: they only press tested commands in the front app. Turn them off if they clash with another app's shortcuts.")
+                    .font(.caption).foregroundStyle(.secondary)
+            }
+        }
+        .formStyle(.grouped)
+    }
+}
+
+private struct KeyCap: View {
+    let text: String
+    init(_ text: String) { self.text = text }
+    var body: some View {
+        Text(text)
+            .font(.callout.monospaced())
+            .padding(.horizontal, 6).padding(.vertical, 2)
+            .background(RoundedRectangle(cornerRadius: 5).stroke(Color(nsColor: .separatorColor)))
     }
 }
 
@@ -26,45 +75,83 @@ private struct AppsTab: View {
     @ObservedObject var settings: AppSettings
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 18) {
-                Text("PlainClick only works with these apps and actions. Other apps show a \"not supported\" message.")
-                    .foregroundStyle(.secondary)
+        VStack(alignment: .leading, spacing: 8) {
+            Text("PlainClick works only with these apps and actions. Drag to reorder; the panel shows them in this order.")
+                .font(.callout).foregroundStyle(.secondary)
+            List {
                 ForEach(ActionCatalog.adapters, id: \.bundleID) { adapter in
-                    VStack(alignment: .leading, spacing: 6) {
-                        Toggle(isOn: Binding(get: { settings.isEnabled(adapter.bundleID) },
-                                             set: { settings.setEnabled(adapter.bundleID, $0) })) {
-                            Text(adapter.displayName).font(.headline)
-                        }
-                        Text("Pinned actions, in panel order:").font(.callout).foregroundStyle(.secondary)
-                        ForEach(settings.visibleActions(for: adapter)) { action in
-                            HStack {
-                                Text(action.label)
-                                Spacer()
-                                Button("Move up") { settings.move(action, in: adapter, by: -1) }
-                                    .accessibilityLabel("Move \(action.label) up")
-                                Button("Move down") { settings.move(action, in: adapter, by: 1) }
-                                    .accessibilityLabel("Move \(action.label) down")
-                                Button("Unpin") { settings.togglePin(action, in: adapter) }
-                                    .accessibilityLabel("Unpin \(action.label)")
+                    Section {
+                        if settings.isEnabled(adapter.bundleID) {
+                            ForEach(settings.visibleActions(for: adapter)) { action in
+                                HStack {
+                                    Image(systemName: "line.3.horizontal").foregroundStyle(.tertiary).accessibilityHidden(true)
+                                    Image(systemName: action.symbol).frame(width: 18).foregroundStyle(Color.accentColor).accessibilityHidden(true)
+                                    Text(action.label)
+                                    Spacer()
+                                    Button { settings.move(action, in: adapter, by: -1) } label: { Image(systemName: "chevron.up") }
+                                        .buttonStyle(.borderless).help("Move up")
+                                        .accessibilityLabel("Move \(action.label) up")
+                                    Button { settings.move(action, in: adapter, by: 1) } label: { Image(systemName: "chevron.down") }
+                                        .buttonStyle(.borderless).help("Move down")
+                                        .accessibilityLabel("Move \(action.label) down")
+                                    Button { settings.togglePin(action, in: adapter) } label: { Image(systemName: "pin.slash") }
+                                        .buttonStyle(.borderless).help("Unpin")
+                                        .accessibilityLabel("Unpin \(action.label)")
+                                }
                             }
-                        }
-                        let unpinned = adapter.supportedActions.filter { !settings.isPinned($0, in: adapter) }
-                        if !unpinned.isEmpty {
-                            HStack {
-                                Text("Available:").foregroundStyle(.secondary)
-                                ForEach(unpinned) { action in
-                                    Button("Pin \(action.label)") { settings.togglePin(action, in: adapter) }
+                            .onMove { settings.reorder(in: adapter, from: $0, to: $1) }
+                            let unpinned = adapter.supportedActions.filter { !settings.isPinned($0, in: adapter) }
+                            if !unpinned.isEmpty {
+                                HStack(spacing: 6) {
+                                    Text("Add:").foregroundStyle(.secondary)
+                                    ForEach(unpinned) { action in
+                                        Button { settings.togglePin(action, in: adapter) } label: {
+                                            Label(action.label, systemImage: "plus")
+                                        }
+                                        .controlSize(.small)
+                                        .accessibilityLabel("Pin \(action.label)")
+                                    }
                                 }
                             }
                         }
+                    } header: {
+                        HStack(spacing: 8) {
+                            AppIcon(bundleID: adapter.bundleID)
+                            Text(adapter.displayName).font(.headline)
+                            Spacer()
+                            if settings.pinned[adapter.bundleID] != nil {
+                                Button("Reset") { settings.resetOrder(for: adapter) }
+                                    .buttonStyle(.borderless).controlSize(.small)
+                                    .accessibilityLabel("Reset \(adapter.displayName) actions")
+                            }
+                            Toggle("", isOn: Binding(get: { settings.isEnabled(adapter.bundleID) },
+                                                     set: { settings.setEnabled(adapter.bundleID, $0) }))
+                                .toggleStyle(.switch).controlSize(.small).labelsHidden()
+                                .accessibilityLabel("Use PlainClick with \(adapter.displayName)")
+                        }
+                        .padding(.vertical, 2)
                     }
-                    Divider()
                 }
-                Text("Actions are listed as tested only after they pass repeated tests on a stated macOS version. See the compatibility page on the website.")
-                    .font(.caption).foregroundStyle(.secondary)
+            }
+            .listStyle(.inset(alternatesRowBackgrounds: false))
+            Text("Actions are listed as tested only after they pass repeated tests on a stated macOS version. See the compatibility page on the website.")
+                .font(.caption).foregroundStyle(.secondary)
+        }
+    }
+}
+
+private struct AppIcon: View {
+    let bundleID: String
+    var body: some View {
+        Group {
+            if let url = NSWorkspace.shared.urlForApplication(withBundleIdentifier: bundleID) {
+                Image(nsImage: NSWorkspace.shared.icon(forFile: url.path)).resizable()
+            } else {
+                Image(systemName: "app").resizable()
             }
         }
+        .frame(width: 20, height: 20)
+        .accessibilityHidden(true)
     }
 }
 
@@ -73,17 +160,24 @@ private struct AppearanceTab: View {
 
     var body: some View {
         Form {
-            Picker("Appearance", selection: $settings.appearance) {
-                ForEach(AppSettings.Appearance.allCases) { Text($0.label).tag($0) }
+            Section("Panel") {
+                Picker("Appearance", selection: $settings.appearance) {
+                    ForEach(AppSettings.Appearance.allCases) { Text($0.label).tag($0) }
+                }
+                .pickerStyle(.segmented)
+                Picker("Layout", selection: $settings.comfortable) {
+                    Text("Comfortable").tag(true)
+                    Text("Compact").tag(false)
+                }
+                .pickerStyle(.segmented)
+                Toggle("Show icons next to labels", isOn: $settings.showIcons)
             }
-            Picker("Layout", selection: $settings.comfortable) {
-                Text("Comfortable").tag(true)
-                Text("Compact").tag(false)
+            Section {
+                Text("These settings affect only the PlainClick panel, not other apps or macOS. Drag the panel anywhere; it remembers its place.")
+                    .font(.caption).foregroundStyle(.secondary)
             }
-            Toggle("Show icons next to labels", isOn: $settings.showIcons)
-            Text("Shortcut: ⌃⌥P (customisable shortcut is planned).").foregroundStyle(.secondary)
-            Text("These settings affect only the PlainClick panel, not other apps or macOS.").font(.caption).foregroundStyle(.secondary)
         }
+        .formStyle(.grouped)
     }
 }
 

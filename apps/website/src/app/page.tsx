@@ -35,7 +35,7 @@ function PanelShot({ src, alt }: { src: string; alt: string }) {
   return (
     <div className="stage shadow-float grid place-items-center rounded-[28px] px-6 py-10 sm:px-12 sm:py-14">
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={src} alt={alt} width={780} height={486} className="w-full max-w-[340px] rounded-2xl bg-white shadow-soft" loading="lazy" />
+      <img src={src} alt={alt} width={780} height={486} className="w-full max-w-[340px] rounded-2xl bg-white shadow-soft ring-1 ring-black/5" loading="lazy" />
     </div>
   );
 }
@@ -101,11 +101,17 @@ export default function Home() {
   return (
     <>
       {/* Hero */}
-      <section className="pb-10 pt-16 text-center sm:pt-24">
+      <section className="hero-glow pb-10 pt-16 text-center sm:pt-24">
         <Container>
           <div className="reveal">
             <LogoMark size={76} className="mx-auto drop-shadow-[0_10px_20px_rgba(0,113,227,0.35)]" />
-            <h1 className="mx-auto mt-8 max-w-4xl text-[44px] font-bold leading-[1.04] tracking-[-0.03em] sm:text-[72px]">
+            <p className="mt-6">
+              <Link href="/changelog" className="inline-flex items-center gap-2 rounded-full border border-line bg-card px-3 py-1 text-[13px] text-muted shadow-soft transition hover:text-ink">
+                <span className="rounded-full bg-accent px-2 py-0.5 text-[11px] font-semibold text-white">New</span>
+                Quick keys ⌃⌥1–9 and launch at login <span aria-hidden="true">›</span>
+              </Link>
+            </p>
+            <h1 className="mx-auto mt-6 max-w-4xl text-[44px] font-bold leading-[1.04] tracking-[-0.03em] sm:text-[72px]">
               Clear controls. <span className="text-gradient">Less clutter.</span>
             </h1>
             <p className="mx-auto mt-5 max-w-2xl text-[19px] leading-relaxed text-muted sm:text-[22px]">
@@ -212,7 +218,7 @@ export default function Home() {
               ["◐", "Free appearance guide", "A built-in guide to Apple's own Reduce transparency and Increase contrast settings. Free for everyone."],
               ["↻", "Updates included", "Every 1.x update is part of your licence, on up to two Macs you own."],
             ].map(([icon, t, b]) => (
-              <div key={t} className="reveal rounded-3xl border border-line bg-white p-6 shadow-soft">
+              <div key={t} className="reveal rounded-3xl border border-line bg-card p-6 shadow-soft">
                 <span className="grid h-11 min-w-11 place-items-center justify-self-start rounded-xl bg-surface px-2 text-[17px] font-semibold text-ink" aria-hidden="true">
                   {icon}
                 </span>
@@ -236,7 +242,7 @@ export default function Home() {
           </div>
           <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {apps.map((a) => (
-              <div key={a.app} className="reveal rounded-3xl border border-line bg-white p-6 shadow-soft">
+              <div key={a.app} className="reveal rounded-3xl border border-line bg-card p-6 shadow-soft">
                 <span className="grid h-11 w-11 place-items-center rounded-xl bg-surface text-ink">
                   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                     {appIcons[a.app]}
@@ -246,7 +252,7 @@ export default function Home() {
                 <ul className="mt-3 space-y-1.5 text-[15px] text-muted">
                   {a.actions.map((x) => (
                     <li key={x} className="flex items-center gap-2">
-                      <span className="text-[#28a745]" aria-hidden="true">✓</span> {x}
+                      <span className="text-ok" aria-hidden="true">✓</span> {x}
                     </li>
                   ))}
                 </ul>
@@ -282,7 +288,7 @@ export default function Home() {
             ))}
           </div>
           <div className="reveal mt-10 grid overflow-hidden rounded-[28px] border border-line md:grid-cols-2">
-            <div className="bg-white p-7 sm:p-9">
+            <div className="bg-card p-7 sm:p-9">
               <h3 className="text-[21px] font-semibold">What leaves your Mac</h3>
               <p className="mt-1 text-[15px] text-muted">Only when you activate or the app checks your licence.</p>
               <ul className="mt-5 space-y-3 text-[15px]">
@@ -323,7 +329,7 @@ export default function Home() {
       {/* Pricing */}
       <section id="pricing" className="bg-surface py-20">
         <Container>
-          <div className="reveal overflow-hidden rounded-[28px] border border-line bg-white shadow-soft md:grid md:grid-cols-[1.15fr_1fr]">
+          <div className="reveal overflow-hidden rounded-[28px] border border-line bg-card shadow-soft md:grid md:grid-cols-[1.15fr_1fr]">
             <div className="p-8 sm:p-12">
               <Eyebrow>One price</Eyebrow>
               <p className="mt-3 flex items-baseline gap-3">
