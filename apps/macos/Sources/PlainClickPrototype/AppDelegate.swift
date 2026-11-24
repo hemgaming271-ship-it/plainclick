@@ -74,7 +74,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         developerItems.forEach(menu.addItem)
         menu.addItem(.separator())
         menu.addItem(NSMenuItem(title: "Quit PlainClick", action: #selector(quit), keyEquivalent: "q"))
-        for item in menu.items { item.target = self }
+        for item in menu.items where item.target == nil { item.target = self }
         statusItem.menu = menu
 
         hotKey = HotKey(keyCode: UInt32(kVK_ANSI_P), modifiers: UInt32(controlKey | optionKey)) { [weak self] in
