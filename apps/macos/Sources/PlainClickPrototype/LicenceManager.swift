@@ -86,9 +86,15 @@ final class LicenceManager: ObservableObject {
             let (status, data) = try await send(LicenceConfig.api.activateRequest(key: key, instanceName: Self.hardwareModel()))
             switch LicenceConfig.api.parseActivate(status: status, data: data) {
             case .activated(let instanceID):
-                LicenceStore.set(key, for: K.licenceKey)
-                LicenceStore.set(instanceID, for: K.instanceID)
-                message = "Activated. Thank you for buying PlainClick."
+                if LicenceStore.set(key, for: K.licenceKey), LicenceStore.set(instanceID, for: K.instanceID) {
+                    message = "Activated. Thank you for buying PlainClick."
+                } else {
+                    // Without saved credentials this Mac stays locked and can't free its slot later, so give the slot back now.
+                    _ = try? await send(LicenceConfig.api.deactivateRequest(key: key, instanceID: instanceID))
+                    LicenceStore.delete(K.licenceKey)
+                    LicenceStore.delete(K.instanceID)
+                    message = "PlainClick couldn't save your licence on this Mac, so it wasn't activated. Check your disk has free space and try again."
+                }
             case .limitReached:
                 message = "This key is already active on 2 Macs. Deactivate it on one of them first (PlainClick › Settings › Licence), or contact support if that Mac is lost."
             case .notActive:
