@@ -42,6 +42,7 @@ self-signed signing and no notarization. In that setup:
 - [ ] Trial: fresh install shows 7 days; ends correctly
 - [ ] Licence: activate, invalid key, limit reached, deactivate, transfer to a second Mac
 - [ ] Offline launch after activation still licensed; revoked licence removed on next online check
+- [ ] After 30 days without a successful check the panel asks for an online check; Check Now restores it with the saved key
 
 ## C. Backend checks
 - [x] Automated: invalid/stale signature, duplicate and retried webhooks, refund before/after fulfilment, wrong product/price/currency/discount/quantity, concurrent activations, forged and transplanted entitlements, email failure and retry, recovery single-use and expiry, rate limiting (`npm test`, 19 passing on 2026-11-17, Windows, PGlite)

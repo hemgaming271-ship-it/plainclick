@@ -6,7 +6,8 @@
 |---|---|---|
 | Target app's menu items (shortcut, identifier, enabled state) | Read in memory through Accessibility | No |
 | Menu titles | Read only by the developer **dump** command, saved to a local file | No (review before sharing) |
-| Test log: timestamp, macOS version, bundle ID, app version, action ID, outcome, latency | `~/Library/Logs/PlainClickPrototype/trials.csv` | No |
+| Diagnostic action log (OFF by default; on only for `--ui-test`/`--demo` runs or after `defaults write <bundle id> DiagnosticLogging -bool YES`): timestamp, macOS version, bundle ID, app version, action ID, outcome, latency | `~/Library/Logs/PlainClickPrototype/trials.csv` | No |
+| Licence key, Dodo instance ID, last successful licence check time, trial start | `~/Library/Application Support/<bundle id>/licence.plist` (folder 0700, file 0600) | Key + instance ID go to Dodo when activating/checking |
 | Window titles, document text, URLs, browsing history, screen contents | Not read, not stored | No |
 
 The prototype makes no network requests.

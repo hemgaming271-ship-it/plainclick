@@ -20,6 +20,11 @@ struct PanelView: View {
             if model.paused {
                 StateCard(symbol: "pause.circle.fill", tint: .orange,
                           text: "PlainClick is paused. Resume it from the menu bar.")
+            } else if licence.state == .needsCheck {
+                StateCard(symbol: "wifi.exclamationmark", tint: .orange,
+                          text: "PlainClick needs to confirm your licence online. It works offline for up to \(LicenceManager.offlineDays) days at a time. Connect to the internet, then choose Check Now.") {
+                    Button("Open Licence Settings…", action: onOpenSettings).controlSize(.small)
+                }
             } else if !licence.isPanelAllowed {
                 StateCard(symbol: "clock.badge.exclamationmark", tint: .orange,
                           text: "Your 7-day trial has ended. A licence is US$5.99, one time. The free appearance guide is still available in Settings.") {
@@ -137,6 +142,7 @@ struct PanelView: View {
 
     private var statusHelp: String {
         if model.paused { return "Paused" }
+        if licence.state == .needsCheck { return "Licence check needed" }
         if !licence.isPanelAllowed { return "Trial ended" }
         if !model.trusted { return "App control is off" }
         return model.supported && !model.disabledByUser ? "Ready" : "Not available for this app"

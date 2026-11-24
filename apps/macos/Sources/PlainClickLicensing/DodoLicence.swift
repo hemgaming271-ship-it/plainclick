@@ -82,16 +82,25 @@ public struct DodoLicenceAPI: Sendable {
 
     public enum ValidateResult: Equatable, Sendable {
         case valid
-        /// Dodo explicitly answered `valid: false`. Only this removes a licence; network trouble never does.
+        /// Dodo explicitly answered that this key/instance is not valid: `valid: false`, or a JSON 403/404 error such as
+        /// `INACTIVE_LICENSE_KEY`. Only this removes a licence; outages, proxies and network trouble never do.
         case invalid
         case unknown
     }
 
     public static func parseValidate(status: Int, data: Data) -> ValidateResult {
-        guard status == 200,
-              let json = (try? JSONSerialization.jsonObject(with: data)) as? [String: Any],
-              let valid = json["valid"] as? Bool else { return .unknown }
-        return valid ? .valid : .invalid
+        let json = (try? JSONSerialization.jsonObject(with: data)) as? [String: Any]
+        switch status {
+        case 200:
+            guard let valid = json?["valid"] as? Bool else { return .unknown }
+            return valid ? .valid : .invalid
+        case 403, 404:
+            // Only Dodo's own JSON error ({"code": …}) counts; a captive portal's 403/404 page must not revoke.
+            guard let code = json?["code"] as? String, !code.isEmpty else { return .unknown }
+            return .invalid
+        default:
+            return .unknown
+        }
     }
 
     public static func isSuccess(status: Int) -> Bool { (200..<300).contains(status) }

@@ -3,16 +3,18 @@ import type { NextConfig } from "next";
 const dev = process.env.NODE_ENV === "development";
 
 // Next.js inlines its bootstrap scripts and styles, so 'unsafe-inline' is required for script/style; everything else
-// is locked to this origin plus Paddle's checkout (used only when PAYMENT_PROVIDER=paddle).
+// is locked to this origin. Paddle's origins are allowed only in a server build not set to Dodo (the pricing page then renders Paddle checkout).
+const paddle = process.env.STATIC_EXPORT !== "1" && process.env.PAYMENT_PROVIDER !== "dodo";
+
 export const contentSecurityPolicy = [
   "default-src 'self'",
-  `script-src 'self' 'unsafe-inline'${dev ? " 'unsafe-eval'" : ""} https://cdn.paddle.com`,
+  `script-src 'self' 'unsafe-inline'${dev ? " 'unsafe-eval'" : ""}${paddle ? " https://cdn.paddle.com" : ""}`,
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob:",
   "media-src 'self'",
   "font-src 'self'",
-  `connect-src 'self'${dev ? " ws: wss:" : ""} https://*.paddle.com`,
-  "frame-src https://*.paddle.com",
+  `connect-src 'self'${dev ? " ws: wss:" : ""}${paddle ? " https://*.paddle.com" : ""}`,
+  paddle ? "frame-src https://*.paddle.com" : "frame-src 'none'",
   "frame-ancestors 'none'",
   // Chromium applies form-action to redirects: the server-mode checkout form 303s to Dodo's hosted checkout.
   "form-action 'self' https://*.dodopayments.com",

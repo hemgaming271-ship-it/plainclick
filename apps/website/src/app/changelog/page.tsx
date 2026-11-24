@@ -19,6 +19,8 @@ export default function Page() {
           <li>Settings → General now shows the app version.</li>
           <li>New: PlainClick › Check for Updates… installs new versions in place. Each update is signature-checked, and macOS doesn&apos;t ask you to approve it again with Open Anyway.</li>
           <li>The local trial log can no longer be read as spreadsheet formulas.</li>
+          <li>An activated Mac now works offline for up to 30 days at a time and confirms its licence whenever it&apos;s online (at launch, every few hours and after waking). If it can&apos;t, Settings › Licence › Check Now restores it; your key stays saved.</li>
+          <li>The local action log is now off unless you turn it on for support.</li>
         </ul>
       </Prose>
     </>
