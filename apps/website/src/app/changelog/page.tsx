@@ -1,4 +1,5 @@
 import { PageHeader, Prose } from "@/components/ui";
+import { site } from "@/lib/site";
 
 export const metadata = { title: "Changelog" };
 
@@ -7,9 +8,8 @@ export default function Page() {
     <>
       <PageHeader title="Changelog" />
       <Prose>
-        <h2>Unreleased</h2>
-        <p>No public version has been released yet. Each release will be listed here with its version, date, SHA-256 checksum, and the macOS versions it was tested on.</p>
-        <p>In the pre-release build so far:</p>
+        <h2>{site.releaseAvailable && site.release.version ? `PlainClick ${site.release.version}` : "Unreleased"}</h2>
+        <p>For release notes and downloads, see <a href={site.releasesUrl}>GitHub Releases</a>.</p>
         <ul>
           <li>Quick keys: Control-Option-1 to 9 press the panel&apos;s actions in order, with the same safety checks as clicking. You can turn them off in Settings → General.</li>
           <li>Launch at login, from the menu-bar menu or Settings → General.</li>
