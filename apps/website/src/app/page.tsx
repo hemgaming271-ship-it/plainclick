@@ -138,7 +138,7 @@ export default function Home() {
           <div className="reveal">
             <FilmCard src="/video/plainclick-launch.mp4" poster="/video/plainclick-launch-poster.jpg" duration="0:52" />
             <p className="mt-3 text-center text-[12px] text-muted">
-              The windows and panels in the film are real screenshots of the pre-release build on a macOS 26 test machine, put together with motion graphics.
+              The windows and panels in the film are real screenshots from a macOS 26 test machine, put together with motion graphics.
             </p>
           </div>
         </Container>
@@ -168,7 +168,7 @@ export default function Home() {
                 loading="lazy"
               />
             }
-            caption="Real screenshot · pre-release build on macOS 26"
+            caption="Real screenshot · macOS 26"
           />
           <FeatureRow
             flip

@@ -62,7 +62,7 @@ export function SiteFooter() {
             Finder and TextEdit are trademarks of Apple Inc.
           </p>
           <p>
-            Screens on this site come from the PlainClick pre-release build running on macOS 26 test machines. It works
+            Screens on this site were captured on macOS 26 test machines. PlainClick works
             only with the apps and actions listed on the <Link href="/compatibility" className="text-link hover:underline">compatibility page</Link>.
           </p>
         </div>

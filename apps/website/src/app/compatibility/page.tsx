@@ -12,7 +12,7 @@ export default function Page() {
         {!anyVerified && (
           <div className="mb-6">
             <Notice>
-              <strong>Pre-release.</strong> &ldquo;Passed automated tests&rdquo; means each action ran 20 times in a
+              <strong>Testing note.</strong> &ldquo;Passed automated tests&rdquo; means each action ran 20 times in a
               row with the real Apple app, including while switching between apps, on test machines running the listed
               macOS versions. It hasn&apos;t been confirmed by hand on a physical Mac yet.
             </Notice>
